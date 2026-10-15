@@ -1,0 +1,63 @@
+{
+  "subtask": "L2 analyze",
+  "kind": "analyze (extract the well potential drop, the charge-neutral Fermi level and the sheet carrier density held in the well from three staged converged self-consistent Hartree solves, and identify which solve is the inversion-symmetric one; no solve is run, no structure is built)",
+  "provenance": "dU_well, ef0 and the Uprime_top diagnostics come from 3_reproduction/L2/result.json (the reproduced leaf record; converged production solves nsym2/m2/p2). n_well is derived from the staged densz.csv by reviewer/derive_reference.py (trapezoid rule on the 0.25 nm grid). Ground truth is OUR reproduction on the STAGED files (self-consistent ground truth); the paper prints U(z) only as a figure, so these scalars are reproduction-internal. Extractability from the agent-visible files alone is proven by reviewer/derive_reference.py, which re-derives every value from agent/ (dU_well, n_well and Uprime_top exactly; ef0 to <= 0.036 meV interpolation error on the 0.2 meV dos.csv grid) and picks the symmetric condition out of the data by |dU_well| alone.",
+  "staged_input": "agent/README.md + agent/{cond_A, cond_B, cond_C}/{potential.csv, dos.csv, densz.csv}, relative symlinks into 3_reproduction/L2/analyze_inputs/",
+  "condition_map": "cond_A = the -2e11 cm^-2 solve, cond_B = the inversion-symmetric solve, cond_C = the +2e11 cm^-2 solve. The mapping and the densities are reviewer-side only: the agent-facing directory names, README and prompt carry no density and no symmetry annotation.",
+
+  "scalars": {
+    "dU_well_A_meV": {
+      "truth": 50.7297,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band 45.6567 to 55.8027; a sign flip fails)"
+    },
+    "dU_well_B_meV": {
+      "truth": 0.1139,
+      "rule": "handbook 2(5) documented near-zero exception: the truth is near-zero BY SYMMETRY (the inversion-symmetric solve must develop no potential drop across the well), so +/-10% relative would grade our own convergence residual. Absolute band |x - 0.1139| <= 2.0 meV, the leaf's own G2 no-splitting band (|dU_well| <= 2 meV). ~18x the fully-converged residual scale (0.114 meV) and ~12% of the smallest asymmetric-condition |dU_well| (16.29 meV), so a symmetric read passes with margin and an asymmetric-magnitude or interface-flipped-asymmetric value fails.",
+      "tol_abs_meV": 2.0
+    },
+    "dU_well_C_meV": {
+      "truth": -16.286,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band -17.9146 to -14.6574; a sign flip fails)"
+    },
+    "ef0_A_meV": {
+      "truth": -21.942,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band -24.1362 to -19.7478; a sign flip fails)"
+    },
+    "ef0_B_meV": {
+      "truth": 30.1461,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band 27.1315 to 33.1607)"
+    },
+    "ef0_C_meV": {
+      "truth": 34.3216,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band 30.8894 to 37.7538)"
+    },
+    "n_well_A_cm-2": {
+      "truth": -1.997493e11,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band -2.1972e11 to -1.7977e11). The sign carries the physics (this condition is hole-rich), so a submission that integrates the charge density without flipping to the electrons-positive convention fails. Quadrature is not a fork: the rectangle rule on the same grid gives -1.998704e11, 0.061% away, i.e. 0.6% of the band."
+    },
+    "n_well_B_cm-2": {
+      "truth": 1.795756e11,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band 1.6162e11 to 1.9753e11). Rectangle rule 1.796696e11, 0.052% away."
+    },
+    "n_well_C_cm-2": {
+      "truth": 1.994582e11,
+      "rule": "handbook 2(1): +/-10% relative, sign included (band 1.7951e11 to 2.1940e11). Rectangle rule 1.995648e11, 0.053% away."
+    }
+  },
+
+  "categorical": {
+    "symmetric_condition": {
+      "truth": "B",
+      "rule": "exact string match against the required value, case-insensitive and whitespace-stripped; any other string, or a non-string value, fails. cond_B is the inversion-symmetric solve: its |dU_well| is 0.1139 meV against 50.73 and 16.29 meV for the other two, a separation of more than two orders of magnitude, so the condition is decidable from the staged potential.csv files alone."
+    }
+  },
+
+  "secondary": {
+    "Uprime_top_A_meV_per_nm": {"value": 3.859, "note": "recorded diagnostic, NOT scored"},
+    "Uprime_top_B_meV_per_nm": {"value": -1.1979, "note": "recorded diagnostic, NOT scored: at fixed n_tot the top-barrier field is Gauss-pinned (an input constraint, not a solve-dependent output)"},
+    "Uprime_top_C_meV_per_nm": {"value": -1.463, "note": "recorded diagnostic, NOT scored"},
+    "Uprime_bottom_meV_per_nm": {"value": 1.198, "note": "not requested from the agent at all: identical fixed input in every solve (the leaf's G1 boundary condition), pure input echo"}
+  },
+
+  "score": "1 only if all ten primary checks pass (binary all-primary-pass, handbook 1(1)): the three dU_well scalars, the three ef0 scalars, the three n_well scalars and the symmetric_condition string. Any single failure scores 0."
+}

@@ -1,0 +1,143 @@
+{
+  "subtask": "L7 analyze",
+  "kind": "analyze (classical Monte Carlo sweep of the CrN Heisenberg model -> normalised staggered-magnetisation curve M(T)/M(0) and the Neel temperature)",
+  "provenance": "truth copied from 3_reproduction/L7/result.json (runs.A.T_grid_K, runs.A.M_stag_norm, ground_truth.T_N_K), produced by 3_reproduction/L7/auditor/fit_neel.py on the run-A VAMPIRE outputs. reviewer/make_reference.py recomputes both answers from the STAGED agent/mc_sweep.csv alone and agrees with result.json to 4.8e-7 per curve point and 2e-4 K on T_N (verified 2026-09-06).",
+  "order_parameter_definition": "M(T) = mean over the two Cr sublattices (VAMPIRE materials 0 and 1) of output:material-mean-magnetisation-LENGTH -- the mean of the per-configuration sublattice-moment MAGNITUDE, not the magnitude of the time-averaged vector -- seed-averaged over the three seeds and normalised by its value at the lowest grid temperature (T = 0 K). With zero anisotropy the Neel axis diffuses, so |<m>| decays while <|m|> does not; choosing between them is the tested skill and is NOT pinned by the prompt.",
+  "T_N_definition": "single free parameter of M(T)/M(0) = (1 - T/T_N)^(1/3), exponent fixed at 1/3 and M(0) pinned to the measured T = 0 value, fitted over the points with M/M(0) in [0.10, 0.60] (13 points). The estimator is NOT pinned by the prompt: the mean-sublattice longitudinal susceptibility peak gives 284.099 K and the alternative fit windows 284.247 K, all far inside the +/-10% band.",
+  "T_grid_K": [
+    0.0,
+    20.0,
+    40.0,
+    60.0,
+    80.0,
+    100.0,
+    120.0,
+    140.0,
+    160.0,
+    180.0,
+    190.0,
+    195.0,
+    200.0,
+    205.0,
+    210.0,
+    215.0,
+    220.0,
+    225.0,
+    230.0,
+    235.0,
+    240.0,
+    245.0,
+    250.0,
+    255.0,
+    260.0,
+    265.0,
+    270.0,
+    275.0,
+    280.0,
+    285.0,
+    290.0,
+    295.0,
+    300.0,
+    305.0,
+    310.0,
+    315.0,
+    320.0,
+    325.0,
+    330.0,
+    335.0,
+    340.0,
+    345.0,
+    350.0
+  ],
+  "primary": {
+    "M_stag_norm": {
+      "n_points": 43,
+      "truth": [
+        1.0,
+        0.974124,
+        0.947336,
+        0.919216,
+        0.890231,
+        0.859797,
+        0.828195,
+        0.793217,
+        0.756362,
+        0.714774,
+        0.693577,
+        0.680313,
+        0.668969,
+        0.653508,
+        0.641887,
+        0.628857,
+        0.612692,
+        0.597589,
+        0.579897,
+        0.56347,
+        0.542656,
+        0.520469,
+        0.4988,
+        0.473418,
+        0.442957,
+        0.410822,
+        0.367099,
+        0.316808,
+        0.239104,
+        0.153935,
+        0.098558,
+        0.068,
+        0.062106,
+        0.053955,
+        0.047328,
+        0.042543,
+        0.038045,
+        0.035804,
+        0.034052,
+        0.031424,
+        0.030609,
+        0.028881,
+        0.028022
+      ],
+      "rel_tol": 0.1,
+      "abs_floor": 0.1,
+      "rule": "PRIMARY, handbook 2(2) per-point curve rule: |sub_i - truth_i| <= max(0.10*|truth_i|, floor) with floor = 0.10 (= 0.10 * max|truth| = 0.10 * 1.0, the curve's characteristic scale, so this is the standard 2(2) floor written out, not an exception). One entry per grid temperature in ASCENDING temperature order; a list of any other length is a gating failure (score 0 before any primary check).",
+      "note": "The floor makes the tail (T >= 290 K, truth < 0.10) effectively ungraded. Accepted: every curve point, including the transition region, has the same +/-0.10 absolute band. Seed-to-seed scatter on this curve is at most 0.020 (single-seed vs seed-averaged), so a single-seed answer passes by design."
+    },
+    "T_N_K": {
+      "truth": 284.213,
+      "rel_tol": 0.1,
+      "band_K": [
+        255.792,
+        312.634
+      ],
+      "rule": "PRIMARY, handbook 2(1) scalar rule: |T_N - 284.213| <= 0.10 * 284.213, i.e. T_N in [255.792, 312.634] K.",
+      "estimator_spread_K": {
+        "fit_0.10-0.60_seed_averaged": 284.213,
+        "fit_0.15-0.65": 284.247,
+        "fit_0.10-0.80": 284.247,
+        "staggered_susceptibility_peak": 284.099,
+        "per_seed_fits": [
+          284.034,
+          284.505,
+          284.099
+        ],
+        "note": "Checked estimators include 280 K and 282.5 K independent readings and the 284.213 K reference; they lie inside the approved 10% band. The +/-10% standard tolerance therefore accepts the whole family without a documented exception."
+      }
+    }
+  },
+  "secondary": {
+    "note": "Recorded in the grading report, NOT scored (handbook 1(2)).",
+    "normalisation_at_T0": {
+      "expected": 1.0,
+      "flag_tol": 0.01,
+      "rule": "SECONDARY: the first entry should be 1.000 (the curve is normalised at the lowest grid temperature). A curve reported in muB fails the primary curve check anyway (2.850 vs 1.000)."
+    },
+    "monotonic_decrease": {
+      "rule": "SECONDARY: M(T)/M(0) should not rise with T beyond seed scatter. Recorded as a flag; the per-point primary match already enforces the shape."
+    },
+    "T_N_vs_chi_peak_K": {
+      "our_value": 284.099,
+      "rule": "SECONDARY: our independent mean-sublattice longitudinal susceptibility peak, 0.11 K from the fit. Recorded for context."
+    }
+  },
+  "score": "1 only if BOTH primary checks pass: the 43-point curve per-point match and the T_N scalar band. Either failure scores 0 (binary all-primary-pass, handbook 1(1)). A missing field, a non-numeric entry, or a curve of the wrong length scores 0 as a gating failure."
+}

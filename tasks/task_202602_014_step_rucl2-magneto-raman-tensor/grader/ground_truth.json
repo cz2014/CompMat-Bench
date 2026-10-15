@@ -1,0 +1,91 @@
+{
+  "subtask": "L10 analyze",
+  "kind": "analyze (Kramers-Heisenberg dielectric assembly from staged WAVEDERs -> finite-difference Raman tensor -> both magneto-Raman observables of the A'1 mode)",
+  "provenance": "Primary numerical targets retained from 3_reproduction/L10/auditor/out/guards_summary.json (eta=0.05, primary u=0.010 pair, 12x12x1) and result.json. Archived phase extraction used legacy anchors and a 2 meV grid; see primary.resonance_set.note. Required unscored antisymmetry output has been removed; reproduction guards remain separately documented.",
+  "convention_robustness": "The archived plot applies a displayed-phase sign reversal; numpy arg itself does not choose a Fourier convention. The grader accepts either phase convention and either LL/RR naming through a resonance set, bounded contrasts and phase magnitudes/opposite signs. Eta grading reduces the raw pairs to maximal distance from +/-1/2; it does not certify full tensor or repeated-value arithmetic consistency.",
+  "primary": {
+    "resonance_set": {
+      "truth_sorted_eV": [
+        0.304,
+        0.548
+      ],
+      "rel_tol": 0.1,
+      "rule": "PRIMARY: the multiset {resonance_LL_eV, resonance_RR_eV}, sorted, must match the sorted truth [0.304, 0.548] within +/-10% per element (section 2(1) scalar). Convention-robust: whichever channel is which, the two resonances must land on the two valley gaps.",
+      "note": "Archived peaks 0.304/0.548 eV are sampled on the 2 meV reference grid. Staged u=0 valley gaps are 0.3121/0.5536 eV. Reference phase extraction used legacy anchors 0.312/0.553 eV and nearest grid values 0.312/0.552 eV; independent computations at actual staged gaps pass the retained tolerances."
+    },
+    "resonance_separation": {
+      "min_separation_eV": 0.1,
+      "rule": "PRIMARY: |resonance_LL_eV - resonance_RR_eV| >= 0.1 eV -- the two circular channels resonate at DISTINCT (opposite) valleys (Fig. 8; our separation ~0.244 eV)."
+    },
+    "extinction": {
+      "bound": 0.1,
+      "our_values": {
+        "extinction_contrast_LL": 0.0229,
+        "extinction_contrast_RR": 0.0027
+      },
+      "rule": "PRIMARY: one extinction per polarization. Each channel's intensity at the OTHER channel's resonance, normalized to its own peak, is <= 0.10 (and >= 0). Deviation-style one-sided bound (section 2(3)); ours ~0 so an absolute bound 0.10 is used instead of 2x-ours (2(3) small-truth exception). A no-extinction (symmetric-R) answer has this ratio ~O(0.5-1) and fails."
+    },
+    "phase_quantization": {
+      "phase_target_over_pi": 0.5,
+      "phase_tol_over_pi": 0.1,
+      "step_target_over_pi": 1.0,
+      "step_tol_over_pi": 0.1,
+      "our_values": {
+        "phase_at_gap_low_over_pi": -0.5206,
+        "phase_at_gap_high_over_pi": 0.5258,
+        "phase_step_over_pi": -0.9536
+      },
+      "rule": "PRIMARY (Fig. 9): |phase_at_gap_low_over_pi| and |phase_at_gap_high_over_pi| each in [0.40, 0.60] (pinned at +/-1/2), the two OPPOSITE in sign (phase_low*phase_high < 0), and |phase_step_over_pi| in [0.90, 1.10] (a pi step). Sign-agnostic (convention-robust). Tolerance 0.10 is the reproduction's own G5 tolerance -- a documented exception to the standard scalar band: the resonance phase's deviation from +/-pi/2 is physically eta-dependent (0.007-0.15 over the eta series), so 10%-of-0.5=0.05 would be over-tight; 0.10 passes ours (dev ~0.02-0.03 at eta=0.05) with margin and still fails same-sign or far-from-half answers."
+    },
+    "eta_washout_series": {
+      "eta_series_eV": [
+        0.03,
+        0.05,
+        0.07,
+        0.09
+      ],
+      "truth_dev_over_pi_by_eta": [
+        0.00719,
+        0.02583,
+        0.06754,
+        0.14928
+      ],
+      "rel_tol": 0.1,
+      "rule": "PRIMARY: the agent reports phase_by_eta_over_pi = four [low-gap, high-gap] raw phase pairs (units of pi, wrapped to (-1,1]) at eta = 0.03, 0.05, 0.07, 0.09 eV in that order. The GRADER forms dev_i = max over the two gaps of the distance to the nearer of +1/2 and -1/2, and matches our truth_dev_over_pi_by_eta per point: |sub - truth| <= max(0.10*|truth|, 0.10*max|truth|) = 0.0149. Sign-invariant: both time conventions give the same deviations. The +/-1/2 quantization is never stated in the prompt (reviewer ruling 2026-09-03: submit the object, grade the metric grader-side).",
+      "why_primary": "A numerical target derived from the complex response at four decay rates. No target values are printed. Matching it checks the reported aggregate, not execution history or all tensor components.",
+      "tolerance_evidence": "The retained per-point band is 0.014928. Independent full-transition/exact-staged-gap computations pass it; the observed sampling change in the documented nearest-grid comparison is at most about 0.00967. This supports retaining the reference and tolerance, not claiming identical extraction operations.",
+      "truth_phase_by_eta_over_pi": [
+        [
+          -0.50514,
+          0.50719
+        ],
+        [
+          -0.52059,
+          0.52583
+        ],
+        [
+          -0.54698,
+          0.56754
+        ],
+        [
+          -0.58029,
+          0.64928
+        ]
+      ]
+    }
+  },
+  "secondary": {
+    "note": "Only gap diagnostics and eta monotonicity are recorded without contributing to the score. Extra answer fields, including any antisymmetry scalar, are ignored.",
+    "eta_washout_monotonic": {
+      "rule": "Record whether the grader-formed deviation series is non-decreasing. The scored per-point bands constrain that series; this diagnostic is not an additional gate."
+    },
+    "valley_gaps": {
+      "our_values": {
+        "gap_low_eV": 0.3121,
+        "gap_high_eV": 0.5536
+      },
+      "rule": "Historical scoped reporting choice: require numeric gap fields from the staged u=0 K/Kprime eigenvalues, record a within-10% diagnostic, and do not score them directly. This reporting exception is retained; wrong gaps are not guaranteed to fail another output check."
+    }
+  },
+  "score": "1 only if all PRIMARY checks pass: the resonance set match, the resonance separation, both extinction bounds, the phase quantization (|phi|~1/2 opposite-sign + pi step), and the per-point eta-washout series formed from the submitted raw phase pairs. Any single failure scores 0 (binary all-primary-pass)."
+}

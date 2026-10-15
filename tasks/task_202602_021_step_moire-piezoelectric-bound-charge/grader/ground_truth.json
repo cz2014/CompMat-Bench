@@ -1,0 +1,72 @@
+{
+  "subtask": "L7 analyze",
+  "kind": "analyze (layer-resolved piezoelectric bound charge from a staged displacement field; no DFT, no HPC, no structure build)",
+  "provenance": "values from 3_reproduction/L7/result.json and compute_piezocharge.py (spectral second derivative of the relaxed-minus-rigid W-sublattice displacement field, paper Eq. 1). Ground truth is OUR reproduction on the staged LAMMPS structures; the paper quotes only a colorbar (~1e12 cm^-2), the fidelity check, not the graded number. Our amplitude runs ~1.5-2x the paper's, the propagated L1 strain inflation (self-consistent ground truth).",
+  "staged_input": "3_reproduction/L1/outcomes/lammps.dat_min (relaxed) and L1/references/lammps.dat (rigid); the displacement field's parents. NOT L7/piezocharge.csv, which is this leaf's answer.",
+  "convention_note": "The absolute sign of rho is convention-soft (|e11| is given as a magnitude), so the whole field is fixed only up to an overall sign flip. The crystal frame is NOT a convention here: the prompt states the constitutive relation in the Cartesian frame of the staged data files, and the 30-degree-rotated partner form is mirror-antisymmetric on this lattice (its locale means vanish identically and its peaks are 3.113/0.693), so the grader rejects it correctly. Every graded quantity is invariant under a global flip: the peak amplitudes, the layer ratio, the net (a magnitude band about zero), the per-locale MAGNITUDES, and the sign-CONTRAST topology (products of the agent's own signed locale means). The all-atom (nearest-locale mean) binning is graded because the prompt asks for the mean of n over all sites of each locale.",
+  "scalars": {
+    "WS2_peak_1e12_cm2": {
+      "truth": 4.234,
+      "rule": "within 10% of the true value (band 3.811-4.657); |max n|, sign-free by construction"
+    },
+    "WSe2_peak_1e12_cm2": {
+      "truth": 1.946,
+      "rule": "within 10% of the true value (band 1.751-2.141); |max n|, sign-free by construction"
+    },
+    "peak_ratio_WS2_over_WSe2": {
+      "truth": 2.176,
+      "rule": "within 10% of the true value (band 1.958-2.394); sign-free, scale-free relative-layer check (tracks the 1.35 e11 ratio times the larger WS2 strain gradient)"
+    }
+  },
+  "net_charge": {
+    "rule": "Zero-truth rule: |net| within an absolute band about the true zero (a relative band is meaningless around zero). The bound charge is charge-neutral over the cell in each layer, so the cell-average n is exactly zero for any conservative differentiation scheme (a spectral scheme returns machine zero; a finite-difference scheme stays tiny). Band chosen at 0.1 in 1e12 cm^-2 = ~2.5% of the WS2 peak (4.234): well above numerical/finite-difference residue, well below any physically nonzero mean. Sign-free (a magnitude band).",
+    "truth": 0.0,
+    "band_1e12_cm2": 0.1,
+    "fields": [
+      "WS2_net_1e12_cm2",
+      "WSe2_net_1e12_cm2"
+    ]
+  },
+  "profile_magnitude": {
+    "rule": "The per-locale |n| profile is graded as one curve, matched point-by-point; tol_i = max(0.10*|truth_i|, floor), floor = 0.10*max = 0.1608 (1e12 cm^-2). Sign-robust (magnitudes of the all-atom nearest-locale means).",
+    "order": [
+      "WS2:R^h_h",
+      "WS2:R^X_h",
+      "WS2:R^M_h",
+      "WSe2:R^h_h",
+      "WSe2:R^X_h",
+      "WSe2:R^M_h"
+    ],
+    "truth_abs_1e12_cm2": [
+      0.225,
+      1.382,
+      1.608,
+      0.079,
+      0.91,
+      1.038
+    ],
+    "floor_1e12_cm2": 0.1608
+  },
+  "sign_topology": {
+    "rule": "sign-CONTRAST, invariant under a global flip, evaluated on the agent's OWN signed locale means (products < 0). The two layers carry OPPOSITE registry sign patterns (tracking their opposite-sign per-layer reconstruction strain), and within each layer R^X_h and R^M_h have opposite sign.",
+    "checks": [
+      "WS2: R^X_h * R^M_h < 0",
+      "WSe2: R^X_h * R^M_h < 0",
+      "between: WS2_R^M_h * WSe2_R^M_h < 0"
+    ]
+  },
+  "score": "1 only if all five groups pass (all checks must pass; any single failure scores 0): (a) the two peak scalars, (b) the peak ratio, (c) the two net-charge magnitude bands, (d) the 6-point magnitude profile, (e) the three sign-contrast relations.",
+  "self_check_2026-07-03": {
+    "direction1_our_reproduction_as_submission": "score 1 (raw-sign values and their global flip both pass; sign-robust). reference_solver.py reads ONLY the two staged data files and reproduces result.json: peaks 4.234/1.946, ratio 2.176, all-atom locale means 0.225/1.382/-1.608 (WS2) and -0.079/-0.910/1.038 (WSe2), nets 0.",
+    "designed_wrong_must_fail": [
+      "all locale means positive (no contrast) -> sign_topology fails",
+      "layers swapped (ratio ~0.46, WSe2 pattern under WS2 label) -> peak, ratio, profile, sign_topology fail",
+      "uniform-strain null field (peaks ~0) -> peak, ratio, profile fail",
+      "R^X_h/R^M_h magnitudes swapped for WS2 (extremum contrast moved) -> profile fails",
+      "paper-scale field (all amplitudes / 1.9: peaks 2.23/1.02) -> peak fails (self-consistent ground truth)",
+      "30-degree-rotated (mirror-antisymmetric) constitutive relation -> peak, ratio, profile and sign_topology fail",
+      "missing required field -> GradeError -> 0"
+    ]
+  },
+  "coverage_note": "Magnitude profiles and the three listed RXh/RMh sign products are graded. Rhh signs and arithmetic consistency of the separately reference-graded submitted ratio are not additional conditions."
+}

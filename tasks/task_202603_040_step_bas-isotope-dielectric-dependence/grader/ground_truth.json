@@ -1,0 +1,100 @@
+{
+  "subtask": "L6 analyze",
+  "kind": "analyze (isotope-composition sweep of min eps' of BAs at 300 K from N = 256 fixed-count ensembles on the staged harmonic force constants; pure-limit mode count, sign sequence at six compositions, and the two sign-change compositions located on the 1/256 grid inside stated brackets)",
+  "provenance": "3_reproduction/L6/result.json (guards G4 weak form, G5, sign_sequence; agent_unit block with the reviewer-accepted brackets and k = 2 of 2026-09-06; commit 265ef70), 3_reproduction/L6/min_eps_grid.json (the 24-composition production table at 10 000 configurations) and 3_reproduction/L6/critical.json (the 39-block distributions at the bracketing compositions). The staged file agent/ifc_harmonic_512.npz is L1's deliverable unchanged (sha256 fd63e55687a26d8b26bad1462f1d3eebd27d364371d8dc7d29cd104f0215407e). M3 (participation ratio) dropped from the graded set by reviewer on 2026-09-10. Crossing-spread reconstruction combines measured block minima with production/interpolated fills in 39 hybrid rows; it is not 39 complete independent bracket searches. Complete block counts: n10 45/46/47/247/248/249 = 10/39/39/39/39/10. The ensemble-crossing tolerance is the approved handbook section 2(5) exception.",
+  "production_N10000": {
+    "min_eps1_by_n10": {
+      "0": -89.20477751485329,
+      "13": -60.819146414266356,
+      "45": -1.2598410473616664,
+      "46": -0.4006679536152653,
+      "47": 0.3272781025140947,
+      "51": 2.1062580248197422,
+      "128": 7.78029913321083,
+      "243": 1.9270080229048157,
+      "247": 0.463612733269132,
+      "248": -0.12166559610474437,
+      "249": -0.97077575314181,
+      "251": -5.153946809844911,
+      "256": -93.41000564975252
+    },
+    "note_n10_45_249": "2560-configuration rows",
+    "crossings_interpolated_x": [
+      0.18183753458103977,
+      0.9679379825188598
+    ],
+    "crossings_interpolated_n10": [
+      46.55,
+      247.79
+    ],
+    "active_modes_pure_ends": {
+      "n10_0": {
+        "count": 3,
+        "rank": 3,
+        "omega_cm1": 691.1701
+      },
+      "n10_256": {
+        "count": 3,
+        "rank": 3,
+        "omega_cm1": 720.5293
+      }
+    }
+  },
+  "primary": {
+    "G5_pure_limits": {
+      "truth": {
+        "n_active_modes_n10_0": 3,
+        "n_active_modes_n10_256": 3,
+        "min_eps1_n10_0": -89.2048,
+        "min_eps1_n10_256": -93.41
+      },
+      "rule": "n_active_modes_n10_0 == 3 and n_active_modes_n10_256 == 3 (exact integers: the three degenerate zone-centre TO modes are the only modes with oscillator strength in a uniform crystal, L2 validation V3), and min_eps1_n10_0 < 0 and min_eps1_n10_256 < 0 (sign only)"
+    },
+    "sign_sequence": {
+      "truth": {
+        "n10_0": "negative",
+        "n10_13": "negative",
+        "n10_51": "positive",
+        "n10_128": "positive",
+        "n10_251": "negative",
+        "n10_256": "negative"
+      },
+      "rule": "the sign of min_eps1_n10_<n> at the six compositions 0, 13, 51, 128, 251, 256 is negative, negative, positive, positive, negative, negative (sign only; values recorded. reviewer ruling 2026-09-06 replaced the plan's x = 0.95 (n10 = 243, +1.93, on the positive side of our upper crossing) by x = 0.98 (n10 = 251, -5.15). Block evidence: at n10 = 51 min eps' is positive in 39 of 39 blocks of 256 (minimum 1.7455); at 13 and 251 the production values are 60 and 5 units from zero against a block scatter of about 1)"
+    },
+    "lower_crossing": {
+      "truth": 47,
+      "k_atoms": 2,
+      "accepted_n10": [
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "rule": "n10_first_positive_lower_bracket within 47 +/- 2 (the first composition with min eps' > 0 on the 10 000-configuration grid is 47: m(46) = -0.40, m(47) = +0.33, interpolated crossing at 46.55. k = ceil(max block deviation of min eps' / |slope per atom|) = ceil(1.0726 / 0.7279) = 2, reviewer-accepted 2026-09-06. Block evidence: at N = 256 the 39 blocks at n10 = 46 span -1.53 to +0.28 (mean -0.46) and at 47 span -0.60 to +0.70 (mean +0.22); these samples support the accepted band but do not guarantee coverage for every independent ensemble)"
+    },
+    "upper_crossing": {
+      "truth": 248,
+      "k_atoms": 2,
+      "accepted_n10": [
+        246,
+        247,
+        248,
+        249,
+        250
+      ],
+      "rule": "n10_first_negative_upper_bracket within 248 +/- 2 (the first composition with min eps' < 0 above the positive plateau on the 10 000-configuration grid is 248: m(247) = +0.46, m(248) = -0.12, interpolated crossing at 247.79. k = ceil(1.0829 / 0.5853) = 2, reviewer-accepted 2026-09-06)"
+    },
+    "bracket_membership": {
+      "rule": "the two reported compositions lie inside their brackets, 42 <= n10 <= 51 and 243 <= n10 <= 252 (format integrity; implied by the bands above)"
+    }
+  },
+  "not_graded": {
+    "min_eps1_values": "Only the signs, not the magnitudes, are scored. At positive oscillator-strength scale a with fixed eps_inf and all other parameters, m(a) = eps_inf + a * (m(1) - eps_inf). The paper comparison and the 0.5101 rescale remain internal fidelity diagnostics.",
+    "G4_weak_form": "The six sampled signs and two bracket readings are consistent with the reproduction's two-crossing picture. The total number of sign changes over the full composition axis is not separately scored or established by these outputs.",
+    "M3_participation_ratio": "dropped (reviewer 2026-09-10): its argmax moves with N (128 at 10 000, 102 at 256) and measures ensemble size rather than dielectric physics",
+    "gamma_500K_and_other_gammas": "the 1.00 cm^-1 set exists for L9; not part of this unit",
+    "bernoulli_and_scale_sensitivities": "recorded diagnostics in 3_reproduction/L6 (Bernoulli raises min eps' by +0.8 at n10 = 51 and +1.25 at 46; the 0.5101 scale gives crossings 0.146 / 0.981)"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

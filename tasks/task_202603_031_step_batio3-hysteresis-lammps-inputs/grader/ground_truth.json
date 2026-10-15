@@ -1,0 +1,142 @@
+{
+  "subtask": "L1 gen_input",
+  "kind": "gen_input (pristine 10 x 10 x 10 core-shell cell + the poling deck + the field-loop deck; descriptor rubric + REQUIRED deck rules)",
+  "provenance": "Structure: our as-run 3_reproduction/L1/auditor/input.lmp (build_bto_coreshell.py, a0 = 3.96786 A, 10000 particles). Decks: our as-run 3_reproduction/L1/auditor/decks/pole.in and loop_aniso.in (the authors' deposited relaxation.in / hysteresis.in potential block, asserted verbatim by make_decks.py; alternating cg box / fire ion minimiser), file names adapted to the prompt. Field list: the authors' deposited field.txt (55 values), restated as agent/field_steps.csv in MV/cm.",
+  "structure": {
+    "a0_A": 3.96786,
+    "replication": [
+      10,
+      10,
+      10
+    ],
+    "n_particles": 10000,
+    "n_bonds": 5000,
+    "counts": {
+      "Ba_core": 1000,
+      "Ba_shell": 1000,
+      "Ti_core": 1000,
+      "Ti_shell": 1000,
+      "O_core": 3000,
+      "O_shell": 3000
+    },
+    "box_rel_tol": 0.002,
+    "max_shell_offset_A": 0.2,
+    "ti_o_A": 1.98393,
+    "ti_o_tol_A": 0.05,
+    "rules": "Exact species/role and bond counts; net charge magnitude <0.001 e; each particle in exactly one seed-compatible core-shell bond, paired molecule IDs; core-shell distance <=0.2 A. All ionic core sites match distinct retained seed sites within 0.05 A in the fixed seed frame, allowing order, consistent IDs and periodic coordinate wrapping. No arbitrary global translation or strip shift. Existing box bands retained; L3 x precompression can be encoded in data.",
+    "core_site_tol_A": 0.05,
+    "core_site_tolerance_basis": "Reuse the earlier 0.05 A L1 spatial registry allowance for complete seed-site matching; no tighter serialization or floating-point endpoint gate."
+  },
+  "model": {
+    "charges": {
+      "Ba": {
+        "core": 5.62,
+        "shell": -3.76
+      },
+      "Ti": {
+        "core": 4.76,
+        "shell": -1.58
+      },
+      "O": {
+        "core": 0.91,
+        "shell": -2.59
+      }
+    },
+    "buckingham": [
+      {
+        "pair": [
+          "Ba",
+          "O"
+        ],
+        "A_eV": 1061.3,
+        "rho_A": 0.374,
+        "C_eV_A6": 0.0
+      },
+      {
+        "pair": [
+          "Ti",
+          "O"
+        ],
+        "A_eV": 3769.93,
+        "rho_A": 0.2589,
+        "C_eV_A6": 0.0
+      },
+      {
+        "pair": [
+          "O",
+          "O"
+        ],
+        "A_eV": 4740.0,
+        "rho_A": 0.2686,
+        "C_eV_A6": 160.0
+      }
+    ],
+    "spring": {
+      "Ba": {
+        "k2": 251.8,
+        "k4": 0.0
+      },
+      "Ti": {
+        "k2": 322.0,
+        "k4": 500.0
+      },
+      "O": {
+        "k2": 31.0,
+        "k4": 4000.0
+      }
+    },
+    "class2_mapping": "bond_coeff <type> 0.0 K2 K3 K4 with K2 = k2/2, K3 = 0, K4 = k4/24"
+  },
+  "deck": {
+    "pair_style_stems": [
+      "buck/coul/long/cs",
+      "buck/coul/long"
+    ],
+    "min_cutoff_A": 12.0,
+    "max_kspace_accuracy": 1e-05,
+    "pole_efield_V_per_A": 0.1,
+    "pole_efield_rel_tol": 0.05,
+    "box_relax_keywords": [
+      "aniso",
+      "x",
+      "y",
+      "z"
+    ],
+    "max_ftol_eV_per_A": 0.001,
+    "field_rel_tol": 0.001,
+    "required_both_runs": [
+      "units metal",
+      "atom_style full",
+      "boundary p p p",
+      "effective charges per core/shell type = the model's (1e-3)",
+      "buck/coul/long/cs or supported buck/coul/long, cutoff >=12 A; coincident core-shell submitted initial data require appropriate zero-distance handling",
+      "All type-pair coefficients defined; specified shell-shell Buckingham coefficients within existing 0.5 percent tolerance, A=C=0 elsewhere; undefined does not equal zero",
+      "kspace_style pppm | pppm/cg | ewald with accuracy <= 1e-5",
+      "bond_style class2, r0 = 0, K2 = k2/2, K3 = 0, K4 = k4/24 per species (1 percent)",
+      "effective same-ion 1-2 Coulomb weight zero, including correct defaults",
+      "Three independent cell lengths at zero target stress, fixed angles; aniso or equivalent x/y/z; active over joint minimization, alternating with position-only minimization and repeated without a prescribed count",
+      "every minimize: etol = 0, finite 0 < ftol <= 1e-3 eV/A; actual convergence is not evaluated"
+    ],
+    "required_pole": [
+      "read_data input.lmp",
+      "fix efield 0 0 0.1 (10 MV/cm along +z, 5 percent) with fix_modify <id> energy yes",
+      "write_data poled.lmp"
+    ],
+    "required_loop": [
+      "read_data poled.lmp, continued state without an initial-cell reset",
+      "ordered effective field/relaxation/write events matching all 55 CSV values within 0.1 percent (floor 1e-6 V/A)",
+      "effective field energy contribution during minimizations",
+      "one state_<CSV-step-label>.lmp output per field; ordinary loops and explicit unrolled forms accepted"
+    ],
+    "not_graded": [
+      "min_style, timestep, min_modify, box/relax options (vmax, nreset), the number of passes per step, thermo, neighbor settings, comm_modify, processors",
+      "whether the field values are inline or read from a file"
+    ],
+    "coverage_note": "Seed coordinates remain the target; 0.2 A shell tolerance is grading slack, not initialization permission. Repeat alternating relaxation but do not grade a particular count or actual convergence. Optional output/runtime state is not inferred.",
+    "parser_scope": "Bounded constants, ordinary loop/file/index forms, static groups and relevant active fixes. Supported runtime relaxation conditionals use two representative bodies to verify repetition, never actual convergence. Unsupported relevant control flow is diagnosed.",
+    "coefficient_handoff": "Future poled.lmp is not required in the submission. Only its preceding write_data coefficient policy can establish supplied coefficients: nocoeff none, default diagonal, pair ij all pairs; do not reuse initial geometry-proxy coefficients."
+  },
+  "score": "1 only if the structure rubric and every REQUIRED rule of both runs pass",
+  "reference_verification": "Static reference and complete-submission tests only. Finite reference cycles are not proof of convergence or exact reproduction of the canonical relaxed endpoints; L3 relaxation remains not reproduced.",
+  "parser_semantics": "Same-file jumps accept SELF, current script names, ./ aliases and resolved variable names. String-variable redefinition uses the latest value. The bounded trace checks active physical protocol; it is not a general LAMMPS interpreter or convergence certification."
+}

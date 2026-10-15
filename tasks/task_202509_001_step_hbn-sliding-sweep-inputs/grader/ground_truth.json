@@ -1,0 +1,590 @@
+{
+  "subtask": "L1 gen_input",
+  "kind": "gen_input (VASP input set + generated structures)",
+  "provenance": "rubric and structure references from 3_reproduction/L1/ (run 20260530_li_L1_opus_think + nu_0.333 gap-fix 2026-06-11); see ../../../3_reproduction/L1/index.md",
+  "run_labels": [
+    "nu_0.000",
+    "nu_0.083",
+    "nu_0.167",
+    "nu_0.250",
+    "nu_0.333",
+    "nu_0.417",
+    "nu_0.500",
+    "nu_0.583",
+    "nu_0.667",
+    "nu_0.750",
+    "nu_0.833",
+    "nu_0.917"
+  ],
+  "structure_reference_dir": "reference",
+  "reference_provenance": "reference/<label>/POSCAR symlinks our as-run slid structure of that ratio; the grader matches each submitted POSCAR against reference/<label>/POSCAR (label = the agent-facing nu_<ratio>). The three high-symmetry stackings were run under 3_reproduction/L1/hpc_computations as nu_0.000_AA, nu_0.333_AB, nu_0.667_BA; the other nine as nu_<ratio>.",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "fallback",
+    "note": "translation-only, polarity-safe: the flat hBN bilayer has a sublattice-swapping symmetry that StructureMatcher (method='matcher') absorbs, so a B/N swap (reversed polarization) would wrongly pass. The fallback method (rigid-translation scan + nearest-same-species, no symmetry ops) fails the swap; verified in the self-check."
+  },
+  "incar_required": {
+    "current_rules": "L1 fixed-geometry static inputs: charge-updating ICHARG and any required charge/potential initialization file; ionic + Hartree OR total local potential output through LVHAR, LVTOT or WRT_POTENTIAL; LDIPOL true and IDIPOL 3; explicit ENCUT >= 400 eV; ISMEAR in {-5,-1,0}; 0 < EDIFF <= 1e-5 eV; same accepted PBE functional throughout. No empirical dispersion requirement or Hubbard U/J interception. Gamma and Monkhorst-Pack automatic meshes allowed, at least 10 x 5 x 1, exactly one subdivision along z. See notes.md and bundled grader rules."
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      15,
+      9,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "score": "1 only if all 12 runs pass structure match AND the INCAR/KPOINTS REQUIRED rubric (all checks must pass; any single failure scores 0)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "nu_0.000": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.083": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.167": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.250": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.333": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.417": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.500": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.583": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.667": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.750": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.833": [
+        10,
+        5,
+        1
+      ],
+      "nu_0.917": [
+        10,
+        5,
+        1
+      ]
+    },
+    "references": {
+      "nu_0.000": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "4b7030be8dbd562c583757aa542d1d024b7a6bff28d6e76295aef226848adab5",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.083": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "0c5815b11a7b30dfeafb85d540ef2873888b46f02beabba6b6edecf52047cde0",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.167": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "e2f08aca15b667608a231ea5c900d7abcbed6e2d0f8e7d5a79a233eea04f491a",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.250": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "b89d804a6cb1cfbbbd8f13ac951a4b0af46834be8c21079e1624d9a558b3778f",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.333": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "5079450c765b45cab0eb45b604fd1f6a9c4aead56caccce0c4a56b6122709bd4",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.417": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "7f48709db936454b1b0b1b5e95e281f390ab60d4c89d0365b3ca55b1e6ea1745",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.500": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "febe08923454df9d8816ffc9b8d0973cbca80184883fb0196ff82e36092bb602",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.583": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "53a8b8a61899e392e53ff1b7b3d1f86988677bab53416068e9a9552aff18ae17",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.667": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "50a7eebf451ab3dfc0ddda785cc9ae2eb7fe60ef6ddccf048b25acbcf741dee8",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.750": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "7772297bdd9438a4f56f2fee4cc4301cd838225ba0e46aeb33254d795a437372",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.833": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "d65442f754a92b10eaeaa63d09a43d3b4f182547f4127c79a54db8abcb22813b",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "nu_0.917": {
+        "automatic_subdivisions": [
+          10,
+          5,
+          1
+        ],
+        "minimum": [
+          10,
+          5,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "5f9c9dac284890392ebcb52d0be7c6c0b4ee3e6dd44f5dd09b77966da00816e9",
+        "reference_lattice_angstrom": [
+          [
+            2.51243,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            4.35165,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 8
+      }
+    }
+  }
+}

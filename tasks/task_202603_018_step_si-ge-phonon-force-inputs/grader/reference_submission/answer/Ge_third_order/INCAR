@@ -1,0 +1,28 @@
+SYSTEM = Ge 4x4x4 primitive supercell (128 atoms), a = 5.43069982 A -- third-order force static (plan step 7), 1 of 95 displacements
+
+# --- electronic (paper Appendix; identical in every L2 force static) ----------
+PREC    = Accurate
+ENCUT   = 500        # eV; paper-pinned. Ge LDA ENMAX = 173.969 eV -> 2.87x
+EDIFF   = 1E-8       # eV; paper-pinned
+NELM    = 200        # headroom for the 1e-8 tolerance
+ISMEAR  = 0          # Gaussian; both materials are gapped (ISMEAR>0 can move
+                     # phonon frequencies by more than 20 %)
+SIGMA   = 0.02
+LREAL   = .FALSE.    # reciprocal-space projection; real-space projection degrades forces
+ADDGRID = .TRUE.
+ISPIN   = 1          # non-magnetic
+NBANDS  = 320        # = the VASP default here (512 electrons/2 + 128/2); explicit so
+                     # NPAR round-up cannot make one run differ from another. Both
+                     # PAWs carry ZVAL 4, so Si and Ge take the same value.
+
+# --- single-point forces ------------------------------------------------------
+IBRION  = -1
+NSW     = 0
+ISYM    = 0          # displaced supercell: VASP force symmetrisation would corrupt the
+                     # force set; phonopy/phono3py restore the crystal symmetry themselves
+LWAVE   = .FALSE.
+LCHARG  = .FALSE.
+
+# --- parallel layout: KPAR and NCORE appended per run by the submit script -----
+KPAR    = 8
+NCORE   = 4

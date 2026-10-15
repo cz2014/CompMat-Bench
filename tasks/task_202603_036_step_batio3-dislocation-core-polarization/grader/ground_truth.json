@@ -1,0 +1,179 @@
+{
+  "subtask": "L8 analyze",
+  "kind": "analyze (per-cell local dipoles on two relaxed dislocation-dipole cells; poling-axis, region and core identification; core windows)",
+  "provenance": "Our existing L8 local-dipole analysis of the staged cells, recomputed by repository-only reviewer/make_reference_submission.py using the periodic Ba-gap endpoint midpoint. Coordinates restored to the data-file frame. Core-window statistics and bulk means match the previous reference after rounding; selected sets are independently compared in 5_review/self_review_all_20260912/implementation/analysis/geometry_audit.json. Existing tolerance source: 3_reproduction/L8/result.json re-relaxation scan (R1/R3/R5), decision record 2026-09-05 condition (c). No new simulation.",
+  "cells": {
+    "cell_1": {
+      "staged_as": "cell_1.lmp",
+      "record": "cells.x",
+      "poling_axis": "x"
+    },
+    "cell_2": {
+      "staged_as": "cell_2.lmp",
+      "record": "cells.y",
+      "poling_axis": "y"
+    }
+  },
+  "primary": {
+    "poling_axis": {
+      "truth": {
+        "cell_1": "x",
+        "cell_2": "y"
+      },
+      "rule": "exact string match (identification, handbook 2(4))"
+    },
+    "core_BaO_xy_A": {
+      "truth": {
+        "cell_1": [
+          77.197,
+          80.83
+        ],
+        "cell_2": [
+          77.67,
+          79.649
+        ]
+      },
+      "tol_A": 4.0,
+      "rule": "each coordinate within 4.0 A absolute (one lattice spacing; an identification band, handbook 2(5) exception: the position is defined by the prompt's rule, and a core placed one column or row off would put the windows on the wrong cells)"
+    },
+    "core_TiO2_xy_A": {
+      "truth": {
+        "cell_1": [
+          77.431,
+          236.439
+        ],
+        "cell_2": [
+          76.96,
+          237.695
+        ]
+      },
+      "tol_A": 4.0,
+      "rule": "as core_BaO_xy_A"
+    },
+    "P_bulk_A_C_m2": {
+      "truth": {
+        "cell_1": [
+          0.22,
+          -0.0008
+        ],
+        "cell_2": [
+          -0.1676,
+          0.1499
+        ]
+      },
+      "rule": "x and y components each within max(0.03 absolute, 20 percent of |truth|); z not graded (M1 tolerance from the re-relaxation scan: max in-plane shift 0.0285)"
+    },
+    "P_bulk_B_C_m2": {
+      "truth": {
+        "cell_1": [
+          0.1365,
+          -0.0041
+        ],
+        "cell_2": [
+          0.0782,
+          0.1597
+        ]
+      },
+      "rule": "as P_bulk_A_C_m2"
+    },
+    "p_polar_near_core_BaO_C_m2": {
+      "truth": {
+        "cell_1": -0.0595,
+        "cell_2": 0.135
+      },
+      "tol": 0.06,
+      "rule": "within 0.06 absolute AND the sign of the truth (M2: scan shift up to 0.0585, every sign preserved)"
+    },
+    "p_polar_near_core_TiO2_C_m2": {
+      "truth": {
+        "cell_1": 0.086,
+        "cell_2": 0.083
+      },
+      "tol": 0.06,
+      "rule": "as p_polar_near_core_BaO_C_m2"
+    },
+    "polar_ordering": {
+      "truth": {
+        "cell_1": "BaO < TiO2",
+        "cell_2": "BaO > TiO2"
+      },
+      "rule": "Physical ordering under one global naming map: cell_1 lower < upper; cell_2 lower >= upper. Individual bands and signs unchanged."
+    },
+    "n_reversed": {
+      "truth": {
+        "cell_1": {
+          "BaO": 11,
+          "TiO2": 3
+        },
+        "cell_2": {
+          "BaO": 2,
+          "TiO2": 3
+        }
+      },
+      "rule": "Raw counts not graded. Require >=1 at every core, and cell_1 physical lower count > upper count under one global naming map."
+    },
+    "x_extent_reversed_A": {
+      "truth": {
+        "cell_1": {
+          "BaO": 19.2,
+          "TiO2": 14.53
+        },
+        "cell_2": {
+          "BaO": 0.13,
+          "TiO2": 0.37
+        }
+      },
+      "class_rule": "cell_2: both named extents between 0 and 8.0 A inclusive; cell_1 required named BaO extent >12.0 A, interpreted at its mapped physical core under the accepted naming convention. Optional cell_1 named TiO2 extent is not required or read.",
+      "lattice_spacing_x_A": 4.01,
+      "alternate_convention_provenance": {
+        "staged_cell_1_upper_span_A": 14.529067196253834,
+        "staged_cell_1_lower_span_A": 19.195316082808375,
+        "upper_reversed_Ti_atom_ids": [
+          23383,
+          23393,
+          23413
+        ],
+        "recorded_upper_scan_spans_A": {
+          "R5": 14.53,
+          "R1": 18.53
+        },
+        "source": "3_reproduction/L8/result.json tolerance_scan_summary.reversed_x_spans; independent recomputation docs/review/grader_semantics_20260917/solver2/span_crosscheck.py. Both physical cell_1 spans remain >12 A; no new simulation."
+      }
+    },
+    "P_total_C_m2": {
+      "truth": {
+        "cell_1": [
+          0.1733,
+          -0.0024
+        ],
+        "cell_2": [
+          -0.0457,
+          0.1553
+        ]
+      },
+      "rule": "x and y components each within max(0.03 absolute, 20 percent of |truth|); z not graded (M4: scan relative shift up to 0.19)"
+    }
+  },
+  "not_graded": {
+    "z_components": "Not required. An optional third vector entry of any type is ignored; the required first two entries are numeric x/y.",
+    "core_and_shell_convention": "result.json cells.*.core_and_shell is a reference computation and is never graded",
+    "raw_reversed_counts": "see n_reversed",
+    "cell_1_TiO2_extent": "Optional submitted field remains unread under either convention, including its type. Its physical core therefore depends on the accepted global naming map."
+  },
+  "score": "1 only if every primary check passes for both cells (binary all-primary-pass)",
+  "reference_builder": {
+    "scope": "Repository-only provenance tool; not executable from a standalone review kit. grader.py and selfcheck.py do not import it.",
+    "dependencies": [
+      "3_reproduction/L8/auditor/local_dipoles.py",
+      "numpy",
+      "scipy",
+      "staged inputs and reproduction result records"
+    ],
+    "core_definition": "Periodic Cartesian midpoint of actual Ba gap endpoints in the outermost region-A row; output in original data-file coordinates. Dependent geometry recomputed."
+  },
+  "core_naming_conventions": {
+    "rule": "Accept reference or globally reversed BaO/TiO2 names only when one permutation satisfies every check in both cells. Canonical truth uses BaO=lower, TiO2=upper. Partial and per-cell relabeling fail.",
+    "provenance": "Independent frozen prompt-only geometric reviews in docs/review/grader_semantics_20260917 and solver2/span_crosscheck.py: surviving-plane ends versus removed-plane footprints support opposite naming readings.",
+    "cell_1_asymmetric_extent": "The required submitted BaO extent belongs to its mapped physical core. Both physical cores satisfy >12 A; optional submitted TiO2 extent remains unread, including its type. No unsubmitted extent is inferred."
+  }
+}

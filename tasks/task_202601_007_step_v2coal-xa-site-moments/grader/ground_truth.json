@@ -1,0 +1,17 @@
+{
+  "subtask": "L4 analyze (XA V2CoAl site/total moments + ferrimagnetic order)",
+  "kind": "ABACUS Mulliken analyze (heavy leaf; the agent reads our reproduced output, runs nothing)",
+  "provenance": "values from 3_reproduction/L4/result.json (our converged ABACUS run; the self-consistent ground truth). The total is the per-f.u. sum of the per-atom Mulliken moments in mulliken.txt (cell 7.99944 uB / 4 f.u. = 2.000); the order is the V1-antiparallel-V2 ferrimagnetic ground state.",
+  "primary": {
+    "total_moment_uB_per_fu": 2.0,
+    "order": "ferrimagnetic",
+    "note": "Total within +/-10%, exact ferrimagnetic label, V1 negative and V2 positive in the supplied fixed output orientation. Site magnitudes are not scored.",
+    "V_sublattice_signs": "m_V1_uB < 0 and m_V2_uB > 0"
+  },
+  "secondary": {
+    "m_V1_uB": -0.471,
+    "m_V2_uB": 1.986,
+    "m_Co_uB": 0.477,
+    "note": "V1/V2 magnitudes and Co are recorded for context, not magnitude-scored. V1/V2 are required as operands of the sign checks; Co is not a required output."
+  }
+}

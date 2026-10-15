@@ -1,0 +1,18 @@
+task_id: task_202603_035_step_batio3-dislocation-strain-maps
+title: Ba-Ba strain maps around the two cores of an edge-dislocation dipole in BaTiO3
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-03
+source_date: 2026-03-30
+earliest_public_date: 2026-01-30
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [lammps]
+docs: [lammps]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

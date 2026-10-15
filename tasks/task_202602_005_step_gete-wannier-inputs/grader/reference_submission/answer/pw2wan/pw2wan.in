@@ -1,0 +1,11 @@
+&inputpp
+    outdir         = './out'
+    prefix         = 'gete'
+    seedname       = 'gete'
+    spin_component = 'none'
+    write_amn      = .true.
+    write_mmn      = .true.
+    write_spn      = .true.
+    spn_formatted  = .true.
+    write_unk      = .false.
+/

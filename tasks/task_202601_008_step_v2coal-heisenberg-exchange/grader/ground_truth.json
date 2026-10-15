@@ -1,0 +1,35 @@
+{
+  "_doc": "L5 analyze ground truth = our self-consistent reproduction (3_reproduction/L5/result.json, TB2J abacus2J.py, k=3 canonical mesh, convention H=-Sum J_ij S_i.S_j). The paper reports J as figures only, so signs are the robust paper-anchored guard; we grade signs + V-Co dominance as primary and the large magnitudes at tolerance.",
+
+  "L2_1_J_V_Co_meV": 8.632,
+  "XA_J_V1_Co_meV": -0.573,
+  "XA_J_V2_Co_meV": 5.092,
+
+  "sign_required": {
+    "L2_1_J_V_Co_meV": "+",
+    "XA_J_V1_Co_meV": "-"
+  },
+
+  "magnitude_rel_tol": 0.10,
+  "magnitude_graded": ["L2_1_J_V_Co_meV", "XA_J_V2_Co_meV"],
+  "sign_only": ["XA_J_V1_Co_meV"],
+
+  "dominant_NN_pair_accepted": [
+    "V-Co", "V_Co", "V Co", "Co-V", "VCo",
+    "V2-Co", "V2_Co", "V2 Co", "Co-V2",
+    "V1-Co", "V1_Co", "V1 Co", "Co-V1"
+  ],
+
+  "_rules": {
+    "L2_1_J_V_Co_meV": "REQUIRED sign(+) [FM, Fig. 3c]; REQUIRED magnitude +/-10% of 8.632 (the standard relative tolerance)",
+    "XA_J_V1_Co_meV": "REQUIRED sign(-) [AFM, SM Note 2]; magnitude NOT graded -- k-sensitive small value (k3 -0.573, k5 -0.645, ~13% drift); graded sign-only as a documented exception to magnitude grading (rationale in notes.md)",
+    "XA_J_V2_Co_meV": "REQUIRED magnitude +/-10% of 5.092 (the standard relative tolerance); large robust FM coupling (k3 5.092, k5 5.024, ~1% drift)",
+    "dominant_NN_pair": "REQUIRED exact-label membership -- the largest |J| NN pair is a V-Co pair (L2_1 8.632 vs V-V 1.209; XA 5.092 vs V1-V2 3.837), the V-Co-V motif; accept the reasonable V-Co spellings (case-insensitive) in dominant_NN_pair_accepted"
+  },
+
+  "_provenance_k3_vs_k5": {
+    "L2_1 J_V-Co": {"k3": 8.632, "k5": 8.545},
+    "XA J_V2-Co":  {"k3": 5.092, "k5": 5.024},
+    "XA J_V1-Co":  {"k3": -0.573, "k5": -0.645, "note": "magnitude k-sensitive, sign robust"}
+  }
+}

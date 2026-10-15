@@ -1,0 +1,33 @@
+{
+  "subtask": "L6 analyze",
+  "kind": "analyze (light implement-and-run; minimum-mode saddle search on a staged EAM system; no DFT)",
+  "provenance": "scheme-A reproduction record 3_reproduction/L6/runs/schemeA/{saddles.csv,minima.csv,geometries.npz} + result.json; all truth values recomputed from the staged relaxed reference (E_ref = -1711.22649835 eV) with the L6 torch EAM (see make_staged_files.py / notes.md).",
+  "reference_energy_eV": -1711.22649835,
+  "starts": {
+    "start_a": {
+      "target_saddle": "sad2 (single-atom edge/corner event)",
+      "final_state": "min3",
+      "dE_eV":        {"truth": 0.83682873, "rule": "2(1) +/-10% relative"},
+      "index1_certificate": {"rule": "sign-only: lambda1_eV_A2 < 0 AND lambda2_eV_A2 > 0", "lambda1_diag": -0.714822255, "lambda2_diag": 1.23758432},
+      "n_atoms_moved": {"truth": 1, "rule": "2(4) exact integer"},
+      "dE_final_eV":   {"truth": 0.71996916, "rule": "2(1) +/-10% relative"}
+    },
+    "start_b": {
+      "target_saddle": "sad3 (few-atom concerted event)",
+      "final_state": "min4",
+      "dE_eV":        {"truth": 0.72171885, "rule": "2(1) +/-10% relative"},
+      "index1_certificate": {"rule": "sign-only: lambda1_eV_A2 < 0 AND lambda2_eV_A2 > 0", "lambda1_diag": -0.359580261, "lambda2_diag": 0.554223617},
+      "n_atoms_moved": {"truth": 2, "rule": "2(4) exact integer"},
+      "dE_final_eV":   {"truth": 0.34310313, "rule": "2(1) +/-10% relative"}
+    },
+    "start_c": {
+      "target_saddle": "sad1 (whole-island 7-atom concerted glide, dE_min)",
+      "final_state": "min2 (compact endpoint at a different adsorption registry, 0.01440205 eV above the reference)",
+      "dE_eV":        {"truth": 0.63204664, "rule": "2(1) +/-10% relative"},
+      "index1_certificate": {"rule": "sign-only: lambda1_eV_A2 < 0 AND lambda2_eV_A2 > 0", "lambda1_diag": -0.617321099, "lambda2_diag": 0.240376280},
+      "n_atoms_moved": {"truth": 7, "rule": "2(4) exact integer"},
+      "dE_final_eV":   {"truth": 0.01440205, "rule": "2(5) expert-approved absolute tolerance for a small nonzero energy difference, abs_tol below", "abs_tol": 0.005}
+    }
+  },
+  "score": "1 only if, for every start, all four primary checks pass (dE_eV, index-1 sign certificate, n_atoms_moved, dE_final_eV); any single failure scores 0. lambda magnitudes are secondary diagnostics, not scored."
+}

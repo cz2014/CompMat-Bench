@@ -1,0 +1,18 @@
+task_id: task_202603_002_step_zno-finite-strain-inputs
+title: input decks for the relaxation and finite-strain elastic and piezoelectric response of wurtzite ZnO
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-05
+earliest_public_date: 2026-03-05
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [qe]
+docs: [qe]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

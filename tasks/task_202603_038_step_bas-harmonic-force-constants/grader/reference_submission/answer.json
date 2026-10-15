@@ -1,0 +1,33 @@
+{
+  "displaced_runs": {
+    "disp_a": {
+      "atom_index": 1,
+      "species": "B",
+      "axis": "x",
+      "displacement_A": 0.01
+    },
+    "disp_b": {
+      "atom_index": 1,
+      "species": "B",
+      "axis": "x",
+      "displacement_A": -0.01
+    },
+    "disp_c": {
+      "atom_index": 257,
+      "species": "As",
+      "axis": "x",
+      "displacement_A": 0.01
+    },
+    "disp_d": {
+      "atom_index": 257,
+      "species": "As",
+      "axis": "x",
+      "displacement_A": -0.01
+    }
+  },
+  "acoustic_sum_residual_max": 3.5202407322807034e-05,
+  "omega_TO_11B_cm1": 691.2540329304719,
+  "omega_TO_10B_cm1": 720.6192552879523,
+  "omega_TO_natural_cm1": 696.7601469713557,
+  "omega_max_supercell_natural_cm1": 730.2870290819793
+}

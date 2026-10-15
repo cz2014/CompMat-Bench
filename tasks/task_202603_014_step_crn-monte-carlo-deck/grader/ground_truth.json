@@ -1,0 +1,229 @@
+{
+  "subtask": "L7 gen_input",
+  "kind": "gen_input (VAMPIRE 7.0 atomistic-spin deck: input + material file + unit cell file for a classical Monte Carlo Neel-temperature sweep of the four-bond CrN model)",
+  "provenance": "Rubric and reference submission from 3_reproduction/L7/. The graded settings are deck A as run (hpc_computations/decks/A/{input,CrN.mat,CrN.ucf}); the reference submission re-expresses that deck with the prompt's file names and the prompt's temperature LOOP (deck A ran one process per temperature). Floors for the box size and the sweep lengths come from the stage-4 confirmatory job on the HPC cluster, tabulated in notes.md. See ../../../3_reproduction/L7/{context.md,index.md,result.json}.",
+  "run_labels": [
+    "mc"
+  ],
+  "file_names": {
+    "input": "input",
+    "material": "material.mat",
+    "unitcell": "unitcell.ucf"
+  },
+  "file_names_note": "Fixed by the prompt. The `input` file must also point at the other two by these names (see input_required.file_wiring): with material:unit-cell-file unset VAMPIRE silently builds a simple-cubic lattice (create:crystal-structure defaults to \"sc\", src/unitcell/data.cpp:32) and with material:file unset it runs on one built-in default material, so both wirings change the physics rather than the bookkeeping.",
+  "cell": {
+    "lattice_abc_A": [
+      5.775870670250322,
+      2.9654911337603655,
+      4.1430715438434085
+    ],
+    "lattice_rel_tol": 0.001,
+    "lattice_note": "The staged agent/cell/POSCAR lattice (orthorhombic, Cr planes stacked along a). Graded on the unit cell file's own `ucx ucy ucz` size line within 0.1%, because a deck that supplies material:unit-cell-file takes its cell size from that line (src/unitcell/read.cpp:85); the input file's dimensions:unit-cell-size-* only scales the BUILT-IN crystal structures (src/unitcell/{sc,bcc,fcc,...}.cpp) and is inert here, so it is not graded. The three lattice-vector lines of the ucf are not graded either: VAMPIRE places atoms as (n + frac) * size per axis (src/create/generate_crystal.cpp:98-100) and never reads those lines back, so the cell it builds is diag(size) whatever they say, and every distance in this rubric is computed that way.",
+    "cr_frac_poscar_order": [
+      [
+        0.13502029,
+        0.25,
+        0.25
+      ],
+      [
+        0.36497971,
+        0.75,
+        0.75
+      ],
+      [
+        0.63502029,
+        0.25,
+        0.25
+      ],
+      [
+        0.86497971,
+        0.75,
+        0.75
+      ]
+    ],
+    "site_match_tol_frac": 0.02,
+    "site_match_note": "The four Cr of the staged POSCAR, in POSCAR order. Matched under a single global translation and periodic wrap (a unit cell file fixes no origin), tolerance 0.02 in fractional coordinates on every component.",
+    "moment_sign_poscar_order": [
+      1,
+      -1,
+      -1,
+      1
+    ],
+    "up_sites": [
+      0,
+      3
+    ],
+    "down_sites": [
+      1,
+      2
+    ],
+    "sublattice_note": "agent/cell/magnetic_state.json. The rubric requires only that the up and down sites carry DIFFERENT material indices, not our exact 2-material assignment: four materials, one per site, also makes the staggered moment readable from the per-material output."
+  },
+  "shells": [
+    {
+      "name": "bond_D",
+      "frac_abs": [
+        0.22995942,
+        0.5,
+        0.5
+      ],
+      "distance_A": 2.872969,
+      "n_per_site": 4,
+      "J_paper_meV": -4.9555,
+      "J_UCF_J": -3.572813839e-21
+    },
+    {
+      "name": "bond_A",
+      "frac_abs": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "distance_A": 2.887935,
+      "n_per_site": 2,
+      "J_paper_meV": -3.5406,
+      "J_UCF_J": -2.552699966e-21
+    },
+    {
+      "name": "bond_C",
+      "frac_abs": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "distance_A": 2.965491,
+      "n_per_site": 2,
+      "J_paper_meV": -1.0128,
+      "J_UCF_J": -7.302080227e-22
+    },
+    {
+      "name": "bond_B",
+      "frac_abs": [
+        0.27004058,
+        0.5,
+        0.5
+      ],
+      "distance_A": 2.987059,
+      "n_per_site": 4,
+      "J_paper_meV": -0.2553,
+      "J_UCF_J": -1.840660626e-22
+    }
+  ],
+  "shell_note": "The four rows of the staged agent/exchange_table.csv, keyed by the componentwise ABSOLUTE fractional displacement (sign- and symmetry-independent, and unaffected by a global origin shift). J_UCF_J = 4.5 * J_paper_meV * 1.602176634e-22 J/meV: the paper writes H = -2 sum_{i>j} J S.S with |S| = 3/2, VAMPIRE writes H = -sum_{i<j} J S.S on unit vectors (manual, Background Theory; src/exchange/energy.cpp:38), so J^UCF = 2 * S^2 * J_paper = 4.5 J_paper, in Joules. Deriving that factor is the tested skill (3_reproduction/L7/context.md section 8).",
+  "shell_tol_frac": 0.02,
+  "shell_tol_note": "Classification tolerance on each component of the absolute fractional displacement. The two four-neighbour shells differ by 0.040 in the first component (0.22996 vs 0.27004), so 0.02 separates them cleanly and still absorbs a cell whose Cr x-coordinate is rounded.",
+  "links_per_site": 12,
+  "links_total": 48,
+  "links_note": "2 + 4 + 2 + 4 = 12 directed links per Cr, 4 Cr = 48. Every bond must be listed in BOTH directions: VAMPIRE sums over j only for each i (src/exchange/energy.cpp:38, with the code's own comment about the silent factor 1/2), and it refuses to start on a list that is not i->j->i symmetric (src/unitcell/verify.cpp:83-100). The full directed neighbor graph and multiplicity are compared, rather than only shell totals.",
+  "J_rel_tol": 0.1,
+  "J_rel_tol_note": "Handbook 2(1), the universal +/-10% relative band, applied per shell to the effective isotropic exchange in Joules. Sign is part of the value: all four bonds are negative.",
+  "max_link_distance_A": 3.2,
+  "max_link_distance_note": "REQUIRED-absent row: the model is the paper's four-bond Table I and nothing else. The fifth Cr-Cr shell sits at 4.139-4.143 A and would raise the ordered-state exchange sum per Cr by 16.5% (3_reproduction/L7/context.md section 5), so any interaction longer than 3.2 A fails. The four graded shells span 2.873-2.987 A, so 3.2 A separates them from the fifth shell with a wide margin.",
+  "material_required": {
+    "num_materials_min": 2,
+    "num_materials_note": "material:num-materials >= 2. VAMPIRE's default is 1 (src/main/initialise_variables.cpp:52), so this is REQUIRED-explicit. A one-material deck cannot supply the requested separate sublattice observable. Finite-system net moments are not identically zero at every temperature.",
+    "anisotropy_max_abs_J": 0.0,
+    "anisotropy_note": "Every per-material anisotropy CONSTANT must be absent or exactly zero (the model is exchange only: no anisotropy, no field). All of them default to zero with their enable switches off (src/anisotropy/data.cpp:41-50,61-65,119), so omitting them all passes. The keyword list the rule walks is grader_vampire_inputs.ANISOTROPY_CONSTANT_KEYWORDS, read from src/anisotropy/interface.cpp (both the current and the legacy spellings).",
+    "unit_cell_category_note": "Every unit cell material the deck uses must be claimed by a `material[i]:unit-cell-category` line, except mat 0 which is on by default. VAMPIRE generates a unit cell atom only if inc_uc_atom[mat] is set (src/create/generate_crystal.cpp:109), that array is filled from the materials' unit_cell_category (generate_crystal.cpp:89), and the keyword stores its value MINUS ONE (src/create/interface.cpp:825, accepted range 1-101, field default 0). So a ucf site with mat = m needs some material to declare unit-cell-category = m + 1. This row is NOT in the author's triage: it was added after the stage-4 confirmatory probes showed the failure is silent -- deck A with its two unit-cell-category lines deleted still runs to completion and reports 432 of 864 atoms, one whole sublattice gone (notes.md, 'Judgments delegated to the grader author').",
+    "moment_min_J_per_T": 1e-30,
+    "moment_note": "atomic-spin-moment nonzero on every material a magnetic site belongs to. The value is NOT graded: with no field and no dipole term, T_N and the normalised curve are exactly independent of it (2.85 muB is our as-run value and the axis label only). VAMPIRE's default is 1.72 muB (src/main/material.cpp:33) and its accepted range is 0.1 - 1e8 muB (src/vio/match.cpp:1772), so an omitted moment passes and a zero moment is not even expressible.",
+    "nonmagnetic_keyword": "material:non-magnetic",
+    "nonmagnetic_note": "A unit cell file may carry the N sites as well as the four Cr, but only as a material declared non-magnetic (`material[i]:non-magnetic` = remove / keep / blank, src/vio/match.cpp:2266-2306). That is the code's own mechanism; a zero atomic-spin-moment is rejected by the range check above, so notes.md's 'zero moment' reads as 'declared non-magnetic' here (recorded in notes.md).",
+    "initial_spin_note": "material[i]:initial-spin-direction is NOT graded. An ordered start is our choice; a random start is equally defensible for locating T_N."
+  },
+  "input_required": {
+    "file_wiring": {
+      "material_file": "material.mat",
+      "unit_cell_file": "unitcell.ucf",
+      "keys": [
+        "material:file",
+        "material:unit-cell-file"
+      ]
+    },
+    "integrator": {
+      "key": "sim:integrator",
+      "accepted": [
+        "monte-carlo"
+      ],
+      "default": "llg-heun (src/simulate/data.cpp:22)",
+      "note": "REQUIRED-explicit. The task is a classical Monte Carlo sweep; the LLG integrators solve dynamics instead, and the two constrained-Monte-Carlo integrators hold the magnetisation direction fixed, which is a different ensemble and does not give the free-system transition."
+    },
+    "program": {
+      "key": "sim:program",
+      "accepted": [
+        "curie-temperature"
+      ],
+      "default": "benchmark (src/program/data.cpp:26, program = 0)",
+      "note": "REQUIRED-explicit. curie-temperature is the program that steps sim:temperature from sim:minimum-temperature to sim:maximum-temperature by sim:temperature-increment, equilibrating and averaging at each point (src/program/curie_temperature.cpp:102-133). cmc-anisotropy, hybrid-cmc and exchange-stiffness walk the same grid but under a constraint; field-cool varies the temperature continuously in time (src/program/field_cool.cpp:113-129) and never steps the grid. Accepted spellings come from src/program/interface.cpp:56-63, not from the manual, which documents two program names (`field-cooling`, `temperature-pulse`) that this source does not accept."
+    },
+    "periodic": {
+      "axes": [
+        0,
+        1,
+        2
+      ],
+      "default": "off on all three axes (src/create/create.cpp:41)",
+      "note": "REQUIRED-explicit: a periodic supercell is stated in the prompt, and free surfaces on a 50-A box would depress T_N. Set by `create:periodic-boundaries-x/-y/-z` or by the bare `create:periodic-boundaries` with or without an axis list (src/create/interface.cpp:206-246)."
+    },
+    "box_floor_A": [
+      49.5,
+      49.5,
+      49.5
+    ],
+    "box_floor_note": "The 49.5 A envelope is retained to preserve previous acceptance, not claimed to be a proven necessary minimum. Saved-data refits of boxes 5x10x7 and 7x14x10 give 295.9592 and 290.5971 K, within the existing 5% comparison band even relative to unchanged 284.2128 K. These effective replication tuples are additionally accepted at >=5000 equilibration and >=15000 sampling sweeps, the tested budgets. The shorter existing budgets were tested only at the larger production box; no global smaller size floor or cross-product of separately tested minima is asserted. Other geometries below the retained envelope remain outside the recorded accepted set, not demonstrated physical failures. Requested edge lengths within 1e-5 A of a measured box are accepted as decimal-serialization equivalents; effective engine cell counts are still reported.",
+    "temperature_grid": {
+      "minimum_max_K": 100.0,
+      "maximum_min_K": 320.0,
+      "increment_max_K": 10.0,
+      "defaults": "minimum 0 K, maximum 300 K, increment 10 K (src/simulate/sim.cpp:90-94)",
+      "note": "The graded T_N band is 256-312 K (+/-10% of 284.213 K). A grid whose top is below 320 K cannot bracket it, a grid that never gets deep into the ordered phase cannot anchor M(0), and a step coarser than 10 K cannot locate the transition inside the band. The default maximum of 300 K fails the 320 K requirement, so the maximum is REQUIRED-explicit; the default minimum (0 K) and increment (10 K) already pass, so omitting either is accepted (handbook 2(6): boundaries are inclusive).",
+      "minimum_allowed_K": 0.0,
+      "increment_min_K": 1e-10
+    },
+    "sweeps": {
+      "equilibration_min": 1000,
+      "loop_min": 3000,
+      "defaults": "equilibration 0 steps (src/simulate/data.cpp:63), loop 10000 steps (src/simulate/data.cpp:61)",
+      "note": "Sweep floor from the stage-4 confirmatory sweep-length runs (notes.md, the HPC cluster job 20454278) on the run-A box: 1000/3000 gives T_N = 284.23 K (+0.01%) and 2000/6000 gives 283.95 K (-0.09%), both inside the 5% band, so the floor is the shorter pair we confirmed. The equilibration default of 0 fails, so sim:equilibration-time-steps is REQUIRED-explicit; the loop default of 10000 already clears 3000, so an omitted sim:loop-time-steps passes."
+    },
+    "output_sublattice_keys": [
+      "output:material-mean-magnetisation-length",
+      "output:material-mean-magnetisation"
+    ],
+    "output_sublattice_note": "At least one of the two. Both write the per-material `m<i>M_norm_mean_l` column, the TIME AVERAGE of the magnitude of each configuration's sublattice vector (src/statistics/magnetization.cpp:194 accumulates all four components including the length; :425 and :456 divide by the sample count). That is the quantity the transition is read from: with no anisotropy the Neel axis is free and diffuses, so an average of the sublattice VECTOR decays to zero deep in the ordered phase. `output:material-magnetisation` is a single instantaneous snapshot (magnetization.cpp:299) and does not qualify; `output:material-standard-deviation` is wired to the SYSTEM accumulator despite its name (src/statistics/update.cpp:80) and does not either.",
+    "output_temperature_key": "output:temperature",
+    "output_temperature_note": "The temperature column, without which the recorded curve carries no abscissa (src/vio/match.cpp:1028).",
+    "algorithm": {
+      "key": "montecarlo:algorithm",
+      "default": "adaptive",
+      "accepted": [
+        "adaptive",
+        "uniform",
+        "angle",
+        "hinzke-nowak"
+      ],
+      "note": "The prompt specifies classical vector spins. Updates must explore continuous directions; pure spin-flip traps each site on its initial axis. The software default passes. No unique update recipe is prescribed."
+    },
+    "measured_smaller_boxes": [
+      {
+        "cells": [
+          5,
+          10,
+          7
+        ],
+        "equilibration_min": 5000,
+        "loop_min": 15000
+      },
+      {
+        "cells": [
+          7,
+          14,
+          10
+        ],
+        "equilibration_min": 5000,
+        "loop_min": 15000
+      }
+    ]
+  },
+  "score": "1 only if the single run `mc` passes every REQUIRED row: the unit cell file (cell size, the four Cr sites, two sublattices on different materials, all 48 directed links of the four shells, no interaction beyond 3.2 A, every shell's exchange within +/-10% of J_UCF_J), the material file (>= 2 materials, no anisotropy, a nonzero moment) and the input file (deck wiring, Monte Carlo integrator with continuous-direction update, temperature-sweep program, periodic in x/y/z, box/sampling pair in the recorded accepted set, temperature grid, sweep floors, the per-material mean-magnetisation-length output and the temperature column). Any single failure scores 0 (handbook 1, binary all-primary-pass). A deck whose three files cannot be parsed scores 0 before any check runs (handbook 1(3))."
+}

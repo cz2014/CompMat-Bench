@@ -1,0 +1,75 @@
+{
+  "subtask": "L8 analyze",
+  "kind": "analyze (coupled surface-phonon-polariton dispersion and p-polarized evanescent energy transmission of a 10 nm vacuum gap, two dielectric functions of natural-abundance BAs at 300 K: the quasiparticle single-oscillator curve and the ensemble-averaged curve)",
+  "provenance": "3_reproduction/L8/result.json (current guards G1-G4 and recorded metrics; original reproduction at commit b629dbe) and 3_reproduction/L8/runs/dispersion.npz (the 6001-point reference curves, symlinked at reviewer/reference/dispersion.npz). The staged file agent/eps_nat_bas.npz is the purpose-trimmed copy of the same two spectra (3_reproduction/L8/auditor/make_staged.py, sha256 3f7ac8683b61536cfd3ea5384af9407bedd0cb0756134c681455d7109a084fb7). Tolerances: the four reviewer-ruled guards of 2026-09-06, plus the accepted per-point curve checks; the disordered curve includes selected poles and fallback values. Reference dispersion rebuilt with minimum-attenuation +1 pole selection and no Re(eps) cutoff. Full-grid independent root methods agree: 330 Lorentz roots and 311 disordered roots. Original 265 Lorentz roots retained; finite coverage, not unbounded-plane completeness.",
+  "staged_spectra": {
+    "eps_lorentz": "the quasiparticle baseline: one damped Lorentz oscillator at the virtual-crystal frequencies with gamma = 0.29 cm^-1 (the record's 'QPT' branch)",
+    "eps_disordered": "the configuration-averaged spectrum of 10 000 fixed-count natural-abundance configurations, isotropic average (the record's 'nonperturbative' branch)",
+    "grid": "680.00 to 740.00 cm^-1, step 0.01, 6001 points; the L2 grid window"
+  },
+  "primary": {
+    "crossings_lorentz_cm1": {
+      "truth": [
+        696.6829731871627,
+        699.3368830880701
+      ],
+      "tol_cm1": 0.05,
+      "rule": "exactly two crossings, each within 0.05 cm^-1 of ours (five grid steps; the interpolation choice moves a crossing by at most one step). Deterministic on the staged file."
+    },
+    "n_grid_points_eps_re_le_minus1_disordered": {
+      "truth": 0,
+      "rule": "exact integer (G3: the count is 0 in the production run, in the 9 984-configuration pool and in all 39 blocks of 256 configurations; the block minimum of min eps' is +1.7455)"
+    },
+    "G1_peak_lorentz": {
+      "truth": {
+        "peak_nu_cm1": 699.31,
+        "peak_beta_over_k0": 290.21838597576783
+      },
+      "rule": "peak_nu_lorentz_cm1 lies between the agent's own two Lorentz crossings, with 0.05 cm^-1 of slack on each side (five grid steps: our peak sits only 0.0269 cm^-1 below the upper crossing, so a strict test would be a knife edge), and within 1.0 cm^-1 of the upper one (reviewer checkpoint-2 ruling: +/- 1.0 cm^-1, numerics only; the QPT branch has no configurational spread). Our gap to the upper crossing is 0.0269 cm^-1; the wrong readings (lower crossing, omega_TO, the eps'' maximum) all sit about 2.65 cm^-1 away."
+    },
+    "G2_peak_ratio": {
+      "truth": {
+        "ratio": 50.15596386300588,
+        "nonpert_peak_beta_over_k0": 5.786318587525493,
+        "nonpert_peak_nu_cm1": 693.07
+      },
+      "band": [
+        10.0,
+        200.0
+      ],
+      "rule": "Ratio of maxima of the two reported curves in [10, 200], unchanged. The disordered curve maximum is a fallback value, so this is not a ratio of two physical mode propagation constants."
+    },
+    "G4_xi_p_max_above_50": {
+      "truth": {
+        "disordered_wide_grid": 0.3740400949459568,
+        "disordered_presentation_grid": 0.37475233342349673,
+        "lorentz_wide_grid": 0.9999996097541616,
+        "lorentz_presentation_grid": 0.9999999926142138
+      },
+      "band_disordered": [
+        0.1,
+        0.6
+      ],
+      "floor_lorentz": 0.99,
+      "rule": "xi_p_max_above_50_disordered within [0.1, 0.6] and 0.99 <= xi_p_max_above_50_lorentz <= 1 (reviewer checkpoint-2 ruling; 39 blocks 0.377 +/- 0.009, range 0.358-0.392, nearest block 29 sigma inside the lower edge and 23 sigma inside the upper edge). Rejects the maximum over the whole map (1.0 on the disordered branch) and a map that never resolves the bound-mode ridge on the Lorentz branch."
+    },
+    "curve_disordered": {
+      "truth": "reference/dispersion.npz nonpert_beta_over_k0: 311 selected +1 roots and 5690 fallback points; each of 6001 frequencies searched.",
+      "rule": "per point |agent - ours| <= max(0.05, 0.05 |ours|); at least 95 percent of the 6001 points pass (agreement with the corrected selected-root/fallback curve). Length must be 6001."
+    },
+    "curve_lorentz": {
+      "truth": "reference/dispersion.npz qpt_beta_over_k0 with qpt_converged selecting 330 roots; 5671 fallback points.",
+      "rule": "same per-point band, evaluated separately on the 330 selected-root points (at least 95 percent pass) and on the remaining 5671 fallback points (at least 95 percent pass). The selected-root set is where the root solve is tested: an agent that reports the light line there scores 0. Length must be 6001."
+    }
+  },
+  "not_graded": {
+    "crossings_disordered_cm1": "Not required; ignored if supplied. Internal reference diagnostics may retain this quantity.",
+    "n_grid_points_eps_re_le_minus1_lorentz": "Not required; ignored if supplied. Internal reference diagnostics may retain this quantity.",
+    "peak_nu_disordered_cm1": "Not required; ignored if supplied. Internal reference diagnostics may retain this quantity.",
+    "M1_confinement_width": "0.4130 cm^-1, recorded only (reviewer ruling)",
+    "M2_evanescent_fraction": "degenerate (1.0) on the Lorentz branch, recorded only (reviewer ruling)",
+    "G5_dispersion_span": "the paper's 690-720 span claim, recorded only (task_notes.md trap 9)",
+    "literal_xi_below_0p3": "the paper's literal 'below 0.3', contradicted by the authors' own deposit; the G4 form above is the ruled reading (task_notes.md trap 8)"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

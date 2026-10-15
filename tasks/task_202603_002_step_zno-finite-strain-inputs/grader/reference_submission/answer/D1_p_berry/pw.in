@@ -1,0 +1,45 @@
+&CONTROL
+  lberry        = .true.
+  gdir          = 3
+  nppstr        = 8
+  calculation   = 'nscf'
+  prefix        = 'wz_x000_D1_p0.008'
+  outdir        = './tmp'
+  pseudo_dir    = '/home/user/pp/gbrv_pbesol'
+  tstress       = .true.
+  tprnfor       = .true.
+  etot_conv_thr = 1.0d-6
+  forc_conv_thr = 1.0d-6
+  disk_io       = 'low'
+/
+&SYSTEM
+  nosym         = .true.
+  noinv         = .true.
+  ibrav         = 0
+  nat           = 4
+  ntyp          = 2
+  ecutwfc       = 80.0
+  ecutrho       = 600.0
+  occupations   = 'fixed'
+/
+&ELECTRONS
+  conv_thr         = 1.0d-12
+  mixing_beta      = 0.3
+  mixing_mode      = 'plain'
+  electron_maxstep = 200
+  diagonalization  = 'david'
+/
+ATOMIC_SPECIES
+  O     15.999  o_pbesol_v1.2.uspp.F.UPF
+  Zn    65.380  zn_pbesol_v1.uspp.F.UPF
+CELL_PARAMETERS angstrom
+      3.259981628064     0.000000001008     0.000000000000
+     -1.629990310032     2.823226832160     0.000000000000
+      0.000000000000     0.000000000000     5.217694956000
+ATOMIC_POSITIONS crystal
+  Zn      0.666667000000     0.333333000000     0.499579639600
+  Zn      0.333333000000     0.666667000000    -0.000420360400
+  O       0.666667000000     0.333333000000     0.880730360400
+  O       0.333333000000     0.666667000000     0.380730360400
+K_POINTS automatic
+  8 8 8 0 0 0

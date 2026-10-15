@@ -1,0 +1,14 @@
+## Matplotlib style file for kdotpy
+
+## Put the axes, ticks, etc. on top of the plot data.
+axes.axisbelow       : False
+
+## Ticks settings: inward on all four axes
+xtick.top            : True
+xtick.bottom         : True
+xtick.direction      : in
+ytick.left           : True
+ytick.right          : True
+ytick.direction      : in
+
+

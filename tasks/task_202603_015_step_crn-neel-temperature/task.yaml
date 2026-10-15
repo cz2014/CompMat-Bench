@@ -1,0 +1,18 @@
+task_id: task_202603_015_step_crn-neel-temperature
+title: the Neel temperature of antiferromagnetic CrN from a classical Monte Carlo sweep
+task_type: step
+role: analyze
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-10
+earliest_public_date: 2026-03-10
+promoted: 2026-09-13
+env_bundles: [env_vampire_7.0.0]
+requires: []
+third_party_docs: [vampire_input_reference.tex]
+codes: [vampire]
+docs: [vampire]
+image: vampire-source-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

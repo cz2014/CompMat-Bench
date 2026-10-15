@@ -1,0 +1,29 @@
+{
+  "chain": "C04",
+  "status": "verified",
+  "notes": "Continuous geometry/IFC/scattering reproduction and independent endpoint comparison passed; no extra flux-residual grading gate.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "fe0fee219a25a4f2e49b4132b13891f6b3969fde6411c68f302b61f80fee74b7",
+  "fields": {
+    "mean_p_Si_3_5THz": {
+      "truth": 0.6479801817817824,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "mean_sigma_p_Si_3_5THz": {
+      "truth": 0.35357170918682,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "mean_p_Ge_5_8THz": {
+      "truth": 0.8567674317859315,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "mean_sigma_p_Ge_5_8THz": {
+      "truth": 0.17148687312535396,
+      "rule": "relative",
+      "rtol": 0.1
+    }
+  }
+}

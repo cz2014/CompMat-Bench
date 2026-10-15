@@ -1,0 +1,10 @@
+{
+  "families": [
+    {"sg_number": 12, "count": 48, "altermagnetic": false},
+    {"sg_number": 25, "count": 24, "altermagnetic": true},
+    {"sg_number": 42, "count": 24, "altermagnetic": true},
+    {"sg_number": 164, "count": 16, "altermagnetic": false},
+    {"sg_number": 187, "count": 8, "altermagnetic": true}
+  ],
+  "n_altermagnetic_configs": 56
+}

@@ -1,0 +1,18 @@
+task_id: task_202603_028_step_hzo-vacancy-charge-thermodynamics
+title: charge-state thermodynamics of the oxygen vacancy in Hf$_{0.5}$Zr$_{0.5}$O$_2$ across its local cation environments
+task_type: step
+role: analyze
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-17
+earliest_public_date: 2026-03-17
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [vasp]
+docs: [vasp]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

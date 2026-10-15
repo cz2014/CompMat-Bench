@@ -1,0 +1,43 @@
+&control
+    calculation      = 'scf'
+    prefix           = 'mnte_prim'
+    outdir           = './out'
+    pseudo_dir       = '/scratch/user/codes_data/qe/pseudo'
+    verbosity        = 'high'
+/
+&system
+    ibrav            = 0
+    nat              = 4
+    ntyp             = 3
+    ecutwfc          = 60
+    ecutrho          = 480
+    occupations      = 'smearing'
+    smearing         = 'gaussian'
+    degauss          = 0.01
+    nspin            = 2
+    starting_magnetization(1) =  0.6
+    starting_magnetization(2) = -0.6
+    starting_magnetization(3) =  0.0
+/
+&electrons
+    conv_thr         = 1.0d-9
+    electron_maxstep = 200
+/
+ATOMIC_SPECIES
+  Mn1    54.93804  Mn.pbe-spn-kjpaw_psl.0.3.1.UPF
+  Mn2    54.93804  Mn.pbe-spn-kjpaw_psl.0.3.1.UPF
+  Te    127.60000  Te.pbe-n-kjpaw_psl.1.0.0.UPF
+HUBBARD (ortho-atomic)
+U Mn1-3d 3.0
+U Mn2-3d 3.0
+CELL_PARAMETERS angstrom
+      4.206583089017    -0.000000000000     0.000000000000
+     -2.103291544508     3.643007818669     0.000000000000
+      0.000000000000     0.000000000000     6.690800592745
+ATOMIC_POSITIONS crystal
+  Mn1      0.000000000000    -0.000000000000    -0.000000000000
+  Mn2     -0.000000000000    -0.000000000000     0.500000000000
+  Te       0.333333333300     0.666666666700     0.249999976200
+  Te       0.666666666700     0.333333333300     0.750000023800
+K_POINTS automatic
+  16 16 10 0 0 0

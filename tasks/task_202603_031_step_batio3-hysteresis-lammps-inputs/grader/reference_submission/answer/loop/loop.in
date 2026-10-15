@@ -1,0 +1,83 @@
+# Input protocol reference: finite passes are not a convergence certificate.
+# No actual relaxation is run or evaluated by this input-task grader.
+# L1 run loop_aniso: the field-list walk with box protocol `fix box/relax aniso 0.0`.
+# Warm-started from poled_final.lmp; each field step starts from the previous relaxed
+# state (the authors' hysteresis.in structure -- a cold start per field would
+# destroy the hysteresis).  Field values are files/zenodo_19354687/field.txt.
+# This deck covers field-list entries 01 .. 55.
+
+atom_style full
+units metal
+dimension 3
+boundary p p p
+
+read_data poled.lmp
+
+# setting per atom charges
+set type 1 charge 5.62 # Ba core
+set type 2 charge 4.76 # Ti core
+set type 3 charge 0.91 # O core
+set type 4 charge -3.76 # Ba shell
+set type 5 charge -1.58 # Ti shell
+set type 6 charge -2.59 # O shell
+
+# setting up the potential
+pair_style buck/coul/long/cs 15.0
+pair_coeff * * 	0.0 		0.1 	 0.0
+pair_coeff 4 6 	1061.30 	0.3740 	 0.0			# Ba-O
+pair_coeff 5 6 	3769.93 	0.2589 	 0.0	 		# Ti-O
+pair_coeff 6 6 	4740.00 	0.2686 	 160.0			# O-O
+pair_modify table 0
+
+# defining the kpspace solver
+kspace_style pppm 1.0e-7
+
+# setting up the springs between cores and shells
+bond_style class2
+bond_coeff 1 	0.0		125.9    	0.0 	0.0 		# Ba core-shell
+bond_coeff 2 	0.0		161.0   	0.0 	20.833 		# Ti core-shell
+bond_coeff 3 	0.0 	15.5    	0.0 	166.666 	# O core-shell
+
+# switching off the coulmbic interactions between the cores and shells
+special_bonds coul 0.0 1.0 1.0
+
+# building neighbor list
+neighbor 2.0 bin
+comm_modify vel yes
+neigh_modify delay 0 check yes every 1 one 50000 page 500000
+
+# energy minimization variables (relaxation.in lines 48-51; ruling: script wins)
+variable etol equal 0.0
+variable ftol equal 1e-4
+variable maxiter equal 10000
+variable maxeval equal 100000
+
+thermo 100
+thermo_style custom step pe fmax fnorm press pxx pyy pzz lx ly lz vol
+
+variable e index 0.1025 0.0925 0.0850 0.0775 0.0700 0.0625 0.0550 0.0475 0.0400 0.0325 0.0250 0.0175 0.0100 0.0025 -0.0050 -0.0125 -0.0200 -0.0275 -0.0350 -0.0425 -0.0500 -0.0575 -0.0650 -0.0725 -0.0800 -0.0875 -0.0950 -0.1025 -0.0925 -0.0850 -0.0775 -0.0700 -0.0625 -0.0550 -0.0475 -0.0400 -0.0325 -0.0250 -0.0175 -0.0100 -0.0025 0.0050 0.0125 0.0200 0.0275 0.0350 0.0425 0.0500 0.0575 0.0650 0.0725 0.0800 0.0875 0.0950 0.1025
+variable istep index 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55
+
+label FIELDLOOP
+fix field all efield 0.0 0.0 ${e}
+fix_modify field energy yes
+print "FIELDSTEP_START ${istep} ${e}"
+
+variable p loop 4
+label LOOPPASS
+min_style cg
+fix br all box/relax aniso 0.0 vmax 0.01 nreset 100
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+unfix br
+min_style fire
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+next p
+jump SELF LOOPPASS
+
+print "FIELDSTEP ${istep} ${e} $(lx) $(ly) $(lz) $(vol) $(pe) $(fmax) $(press) $(pxx) $(pyy) $(pzz)" append loop_steps.txt screen yes
+write_data state_${istep}.lmp nocoeff
+unfix field
+next istep e
+jump SELF FIELDLOOP
+
+print "LOOP_DECK_DONE"

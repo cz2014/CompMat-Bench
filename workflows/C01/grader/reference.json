@@ -1,0 +1,128 @@
+{
+  "chain": "C01",
+  "status": "verified",
+  "notes": "reviewer approved both original and rotated piezoelectric interpretations on 2026-09-23. A complete answer must satisfy one consistent convention, including the existing joint global-sign rule. All tolerances are retained; fieldwise mixing is forbidden. Both endpoint sets were reproduced from the same archived relaxed structure without DFT or model calls.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "9f3fa4f777df5b48df3b0621f7dca445dbf586ba7dc72641164690ca7d5b416b",
+  "fields": {
+    "WS2_potential_pp_meV": {
+      "truth": 170.9340620249883,
+      "atol": 0.2,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "WS2_charge_peak_1e12_cm2": {
+      "truth": 4.234314379186922,
+      "atol": 0.02,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "WS2_RMh_mean_meV": {
+      "truth": 37.886,
+      "atol": 0.2,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "WSe2_potential_pp_meV": {
+      "truth": 76.99013313146688,
+      "atol": 0.2,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "WSe2_charge_peak_1e12_cm2": {
+      "truth": 1.9463001304429697,
+      "atol": 0.02,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "WSe2_RMh_mean_meV": {
+      "truth": -19.201,
+      "atol": 0.2,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    }
+  },
+  "joint_sign_fields": [
+    "WS2_RMh_mean_meV",
+    "WSe2_RMh_mean_meV"
+  ],
+  "accepted_conventions": {
+    "original": {
+      "WS2_potential_pp_meV": {
+        "truth": 170.9340620249883,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WS2_charge_peak_1e12_cm2": {
+        "truth": 4.234314379186922,
+        "atol": 0.02,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WS2_RMh_mean_meV": {
+        "truth": 37.886,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WSe2_potential_pp_meV": {
+        "truth": 76.99013313146688,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WSe2_charge_peak_1e12_cm2": {
+        "truth": 1.9463001304429697,
+        "atol": 0.02,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WSe2_RMh_mean_meV": {
+        "truth": -19.201,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      }
+    },
+    "rotated": {
+      "WS2_potential_pp_meV": {
+        "truth": 19.365414139061915,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WS2_charge_peak_1e12_cm2": {
+        "truth": 3.1129556255655086,
+        "atol": 0.02,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WS2_RMh_mean_meV": {
+        "truth": -0.0,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WSe2_potential_pp_meV": {
+        "truth": 8.206505913123436,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WSe2_charge_peak_1e12_cm2": {
+        "truth": 0.6929524361851945,
+        "atol": 0.02,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      },
+      "WSe2_RMh_mean_meV": {
+        "truth": -0.0,
+        "atol": 0.2,
+        "rtol": 0.05,
+        "rule": "tolerance"
+      }
+    }
+  },
+  "convention_provenance": "docs/review/c01_dual_convention_20260923/verification/receipt.json"
+}

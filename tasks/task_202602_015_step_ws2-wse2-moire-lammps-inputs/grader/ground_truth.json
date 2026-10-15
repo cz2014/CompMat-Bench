@@ -1,0 +1,59 @@
+{
+  "subtask": "L1 gen_input",
+  "kind": "gen_input (rigid R-type WS2/WSe2 moire supercell + LAMMPS relaxation deck)",
+  "provenance": "structure and deck references from 3_reproduction/L1/ (reproduced 2026-06-21; see ../../../3_reproduction/L1/index.md). Ground truth is OUR rigid cell (references/lammps.dat) and OUR as-run relaxation deck (references/lammps.in), not any paper figure or number.",
+  "reference_data": "reference/lammps.dat",
+  "type_map": {
+    "1": "W",
+    "2": "S",
+    "3": "S",
+    "4": "W",
+    "5": "Se",
+    "6": "Se"
+  },
+  "note_reference": "The reference structure is our rigid cell re-expressed in ELEMENT space by the 6-type Twister map above, computed inside grader.py from reference/lammps.dat. All structure targets (species counts, per-layer W counts, layer lattice constants, z-planes, anchor) are DERIVED from that reference at grade time; only the tolerances below are constants here.",
+  "structure_submission": "POSCAR_moire",
+  "structure_tolerances": {
+    "note": "Descriptor fallback instead of a full structure match (StructureMatcher/fallback both impractical or unsafe at 3903 atoms -- a documented exception, see notes.md). Integer counts are compared exactly; lengths/lattice per the structure standard; the metric bands below are documented exceptions justified by the designed-wrong self-check.",
+    "lattice_len_rel": 0.001,
+    "lattice_ang_deg": 0.5,
+    "min_vacuum_A": 15.0,
+    "note_vacuum": "only the in-plane lattice is compared to the reference; the vacuum height along z is the agent's choice (prompt de-leak 2026-07-08) and is guarded by the 15 A floor instead of a c match",
+    "species_counts": "exact (integer counts match exactly)",
+    "per_layer_W_counts": "exact (integer counts): bottom (WS2) 676, top (WSe2) 625",
+    "layer_identity": "exact: every chalcogen nearer the bottom W-plane is S, every one nearer the top is Se (all-or-nothing integer partition)",
+    "layer_a_rel": 0.02,
+    "anchor_max_inplane_A": 0.3,
+    "wplane_sep_tol_A": 0.2,
+    "half_thickness_tol_A": 0.15
+  },
+  "geometry_tolerances": {
+    "inplane_site_A": 0.1,
+    "file_inplane_A": 0.1,
+    "file_z_A": 0.15,
+    "note": "B-01: new per-site xy bijection tolerance uses the structure standard default; all existing structure tolerances remain unchanged. B-02: both submitted formats share one rigid translation; xy uses the same 0.10 A and z reuses the existing 0.15 A half-thickness margin. Full-cell consistency uses the existing lattice tolerances."
+  },
+  "deck": {
+    "run_labels": [
+      "relax"
+    ],
+    "script_name": "relax.in",
+    "data_name": "moire.dat",
+    "ftol_max_eVA": 1e-06,
+    "ftol_note": "the prompt states the objective (a tight force criterion, energy test disabled) and withholds the number (handbook 5.2a); our as-run deck used 1e-8, and the floor accepts any competent tight choice down to 1e-6",
+    "element_counts": {
+      "W": 1301,
+      "S": 1352,
+      "Se": 1250
+    },
+    "required_checks": [
+      "units metal",
+      "boundary p p p/f/s/m",
+      "complete chemically correct ordinary SW per sheet and four inward-interface KC/z channels, effective type mappings",
+      "fixed box",
+      "resolved force-criterion minimize etol=0 and 0<ftol<=1e-6",
+      "exact element counts W1301 S1352 Se1250"
+    ]
+  },
+  "score": "1 only if structure, one-to-one lattice occupancy, POSCAR/data consistency and every required deck check pass. Existing whole-layer phase freedom applies to reference comparison only."
+}

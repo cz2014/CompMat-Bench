@@ -1,0 +1,71 @@
+{
+  "subtask": "L7 gen_input",
+  "kind": "gen_input (benchmark four-column per-state material table; accepted Monte Carlo consumer uses C, v_x, tau only; graded on aggregate invariants)",
+  "provenance": "3_reproduction/L7/data/full_modes_{Si,Ge}.h5, the arrays behind the accepted Monte Carlo input tables L7/data/modes_{Si,Ge}.txt (commit af1723c, reviewer human audit 2026-09-07), velocities rotated into the cubic frame by L2/auditor/guards/frame.json; the record's closure against the L2 RTA conductivity is 1.7e-6 (Si) and 3.7e-7 (Ge), L7/auditor/mode_export_{Si,Ge}.json. Re-derived from the staged files by reviewer/make_reference_submission.py (reference_vs_record.json).",
+  "table_format": "four whitespace-separated columns per row, no header: nu [THz], C [J/m^3/K], v_x [m/s], tau [s]",
+  "nu_cut_THz": 3.0,
+  "odd_ratio_tol": 0.0001,
+  "primary": {
+    "Si": {
+      "n_rows": {
+        "truth": 93747,
+        "rule": "exact integer (rule 2(4)); 6 x 25^3 states minus the three without a scattering rate"
+      },
+      "sum_C_J_m3_K": {
+        "truth": 1587977.0782818925,
+        "rule": "+/-10 percent relative (rule 2(1)); total volumetric heat capacity at 300 K"
+      },
+      "kappa_xx_W_mK": {
+        "truth": 320.33094981737565,
+        "rule": "+/-10 percent relative (rule 2(1)); sum C v_x^2 tau over the rows"
+      },
+      "kappa_below_3THz_W_mK": {
+        "truth": 100.0957061918818,
+        "rule": "+/-10 percent relative (rule 2(1)); the same sum over rows with nu < 3 THz"
+      },
+      "fourth_moment_W_m_K_s2": {
+        "truth": 5635700370.830542,
+        "rule": "+/-10 percent relative (rule 2(1)); sum C v_x^4 tau over the rows, the |v_x| distribution of the conductivity: the deterministic variants tested during authoring agree within 5 percent (axis [111] within 4 percent), the isotropic-speed shortcut v_x = +-|v|/sqrt(3) misses by 45 percent"
+      },
+      "odd_ratio": {
+        "truth": 0.0,
+        "rule": "|sum C v_x tau| / sum C |v_x| tau <= 0.0001 (absolute band, zero target, rule 2(2))",
+        "record_value": 1.8202902855852328e-11
+      }
+    },
+    "Ge": {
+      "n_rows": {
+        "truth": 93747,
+        "rule": "exact integer (rule 2(4)); 6 x 25^3 states minus the three without a scattering rate"
+      },
+      "sum_C_J_m3_K": {
+        "truth": 1804675.2960213418,
+        "rule": "+/-10 percent relative (rule 2(1)); total volumetric heat capacity at 300 K"
+      },
+      "kappa_xx_W_mK": {
+        "truth": 145.9012544180069,
+        "rule": "+/-10 percent relative (rule 2(1)); sum C v_x^2 tau over the rows"
+      },
+      "kappa_below_3THz_W_mK": {
+        "truth": 58.39428031147502,
+        "rule": "+/-10 percent relative (rule 2(1)); the same sum over rows with nu < 3 THz"
+      },
+      "fourth_moment_W_m_K_s2": {
+        "truth": 1257033433.4744291,
+        "rule": "+/-10 percent relative (rule 2(1)); sum C v_x^4 tau over the rows, the |v_x| distribution of the conductivity: the deterministic variants tested during authoring agree within 5 percent (axis [111] within 4 percent), the isotropic-speed shortcut v_x = +-|v|/sqrt(3) misses by 45 percent"
+      },
+      "odd_ratio": {
+        "truth": 0.0,
+        "rule": "|sum C v_x tau| / sum C |v_x| tau <= 0.0001 (absolute band, zero target, rule 2(2))",
+        "record_value": 0.0
+      }
+    }
+  },
+  "not_graded": {
+    "row_order": "free",
+    "transport_axis": "the cubic [100] axis is the physical specification; for a cubic crystal every graded aggregate is direction-independent to well inside the tolerance (sum C |v_x| changes by 3.7 percent between [100] and [111]), so the axis choice is not resolved by the grader (notes.md)",
+    "per_state_values": "graded only through the aggregates above; passing does not certify each row or column independently. Compensated wrong tables and local near-degenerate velocity differences are documented in notes.md; human decision retains this rubric without a per-state matcher.",
+    "extra_runs": "labels beyond Si and Ge are ignored"
+  },
+  "score": "1 only if every primary check of both materials passes (binary all-primary-pass)"
+}

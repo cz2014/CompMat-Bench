@@ -1,0 +1,37 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (CALPHAD ZnO-MgO pseudo-binary from a published solid-solution description: the T0 crossing at 300 C, the Gibbs energy difference at x = 0.5, and the wurtzite/rocksalt common-tangent compositions at 1000 C and 1500 C)",
+  "provenance": "3_reproduction/L1/result.json keys metrics.M1_dG_300C_kJmol (x = 0.5), metrics.M2_x_T0_300C, metrics.M4_x_solvus_WZ and 3_reproduction/L1/phase_diagram.csv rows T_C = 1000, 1500 (commit 38080af). Re-derived from the leaf module by reviewer/make_reference_submission.py; identical to the record.",
+  "primary": {
+    "x_T0_573K": {
+      "truth": 0.338002,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); the source paper's abstract-level 'about 0.4' sits at +18 percent and fails"
+    },
+    "dG_RS_minus_WZ_x0p5_573K_kJ_per_mol": {
+      "truth": -10.06806,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value (rocksalt is the lower at x = 0.5). Invariant to the reference-state convention: the same linear-in-x shift added to both phases cancels"
+    },
+    "x_WZ_solvus_1273K": {
+      "truth": 0.056439,
+      "rule": "+/-10 percent relative (scalar rule 2(1))"
+    },
+    "x_RS_solvus_1273K": {
+      "truth": 0.732385,
+      "rule": "+/-10 percent relative (scalar rule 2(1))"
+    },
+    "x_WZ_solvus_1773K": {
+      "truth": 0.16095,
+      "rule": "+/-10 percent relative (scalar rule 2(1))"
+    },
+    "x_RS_solvus_1773K": {
+      "truth": 0.565593,
+      "rule": "+/-10 percent relative (scalar rule 2(1))"
+    }
+  },
+  "not_graded": {
+    "x_T0_298K": "0.339068; within 0.3 percent of the 573.15 K value, no separate signal",
+    "common_tangent_573K": "(2.199e-5, 0.954575); outside the approved scope. The nonzero wurtzite value has a defined 10 percent relative band [1.9791e-5, 2.4189e-5], excluding zero; rocksalt band spans 0.86-1.05.",
+    "peritectic": "1936.5 C, apex x = 0.2200; liquid out of scope (reviewer 2026-09-10)"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

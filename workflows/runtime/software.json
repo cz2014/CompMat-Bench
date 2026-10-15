@@ -1,0 +1,453 @@
+{
+  "python": {
+    "version": "base image Python",
+    "argv": [
+      "/app/.venv/bin/python"
+    ]
+  },
+  "vasp-6.1": {
+    "version": "6.1.0",
+    "argv": [
+      "/opt/science/native/vasp/bin/vasp_std"
+    ],
+    "mpi": [
+      "/opt/science/native/intelmpi/bin/mpiexec.hydra",
+      "-hosts",
+      "localhost"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/intelmpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/vasp/lib:/opt/science/native/intelmpi/lib/release:/opt/science/native/intelmpi/lib",
+      "I_MPI_ROOT": "/opt/science/native/intelmpi",
+      "I_MPI_FABRICS": "shm",
+      "I_MPI_HYDRA_BOOTSTRAP": "fork",
+      "I_MPI_PIN": "0",
+      "I_MPI_HYDRA_IFACE": "lo"
+    }
+  },
+  "vasp-wannier": {
+    "version": "6.4.1 with Wannier90 interface",
+    "argv": [
+      "/opt/science/native/vasp-w90/bin/vasp_std"
+    ],
+    "mpi": [
+      "/opt/science/native/intelmpi/bin/mpiexec.hydra",
+      "-hosts",
+      "localhost"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/intelmpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/vasp/lib:/opt/science/native/intelmpi/lib/release:/opt/science/native/intelmpi/lib",
+      "I_MPI_ROOT": "/opt/science/native/intelmpi",
+      "I_MPI_FABRICS": "shm",
+      "I_MPI_HYDRA_BOOTSTRAP": "fork",
+      "I_MPI_PIN": "0",
+      "I_MPI_HYDRA_IFACE": "lo"
+    }
+  },
+  "wannier90": {
+    "version": "3.1.0 (VASP interface build)",
+    "argv": [
+      "/opt/science/native/vasp-w90/bin/wannier90.x"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/intelmpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/vasp/lib:/opt/science/native/intelmpi/lib/release:/opt/science/native/intelmpi/lib",
+      "I_MPI_ROOT": "/opt/science/native/intelmpi",
+      "I_MPI_FABRICS": "shm",
+      "I_MPI_HYDRA_BOOTSTRAP": "fork",
+      "I_MPI_PIN": "0",
+      "I_MPI_HYDRA_IFACE": "lo"
+    }
+  },
+  "abacus": {
+    "version": "3.10.1",
+    "argv": [
+      "/opt/science/native/abacus/bin/abacus"
+    ],
+    "mpi": [
+      "/opt/science/native/abacus/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/abacus/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/abacus/lib",
+      "OPAL_PREFIX": "/opt/science/native/abacus",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,sm,tcp",
+      "PRTE_MCA_rmaps_default_mapping_policy": "slot",
+      "PRTE_MCA_hwloc_default_binding_policy": "none",
+      "PRTE_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_btl_tcp_if_include": "lo"
+    }
+  },
+  "pw.x": {
+    "version": "QE 7.5",
+    "argv": [
+      "/opt/science/native/qe/bin/pw.x"
+    ],
+    "mpi": [
+      "/opt/science/native/qe-mpi/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/qe-mpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/qe/lib:/opt/science/native/qe-mpi/lib",
+      "OPAL_PREFIX": "/opt/science/native/qe-mpi",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,vader,tcp",
+      "OMPI_MCA_btl_tcp_if_include": "lo",
+      "OMPI_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_hwloc_base_binding_policy": "none",
+      "OMPI_MCA_rmaps_base_oversubscribe": "1"
+    }
+  },
+  "ph.x": {
+    "version": "QE 7.5",
+    "argv": [
+      "/opt/science/native/qe/bin/ph.x"
+    ],
+    "mpi": [
+      "/opt/science/native/qe-mpi/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/qe-mpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/qe/lib:/opt/science/native/qe-mpi/lib",
+      "OPAL_PREFIX": "/opt/science/native/qe-mpi",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,vader,tcp",
+      "OMPI_MCA_btl_tcp_if_include": "lo",
+      "OMPI_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_hwloc_base_binding_policy": "none",
+      "OMPI_MCA_rmaps_base_oversubscribe": "1"
+    }
+  },
+  "q2r.x": {
+    "version": "QE 7.5",
+    "argv": [
+      "/opt/science/native/qe/bin/q2r.x"
+    ],
+    "mpi": [
+      "/opt/science/native/qe-mpi/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/qe-mpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/qe/lib:/opt/science/native/qe-mpi/lib",
+      "OPAL_PREFIX": "/opt/science/native/qe-mpi",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,vader,tcp",
+      "OMPI_MCA_btl_tcp_if_include": "lo",
+      "OMPI_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_hwloc_base_binding_policy": "none",
+      "OMPI_MCA_rmaps_base_oversubscribe": "1"
+    }
+  },
+  "matdyn.x": {
+    "version": "QE 7.5",
+    "argv": [
+      "/opt/science/native/qe/bin/matdyn.x"
+    ],
+    "mpi": [
+      "/opt/science/native/qe-mpi/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/qe-mpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/qe/lib:/opt/science/native/qe-mpi/lib",
+      "OPAL_PREFIX": "/opt/science/native/qe-mpi",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,vader,tcp",
+      "OMPI_MCA_btl_tcp_if_include": "lo",
+      "OMPI_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_hwloc_base_binding_policy": "none",
+      "OMPI_MCA_rmaps_base_oversubscribe": "1"
+    }
+  },
+  "bands.x": {
+    "version": "QE 7.5",
+    "argv": [
+      "/opt/science/native/qe/bin/bands.x"
+    ],
+    "mpi": [
+      "/opt/science/native/qe-mpi/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/qe-mpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/qe/lib:/opt/science/native/qe-mpi/lib",
+      "OPAL_PREFIX": "/opt/science/native/qe-mpi",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,vader,tcp",
+      "OMPI_MCA_btl_tcp_if_include": "lo",
+      "OMPI_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_hwloc_base_binding_policy": "none",
+      "OMPI_MCA_rmaps_base_oversubscribe": "1"
+    }
+  },
+  "pp.x": {
+    "version": "QE 7.5",
+    "argv": [
+      "/opt/science/native/qe/bin/pp.x"
+    ],
+    "mpi": [
+      "/opt/science/native/qe-mpi/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/qe-mpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/qe/lib:/opt/science/native/qe-mpi/lib",
+      "OPAL_PREFIX": "/opt/science/native/qe-mpi",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,vader,tcp",
+      "OMPI_MCA_btl_tcp_if_include": "lo",
+      "OMPI_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_hwloc_base_binding_policy": "none",
+      "OMPI_MCA_rmaps_base_oversubscribe": "1"
+    }
+  },
+  "pw2wannier90.x": {
+    "version": "QE 7.5",
+    "argv": [
+      "/opt/science/native/qe/bin/pw2wannier90.x"
+    ],
+    "mpi": [
+      "/opt/science/native/qe-mpi/bin/mpirun",
+      "--bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/qe-mpi/bin:/app/.venv/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/qe/lib:/opt/science/native/qe-mpi/lib",
+      "OPAL_PREFIX": "/opt/science/native/qe-mpi",
+      "OMPI_MCA_pml": "ob1",
+      "OMPI_MCA_btl": "self,vader,tcp",
+      "OMPI_MCA_btl_tcp_if_include": "lo",
+      "OMPI_MCA_oob_tcp_if_include": "lo",
+      "OMPI_MCA_hwloc_base_binding_policy": "none",
+      "OMPI_MCA_rmaps_base_oversubscribe": "1"
+    }
+  },
+  "python-phonons": {
+    "version": "phonopy/phono3py 4.4.0",
+    "argv": [
+      "/app/.venv/bin/python"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/layers/phonons-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/phonons-v1/lib",
+      "PATH": "/opt/layers/phonons-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    },
+    "python_modules": [
+      "lammps",
+      "phonopy",
+      "phono3py"
+    ],
+    "description": "Python environment for LAMMPS and phonon calculations"
+  },
+  "python-mace": {
+    "version": "mace-torch 0.3.16; torch 2.13.0+cpu",
+    "argv": [
+      "/app/.venv/bin/python"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/layers/torch-mace-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/torch-mace-v1/lib",
+      "PATH": "/opt/layers/torch-mace-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    }
+  },
+  "python-tb2j": {
+    "version": "TB2J 0.9.12.26",
+    "argv": [
+      "/app/.venv/bin/python"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/layers/tb2j-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/tb2j-v1/lib",
+      "PATH": "/opt/layers/tb2j-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    }
+  },
+  "lmp": {
+    "version": "LAMMPS 22 Jul 2025 Update 4",
+    "argv": [
+      "/lib64/ld-linux-x86-64.so.2",
+      "/opt/layers/phonons-v1/lammps/lmp"
+    ],
+    "mpi": [
+      "/opt/layers/phonons-v1/bin/mpiexec"
+    ],
+    "env": {
+      "LD_LIBRARY_PATH": "/opt/layers/phonons-v1/lib",
+      "PATH": "/opt/layers/phonons-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "UCX_TLS": "self,sm,tcp",
+      "HYDRA_LAUNCHER": "fork"
+    }
+  },
+  "phonopy": {
+    "version": "phonopy/phono3py 4.4.0",
+    "argv": [
+      "/app/.venv/bin/python",
+      "/opt/layers/phonons-v1/bin/phonopy"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/layers/phonons-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/phonons-v1/lib",
+      "PATH": "/opt/layers/phonons-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    },
+    "python_modules": [
+      "lammps",
+      "phonopy",
+      "phono3py"
+    ],
+    "description": "Python environment for LAMMPS and phonon calculations"
+  },
+  "phono3py": {
+    "version": "phonopy/phono3py 4.4.0",
+    "argv": [
+      "/app/.venv/bin/python",
+      "/opt/layers/phonons-v1/bin/phono3py"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/layers/phonons-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/phonons-v1/lib",
+      "PATH": "/opt/layers/phonons-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    },
+    "python_modules": [
+      "lammps",
+      "phonopy",
+      "phono3py"
+    ],
+    "description": "Python environment for LAMMPS and phonon calculations"
+  },
+  "python-tb2j-0.9.20": {
+    "version": "TB2J 0.9.20",
+    "argv": [
+      "/app/.venv/bin/python"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/tb2j-0.9.20:/opt/layers/tb2j-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/tb2j-v1/lib",
+      "PATH": "/opt/layers/tb2j-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    }
+  },
+  "abacus2J": {
+    "version": "TB2J 0.9.12.26",
+    "argv": [
+      "/app/.venv/bin/python",
+      "-m",
+      "TB2J.scripts.abacus2J"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/layers/tb2j-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/tb2j-v1/lib",
+      "PATH": "/opt/layers/tb2j-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    }
+  },
+  "wann2J": {
+    "version": "TB2J 0.9.20",
+    "argv": [
+      "/app/.venv/bin/python",
+      "-m",
+      "TB2J.scripts.wann2J"
+    ],
+    "env": {
+      "PYTHONPATH": "/opt/tb2j-0.9.20:/opt/layers/tb2j-v1",
+      "LD_LIBRARY_PATH": "/opt/layers/tb2j-v1/lib",
+      "PATH": "/opt/layers/tb2j-v1/bin:/app/.venv/bin:/usr/bin:/bin",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "UCX_TLS": "self,sm,tcp"
+    }
+  },
+  "alm": {
+    "version": "ALAMODE 1.4.2",
+    "argv": [
+      "/opt/layers/alamode-v1/alamode/bin/alm"
+    ],
+    "env": {
+      "LD_LIBRARY_PATH": "/opt/layers/alamode-v1/alamode/lib",
+      "OPAL_PREFIX": "/opt/layers/alamode-v1/alamode",
+      "PATH": "/opt/layers/alamode-v1/alamode/bin:/app/.venv/bin:/usr/bin:/bin"
+    }
+  },
+  "anphon": {
+    "version": "ALAMODE 1.4.2",
+    "argv": [
+      "/opt/layers/alamode-v1/alamode/bin/anphon"
+    ],
+    "env": {
+      "LD_LIBRARY_PATH": "/opt/layers/alamode-v1/alamode/lib",
+      "OPAL_PREFIX": "/opt/layers/alamode-v1/alamode",
+      "PATH": "/opt/layers/alamode-v1/alamode/bin:/app/.venv/bin:/usr/bin:/bin"
+    }
+  },
+  "lmp-deepmd": {
+    "version": "LAMMPS 29 Aug 2024 / DeepMD 3.1.1 study-native bundle",
+    "argv": [
+      "/opt/science/native/c09-deepmd/bin/lmp"
+    ],
+    "mpi": [
+      "/opt/science/native/c09-deepmd/bin/mpirun",
+      "-launcher",
+      "fork",
+      "-bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/c09-deepmd/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/c09-deepmd/lib",
+      "LAMMPS_PLUGIN_PATH": "/opt/science/native/c09-deepmd/lib/deepmd_lmp",
+      "TF_INTRA_OP_PARALLELISM_THREADS": "1",
+      "TF_INTER_OP_PARALLELISM_THREADS": "1",
+      "DP_INTRA_OP_PARALLELISM_THREADS": "1",
+      "DP_INTER_OP_PARALLELISM_THREADS": "1"
+    }
+  },
+  "python-c09": {
+    "version": "UV-locked Python 3.11; DeepMD 3.1.1 / ASE 3.26.0",
+    "argv": [
+      "/opt/science/c09/project/.venv/bin/python"
+    ],
+    "env": {
+      "PATH": "/opt/science/c09/project/.venv/bin:/usr/bin:/bin",
+      "PYTHONNOUSERSITE": "1",
+      "TF_INTRA_OP_PARALLELISM_THREADS": "1",
+      "TF_INTER_OP_PARALLELISM_THREADS": "1",
+      "DP_INTRA_OP_PARALLELISM_THREADS": "1",
+      "DP_INTER_OP_PARALLELISM_THREADS": "1",
+      "LD_LIBRARY_PATH": "/opt/science/python311/lib"
+    }
+  },
+  "python-c10": {
+    "version": "UV-locked Python 3.11; ASE 3.26.0 / NumPy 2.2.6 / SciPy 1.15.3",
+    "argv": [
+      "/opt/science/c10/project/.venv/bin/python"
+    ],
+    "env": {
+      "PATH": "/opt/science/c10/project/.venv/bin:/usr/bin:/bin",
+      "PYTHONNOUSERSITE": "1",
+      "LD_LIBRARY_PATH": "/opt/science/python311/lib"
+    }
+  }
+}

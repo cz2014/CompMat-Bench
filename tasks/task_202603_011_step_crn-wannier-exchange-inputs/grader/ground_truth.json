@@ -1,0 +1,223 @@
+{
+  "subtask": "L4 gen_input",
+  "kind": "gen_input (VASP + Wannier90-interface static of the given relaxed cell, plus the TB2J command that extracts the isotropic exchange from it)",
+  "provenance": "rubric and reference submission from 3_reproduction/L4/ (hpc_computations/w90_static_iii as-run INCAR / KPOINTS / wannier90.win, job 20410128; auditor/submit_tb2j_prod.sh for the production wann2J.py command, job 20410537) and 3_reproduction/L3/ (auditor/POSCAR_relaxed_variant_iii.vasp = the given cell; hpc_computations/static_iii/EIGENVAL.gz = the grader-side window reference, DOSCAR.gz = the staged E_F). See ../../../3_reproduction/L4/index.md and result.json.",
+  "run_labels": [
+    "wannier",
+    "tb2j"
+  ],
+  "files_per_label": {
+    "wannier": [
+      "INCAR",
+      "KPOINTS",
+      "POSCAR",
+      "wannier90.win"
+    ],
+    "tb2j": [
+      "run.sh"
+    ]
+  },
+  "layout_note": "handbook 5.1 manifest-plus-per-label layout, with the per-label file set pinned by the prompt (the Wannier90 .win and the TB2J run.sh are the non-VASP members). A label directory missing one of its files is a gating format failure (handbook 1(3)); extra files are recorded and ignored.",
+  "structure_reference_dir": "reference",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "matcher",
+    "note": "Standard threshold (handbook 5.2, structure_task_authoring 2). The cell is GIVEN and held fixed by the prompt, so the check only has to reject a different or corrupted cell, not resolve a small displacement: the default 0.1 A and the species-aware StructureMatcher pipeline are exactly right. The cell is nearly isotropic (5.78 x 2.97 x 4.14 A), so method='matcher' (not the anisotropic 'fallback' route) applies."
+  },
+  "reference_provenance": "reference/relaxed_cell/POSCAR symlinks 3_reproduction/L3/auditor/POSCAR_relaxed_variant_iii.vasp -- the same file staged to the agent as relaxed_cell/POSCAR.",
+  "encut_catalog": "graderlib/grader_potcar_vasp54.yaml",
+  "encut_catalog_key": "species_lda",
+  "encut_floor_eV": 400.0,
+  "encut_floor_note": "1.0 * max(ENMAX over the LDA PAW potentials Cr_pv 265.753 and N 400.000) = 400.0 eV, read from the species_lda block of the graderlib catalog. LDA, not PBE: this paper's library is potpaw_LDA.54, and element symbols collide between the two libraries, so the grader names the key it reads.",
+  "kmesh_reference": {
+    "subdivisions": [
+      6,
+      12,
+      8
+    ],
+    "vacuum_axes": [],
+    "centering": "gamma",
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "ldau": {
+    "type": 2,
+    "cr_l": 2,
+    "cr_u_eV": 4.1,
+    "u_band_eV": [
+      4.0,
+      4.2
+    ],
+    "n_u_max_eV": 0.1,
+    "note": "Declared pin 1 (notes.md): Dudarev (LDAUTYPE effectively 2, the VASP default, so an omitted tag passes) single effective U on the Cr 3d shell. Graded: LDAU=.TRUE., LDAUTYPE eff 2, LDAUL[Cr]=2, U_eff[Cr]=LDAUU-LDAUJ in [4.0,4.2]; N carries no U (LDAUL[N]=-1, or |U_eff[N]| <= 0.1 eV if the agent lists an l for it). LDAUL defaults to 2 per species; omitted LDAUJ defaults to zero. Equivalent U/J decompositions pass."
+  },
+  "magmom": {
+    "cr_abs_min_muB": 1.0,
+    "n_abs_max_muB": 0.5,
+    "stacking_axis": 0,
+    "note": "Declared pins 2-3 (notes.md): collinear up-up-down-down along the first lattice vector, with the PARALLEL neighbouring Cr planes the wider-spaced pair. Graded geometrically, not by list position: the four Cr sites are ordered by their fractional coordinate on the stacking axis, the four cyclic plane spacings are computed, and the rule requires the two wide-gap adjacent pairs to carry the same sign and the two narrow-gap adjacent pairs opposite signs, with |m_Cr| >= 1.0 muB and every N |m| <= 0.5 muB. The global sign is free (a time-reversal twin). On the given cell the wide gaps are 1.560 A (Cr planes at x=0.365/0.635 and, cyclically, 0.865/0.135) and the narrow gaps 1.328 A, so our as-run MAGMOM = 3 -3 -3 3 0 0 0 0 satisfies it. An absent MAGMOM is the VASP ferromagnetic default (1.0 on every ion) and fails."
+  },
+  "ispin": 2,
+  "nbands_floor": 48,
+  "nbands_floor_note": "Grader-side derivation from 3_reproduction/L3/hpc_computations/static_iii/EIGENVAL.gz (292 k-points, 2 spins, 56 bands). Bands 1-16 (Cr 3p + N 2s semicore) top out at -3.8796 eV and the p-d manifold starts at +1.8816 eV, a global 5.76 eV gap, so at EVERY k the 32 states of the Cr-3d + N-2p manifold are band indices 17 through 48. NBANDS must therefore reach at least 48 for an outer window above the semicore to hold 32 states at every k. VASP's default NBANDS here is NELECT/2 + NIONS/2 = 34 + 4 = 38, which is below the floor, so this is REQUIRED-explicit. Set at the hard physical minimum, not at our as-run 72 (handbook 5.2a: grade the class of defensible choices; a competent 50- or 56-band deck is correct and must not be rejected).",
+  "wannier90": {
+    "num_wann": 32,
+    "num_wann_note": "4 Cr x 5 d + 4 N x 3 p = 32 functions per spin. VASP 6.4 uses effective INCAR NUM_WANN and writes it to wannier90.win; redundant or differing raw .win num_wann does not determine the dimension.",
+    "projections_required": [
+      [
+        "Cr",
+        2,
+        5
+      ],
+      [
+        "N",
+        1,
+        3
+      ]
+    ],
+    "projections_note": "Pinned Wannier90 3.1.0 parses the selected projections. Require independent d/p harmonic coverage on every Cr/N site in a scalar spin channel, resolving elemental and f=/c= coordinate projections and rotated axes. Repeated copies do not supply missing basis directions.",
+    "write_hr": true,
+    "write_xyz": true,
+    "write_flags_note": "write_hr and write_xyz both default .false. in Wannier90 3.x. TB2J's Wannier route reads <prefix>_hr.dat together with <prefix>_centres.xyz (the centres file is what gates the home-cell remapping), so both are REQUIRED-explicit.",
+    "nbands_default": 38,
+    "interface_note": "Pinned VASP 6.4 / Wannier90 library route: LWANNIER90_RUN=true invokes setup and construction. In the declared .win projection route NUM_WANN defaults to NBANDS; the task independently requires NBANDS >= 48, so omission cannot yield the required 32. LOCPROJ-based construction is outside this bounded declared-projection route.",
+    "interface_sources": [
+      "https://vasp.at/wiki/LWANNIER90_RUN",
+      "https://vasp.at/wiki/NUM_WANN"
+    ]
+  },
+  "energy_windows": {
+    "reference_eigenvalues": "Reviewer-only reference/window_eigenvalues.json.gz, derived from L3 static_iii EIGENVAL.gz: 292 k, two spins, 56 bands. L3 and L4 are different SCF runs; this does not certify a submitted L4 spectrum.",
+    "semicore_top_eV": -3.879636,
+    "pd_manifold_bottom_eV": 1.881644,
+    "dis_win_max_min_eV": 15.79875,
+    "dis_froz_max_max_eV": 14.075287,
+    "derivation": "The stored extrema describe the archived bands 16, 17, 48 and 49. They are retained for provenance re-derivation, not independent unconditional window thresholds. Actual scoring jointly counts selected reference states.",
+    "rules": {
+      "outer": "Explicit lower edge must not cut the target p-d manifold bottom (1.881644 eV). Admission of lower semicore states is allowed. Ordered finite bounds; omitted bounds use spectrum extrema. Count at least 32 outer reference states.",
+      "frozen": "Optional; upper edge activates freezing; omitted lower edge inherits outer lower edge. A lower edge without upper is invalid. Count at most 32 states in the intersection with the outer window.",
+      "evidence_limits": "Unknown bands above archived band 56 can make a cardinality inference unresolved. Report such uncertainty as secondary, never fabricate eigenvalues. This fixed archive screen is applied identically across accepted mesh representations.",
+      "ungraded": "exclude_bands, num_bands, write_tb, use_ws_distance, guiding_centres, iteration counts and convergence tolerances remain outside scoring."
+    },
+    "as_run_check": "Reference bounds [-0.069,16.531] eV and frozen upper 11.931 eV select 34 outer and 18–22 frozen states on the archive. Omission of the lower outer edge alone freezes 34–38 states and fails."
+  },
+  "efermi": {
+    "doscar_eV": 9.6929406,
+    "tolerance_eV": 0.3,
+    "note": "E_F of the staged ground_state/DOSCAR.gz (line 6 field 4). The Wannier static's own E_F is 9.6310 eV, 0.062 eV lower; at the measured 0.006 meV of exchange per 1.0 eV of window shift (L4 index.md) that difference is immaterial, so the +/- 0.3 eV band accommodates either reading. Documented handbook 2(5) exception: an absolute band on an energy whose zero is the calculation's own, not a +/- 10% relative band."
+  },
+  "tb2j": {
+    "program": "wann2J.py",
+    "elements_must_include": [
+      "Cr"
+    ],
+    "prefix_up": "wannier90.1",
+    "prefix_down": "wannier90.2",
+    "prefix_note": "VASP writes spin file prefixes wannier90.1 and wannier90.2. Grade only their POSIX basenames, preserving this logical spin identity; relative or absolute runtime directory components are ungraded. Renaming to .up/.dn without a declared corresponding file rename remains incompatible.",
+    "kmesh_reference": [
+      6,
+      12,
+      8
+    ],
+    "kmesh_per_axis_floor": [
+      4,
+      8,
+      6
+    ],
+    "kmesh_note": "Green-function integration uses the same frozen automatic-default minimum as the trusted Wannier cell: 4 x 8 x 6. TB2J default 5 x 5 x 5 remains below y/z minima; --kmesh is required explicitly.",
+    "rcut_min_A": 2.987058701,
+    "rcut_note": "When specified, rcut must reach the farthest required first-shell Cr neighbour (2.987058701 A in the staged geometry). The former 3.2 A margin is not a necessary minimum. Omission uses the existing accepted TB2J default; production remains 6.0 A.",
+    "ungraded": "--path, --posfile, --emin, --emax, --nz, --np, --output_path, --description and every other option are NOT graded (L4 index.md: the settings sweep moved the exchange by at most 0.007 meV against a 0.30 meV threshold, and TB2J auto-sets the contour bottom regardless of --emin)."
+  },
+  "incar_required": {
+    "note": "Each rule is on the effective value (explicit if set, else the VASP default). Only these settings are graded; the per-tag triage, with the second question of handbook 5.2a answered for each, is in notes.md.",
+    "static": "NSW effectively 0 (default 0) or IBRION = -1 -- the cell is given and held fixed",
+    "ISPIN": "ISPIN = 2 (default 1) -- collinear spin-polarized",
+    "MAGMOM": "up-up-down-down Cr seed, wider-spaced planes parallel (see magmom)",
+    "LDAU_block": "LDAU = .TRUE., LDAUTYPE eff 2, LDAUL[Cr] = 2, U_eff[Cr]=LDAUU-LDAUJ in [4.0,4.2] (see ldau)",
+    "LASPH": "LASPH=.TRUE.; retained task-level user decision, B-21 deferred. Native LDA+U alone does not establish universal necessity.",
+    "LMAXMIX": "LMAXMIX>=4; retained task-level user decision, B-32 deferred; no undeclared fixed-charge handoff is assumed.",
+    "ENCUT": "ENCUT >= 400.0 eV (1.0 * max ENMAX over the LDA Cr_pv and N potentials); REQUIRED-explicit",
+    "smearing": "ISMEAR in {-5, 0} (gapped antiferromagnet; default 1). The 6x12x8 mesh satisfies the tetrahedron 2-D+ condition, so both values pass",
+    "EDIFF": "EDIFF <= 1e-5 eV (default 1e-4)",
+    "functional": "LDA: GGA absent (LDA comes from the POTCAR) or GGA = CA",
+    "NUM_WANN": "Effective VASP NUM_WANN = 32; explicit INCAR value is authoritative over .win num_wann. Documented default NBANDS is evaluated for the declared projection route. NBANDS default for this fixed cell is 38; NBANDS has a separate >=48 rule.",
+    "ISYM": "ISYM = -1 (default 2). The interface needs every k of the full Gamma-centred mesh; ISYM = 0 still folds 576 points to 292 by time reversal (L4 index.md, and L3's own 292-point static is that folded mesh)",
+    "NCORE": "NCORE effectively 1 (VASP default 1, so an omitted NCORE passes; NCORE > 1 aborts the PEAD routines the interface calls -- reviewer probe 2026-09-05, recorded in the as-run INCAR)",
+    "NBANDS": "NBANDS >= 48 (see nbands_floor)",
+    "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+    "ungraded": "LWANNIER90 (setup is implied by required LWANNIER90_RUN), KPAR, PREC, ALGO, LREAL, NELM, ISTART, ICHARG, LWAVE, LCHARG, LORBIT, LDAUPRINT, SIGMA are not graded.",
+    "LWANNIER90_RUN": "Effectively true (default false), invoking setup and library construction. LWANNIER90 need not be repeated."
+  },
+  "score": "1 only if BOTH labels pass: the `wannier` label's INCAR/KPOINTS REQUIRED rubric, its POSCAR structure match against the given relaxed cell, and its wannier90.win rubric; and the `tb2j` label's run.sh rubric. Any single failure scores 0 (binary all-primary-pass, handbook 1).",
+  "window_screen": {
+    "method": "joint reference-spectrum occupancy, inclusive endpoints; frozen set intersects outer set",
+    "reference": "reference/window_eigenvalues.json.gz",
+    "evidence_scope": "archived_static_spectrum",
+    "submitted_spectrum_certified": false,
+    "limits": "L3 archived 56-band spectrum is a bounded rubric reference, not the actual spectrum of every L4 input or mesh. Unknown higher-band effects are diagnostic, not invented failure thresholds.",
+    "defaults": "outer bounds use supplied spectrum extrema; frozen min inherits outer min; frozen max absent disables freezing; frozen min alone is invalid."
+  },
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "wannier": [
+        4,
+        8,
+        6
+      ]
+    },
+    "references": {
+      "wannier": {
+        "automatic_subdivisions": [
+          4,
+          8,
+          6
+        ],
+        "minimum": [
+          4,
+          8,
+          6
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "b2b0425ccf978c503899c80c1cec0e51682b7e977a2e6a6ec3e792ed462d8039",
+        "reference_lattice_angstrom": [
+          [
+            5.775870670250322,
+            0.0,
+            4e-16
+          ],
+          [
+            -2e-16,
+            2.9654911337603655,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            4.1430715438434085
+          ]
+        ],
+        "reference_atom_count": 8
+      }
+    }
+  }
+}

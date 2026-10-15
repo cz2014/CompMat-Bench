@@ -1,0 +1,11 @@
+COHPstartEnergy -20
+COHPendEnergy 20
+basisSet pbevaspfit2015
+gaussianSmearingWidth 0.2
+basisfunctions Hf 5d 5p 6s
+basisfunctions Zr 4d 4p 4s 5s
+basisfunctions O 2p 2s
+cohpGenerator from 1.5 to 2.7 type Hf type O
+cohpGenerator from 1.5 to 2.7 type Zr type O
+skipCOOP
+skipCOBI

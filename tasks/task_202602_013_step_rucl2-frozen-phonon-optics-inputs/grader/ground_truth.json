@@ -1,0 +1,554 @@
+{
+  "subtask": "L10 gen_input",
+  "kind": "gen_input (VASP input set + five frozen-phonon displaced structures, two-step optics per geometry)",
+  "provenance": "rubric, structure references, and reference_submission decks from 3_reproduction/L10/ (hpc_computations/deck_12x12 as-run INCAR.scf/INCAR.opt/KPOINTS_scf/KPOINTS_opt; auditor/deck/<u>/POSCAR displaced cells; run_manifest.md). See ../../../3_reproduction/L10/index.md.",
+  "run_labels": [
+    "u_0p00_scf",
+    "u_0p00_opt",
+    "u_p010_scf",
+    "u_p010_opt",
+    "u_m010_scf",
+    "u_m010_opt",
+    "u_p020_scf",
+    "u_p020_opt",
+    "u_m020_scf",
+    "u_m020_opt"
+  ],
+  "label_to_geometry": {
+    "u_0p00": "u_0p00",
+    "u_p010": "u_p010",
+    "u_m010": "u_m010",
+    "u_p020": "u_p020",
+    "u_m020": "u_m020"
+  },
+  "structure_reference_dir": "reference",
+  "reference_provenance": "reference/<geom>/POSCAR symlinks our as-run displaced cell (auditor/deck/<geom>/POSCAR, generated from L9/hpc_computations/relax_ref/CONTCAR + L9/a1p_mode.json eigenvector_cartesian_normalized x amplitude). The grader matches each submitted POSCAR (both the _scf and _opt label of a geometry) against reference/<geom>/POSCAR.",
+  "structure_match": {
+    "max_disp_A": 0.002,
+    "method": "fallback",
+    "note": "TIGHTENED per-task threshold (structure standard 2(5)/3(5) exception): the physical displacements are 0.010-0.020 A, so the default 0.1 A max-displacement cannot resolve them (it would pass an undisplaced or wrong-amplitude cell). 0.002 A resolves every designed-wrong variant (undisplaced, wrong amplitude, wrong sign pairing, displaced Ru) while giving ~5x margin below the smallest real displacement difference (0.010 A) and ~100x above POSCAR write precision. method='fallback' is REQUIRED: the cell is strongly anisotropic (a~3.5 A vs c=20 A) and the displacement is along c, so StructureMatcher's mean-length-normalized stol would be far too loose along the long axis; the fallback reports the true Cartesian max displacement in A. Verified in notes.md self-check."
+  },
+  "encut_catalog": "graderlib/grader_potcar_vasp54.yaml",
+  "encut_floor_eV": 280.0,
+  "encut_floor_note": "1.0 * max(ENMAX over Ru_pv 230.429, Cl 280.000) = 280.0 eV (the pseudopotential's own floor), read from the graderlib species catalog.",
+  "kmesh_reference": {
+    "subdivisions": [
+      12,
+      12,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "ldau": {
+    "type": 2,
+    "ru_l": 2,
+    "ru_u_eV": 2.0,
+    "u_band_eV": [
+      1.9,
+      2.1
+    ],
+    "note": "Paper specifies U=2 eV; our reproduced model uses Dudarev on Ru 4d. Effective LDAUTYPE=2, Ru LDAUL=2, finite LDAUU[Ru]-LDAUJ[Ru] in [1.9,2.1] eV; missing J defaults to zero. Per-species arrays follow POSCAR. Cl interaction values are not separately inspected."
+  },
+  "magmom": {
+    "ru_mz_min": 1.0,
+    "cl_m_max": 0.5,
+    "saxis": [
+      0,
+      0,
+      1
+    ],
+    "note": "Out-of-plane ferromagnetic seed (paper: FM, out-of-plane magnetization). Graded: SAXIS effective (0,0,1) (VASP default, so omit passes); noncollinear MAGMOM with Ru z-component |m_z| >= 1.0 and |m_z| >= |m_x|,|m_y| (out-of-plane dominant, magnitude and +/- sign free -- the sign is a TR-twin convention); each Cl |m| <= 0.5. A non-default-SAXIS compensated seed is a rare alternative consciously not accommodated (notes.md)."
+  },
+  "nbands_opt_floor": 48,
+  "nbands_opt_note": "NBANDS_opt>=48 retained. Empty-band truncation of existing matrix data supports the selected observables; it does not certify convergence of every newly executed optics run. Production requested 128 bands and stored 129 after code padding.",
+  "incar_required": {
+    "note": "Each rule is on the effective value (explicit if set, else the VASP default). Only these settings are graded; the per-tag triage and VASP defaults are in notes.md. 'common' = graded on all 10 labels; 'opt_only' = the 5 _opt labels; 'scf_only' = the 5 _scf labels.",
+    "common": {
+      "static": "NSW effectively 0 (default 0) or IBRION=-1 -- frozen-phonon, no ionic motion",
+      "smearing": "ISMEAR in {-5, 0} (gapped FM insulator; default 1)",
+      "ENCUT": "ENCUT >= 280.0 eV (1.0*max_ENMAX over Ru,Cl)",
+      "EDIFF": "EDIFF <= 1e-5 eV (default 1e-4)",
+      "functional": "PBE: GGA absent or GGA=Pe",
+      "LSORBIT": "LSORBIT=.TRUE. (spin-orbit coupling; the valley Zeeman split is the whole observable; default .FALSE.)",
+      "LDAU_block": "LDAU true, effective LDAUTYPE=2, Ru l=2 and finite U-J in [1.9,2.1] eV; omitted J=0; Cl values ungraded.",
+      "LASPH": "LASPH=.TRUE. (open Ru-d shell + DFT+U aspherical PAW terms; default .FALSE.)",
+      "LMAXMIX": "LMAXMIX>=4 for the task-defined d-channel SCF-to-fixed-density optics handoff.",
+      "MAGMOM_SAXIS": "out-of-plane FM seed (see magmom)",
+      "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints."
+    },
+    "opt_only": {
+      "LOPTICS": "LOPTICS=.TRUE. (writes the WAVEDER optical matrix elements; default .FALSE.)",
+      "ICHARG": "ICHARG=11 (non-self-consistent: read the fixed step-(a) charge density; default depends on ISTART)",
+      "NBANDS": "NBANDS>=48; retained empty-band floor, with evidence limits described in nbands_opt_note."
+    },
+    "scf_only": {
+      "LCHARG": "LCHARG=.TRUE. (write the charge density for the step-(b) ICHARG=11 optics NSCF; VASP default .TRUE., so omit passes; LCHARG=.FALSE. fails)",
+      "self_consistent_charge": "ICHARG omitted or 0,1,2,4,5; charge updating required. No startup-file or restart-source check."
+    }
+  },
+  "score": "1 only if all 10 runs pass: the displaced-structure match (both labels of each geometry) AND the applicable INCAR/KPOINTS REQUIRED rubric (common on all 10; opt_only on the 5 _opt; scf_only on the 5 _scf). Any single failure scores 0 (binary all-primary-pass).",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "u_0p00_scf": [
+        7,
+        7,
+        1
+      ],
+      "u_0p00_opt": [
+        7,
+        7,
+        1
+      ],
+      "u_p010_scf": [
+        7,
+        7,
+        1
+      ],
+      "u_p010_opt": [
+        7,
+        7,
+        1
+      ],
+      "u_m010_scf": [
+        7,
+        7,
+        1
+      ],
+      "u_m010_opt": [
+        7,
+        7,
+        1
+      ],
+      "u_p020_scf": [
+        7,
+        7,
+        1
+      ],
+      "u_p020_opt": [
+        7,
+        7,
+        1
+      ],
+      "u_m020_scf": [
+        7,
+        7,
+        1
+      ],
+      "u_m020_opt": [
+        7,
+        7,
+        1
+      ]
+    },
+    "references": {
+      "u_0p00_scf": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "b7e4a38161c487e8eaaa05483287ba7abc95988d10db67c990f66940e1f2ae8e",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_0p00_opt": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "b7e4a38161c487e8eaaa05483287ba7abc95988d10db67c990f66940e1f2ae8e",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_p010_scf": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "4ba91c0cb066e7888e720aa3f05fe842c1232fe50e15cd998fa00710bf58c978",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_p010_opt": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "4ba91c0cb066e7888e720aa3f05fe842c1232fe50e15cd998fa00710bf58c978",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_m010_scf": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "d405ad2e495247263ba590733bcc65d6cb7581999d242812f0f8f97b35ed8b39",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_m010_opt": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "d405ad2e495247263ba590733bcc65d6cb7581999d242812f0f8f97b35ed8b39",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_p020_scf": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "549e6295f818c9bc0ccfb9456a08d7b4f2f8dcd4ee36153acfb87da4cbc9aaa9",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_p020_opt": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "549e6295f818c9bc0ccfb9456a08d7b4f2f8dcd4ee36153acfb87da4cbc9aaa9",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_m020_scf": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "30fc3c31400612c038efb044479ae4acff745b8995664c5e666d20dfa6b07a5b",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "u_m020_opt": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "30fc3c31400612c038efb044479ae4acff745b8995664c5e666d20dfa6b07a5b",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      }
+    }
+  }
+}

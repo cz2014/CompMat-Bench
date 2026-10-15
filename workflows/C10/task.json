@@ -1,0 +1,22 @@
+{
+  "id": "C10",
+  "task_type": "step",
+  "title": "Molecular reaction energies and chain propagation",
+  "source_month": "2026-10",
+  "conditions": {
+    "LG": "full_guidance",
+    "LA": "reduced_guidance"
+  },
+  "submission": "answer.json",
+  "graded_fields": [
+    "v_K1_0_sites_per_ps",
+    "v_K1_5_sites_per_ps",
+    "v_K2_0_sites_per_ps"
+  ],
+  "reference_status": "verified",
+  "content_ready": true,
+  "runtime_ready": true,
+  "runtime_profile": "long-chain-single-node-v1",
+  "runtime_delivery": "shared system instructions",
+  "environment_spec": "environment/deployment.json"
+}

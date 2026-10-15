@@ -1,0 +1,133 @@
+# VASP 5.4 PAW PBE pseudopotential catalog: identity and public metadata only.
+# No POTCAR content is stored or redistributed (licensing). These are the same
+# fields our potcar_spec.txt provenance records, plus cutoff metadata needed by
+# graders and by sealed agents.
+#
+# Two consumers:
+#   (1) the source for each task's agent-facing potcar_catalog.yaml, which is a
+#       per-task SUBSET listing only the species that task uses (the agent must
+#       not see other papers' species or any grading-floor language; see
+#       docs/design/review_kit_runbook.md). This master is NOT staged to agents.
+#   (2) read by tasks/grader_vasp_inputs.py for the ENCUT rubric rule
+#       (ENCUT >= 1.0 * max ENMAX over the species present; the grading floor is
+#       the pseudopotential's own ENMAX, e.g. 400 eV for B+N. Decided in
+#       docs/decision-records/2026-06-17_vasp_rubric_encut.md).
+#
+# Extend with new species as new papers need them. Values are read from the
+# POTCAR headers of the full VASP 5.4 PBE library (the complete table is
+# tasks/grader_potcar_vasp54_enmax_all.yaml, harvested from our the HPC cluster install);
+# our as-run OUTCARs cross-check them (OUTCAR echoes can differ in the last
+# rounding digit, e.g. B 318.614 vs the header's 318.606 -- the header value
+# is canonical and is the lower, safer floor).
+
+schema:
+  titel: "POTCAR TITEL line (the identity our potcar_spec.txt records)"
+  enmax_eV: "POTCAR ENMAX: minimum sensible plane-wave cutoff"
+  enmin_eV: "POTCAR ENMIN"
+  valence: "number of valence electrons (ZVAL)"
+  notes: "rubric_floor_encut = 1.0 * ENMAX (gen_input grading floor = the pseudopotential's own ENMAX); convergence target ~1.3 * ENMAX; cell relaxation uses 1.3 * ENMAX (Pulay)"
+
+species:
+  Al:
+    titel: "PAW_PBE Al 04Jan2001"
+    enmax_eV: 240.300
+    enmin_eV: 180.225
+    valence: 3
+  B:
+    titel: "PAW_PBE B 06Sep2000"
+    enmax_eV: 318.606
+    enmin_eV: 238.954
+    valence: 3
+  Cl:
+    titel: "PAW_PBE Cl 17Jan2003"
+    enmax_eV: 280.000
+    enmin_eV: 196.854
+    valence: 7
+  Co:
+    titel: "PAW_PBE Co 06Sep2000"
+    enmax_eV: 267.969
+    enmin_eV: 200.977
+    valence: 9
+  Hf:
+    titel: "PAW_PBE Hf_pv 06Sep2000"
+    enmax_eV: 220.334
+    enmin_eV: 165.250
+    valence: 10
+  Zr:
+    titel: "PAW_PBE Zr_sv 04Jan2005"
+    enmax_eV: 229.898
+    enmin_eV: 172.424
+    valence: 12
+  N:
+    titel: "PAW_PBE N 08Apr2002"
+    enmax_eV: 400.000
+    enmin_eV: 300.000
+    valence: 5
+  O:
+    titel: "PAW_PBE O 08Apr2002"
+    enmax_eV: 400.000
+    enmin_eV: 300.000
+    valence: 6
+  Ru:
+    titel: "PAW_PBE Ru_pv 06Sep2000"
+    enmax_eV: 230.429
+    enmin_eV: 172.822
+    valence: 14
+  S:
+    titel: "PAW_PBE S 17Jan2003"
+    enmax_eV: 280.000
+    enmin_eV: 194.016
+    valence: 6
+  Se:
+    titel: "PAW_PBE Se 06Sep2000"
+    enmax_eV: 211.534
+    enmin_eV: 158.651
+    valence: 6
+  Sn:
+    titel: "PAW_PBE Sn_d 06Sep2000"
+    enmax_eV: 241.090
+    enmin_eV: 180.817
+    valence: 14
+  Te:
+    titel: "PAW_PBE Te 08Apr2002"
+    enmax_eV: 174.982
+    enmin_eV: 131.236
+    valence: 6
+  V:
+    titel: "PAW_PBE V_pv 07Sep2000"
+    enmax_eV: 263.675
+    enmin_eV: 197.756
+    valence: 11
+  W:
+    titel: "PAW_PBE W_pv 06Sep2000"
+    enmax_eV: 223.065
+    enmin_eV: 167.299
+    valence: 12
+
+# LDA (Ceperley-Alder) PAW library potpaw_LDA.54. Kept under a separate
+# top-level key rather than merged into `species` above: element symbols
+# collide between the PBE and LDA libraries (e.g. N appears in both, with
+# different TITEL dates and, in general, different ENMAX), so one flat
+# element-keyed map cannot hold both. Same schema and same two consumers as
+# `species`.
+species_lda:
+  Si:
+    titel: "PAW Si 02Apr1999"
+    enmax_eV: 245.704
+    enmin_eV: 184.278
+    valence: 4
+  Ge:
+    titel: "PAW Ge 03Mar1998"
+    enmax_eV: 173.969
+    enmin_eV: 130.477
+    valence: 4
+  Cr:
+    titel: "PAW Cr_pv 02Aug2007"
+    enmax_eV: 265.753
+    enmin_eV: 199.315
+    valence: 12
+  N:
+    titel: "PAW N 21Mar2012"
+    enmax_eV: 400.000
+    enmin_eV: 300.000
+    valence: 5

@@ -1,0 +1,18 @@
+task_id: task_202602_024_step_mnte-altermagnet-spin-splitting
+title: Spin splitting and magnetism of an altermagnetic MnTe pipeline
+task_type: step
+role: analyze
+cost_class: heavy
+source_month: 2026-02
+source_date: 2026-02-25
+earliest_public_date: 2025-08-27
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [qe]
+docs: [qe]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

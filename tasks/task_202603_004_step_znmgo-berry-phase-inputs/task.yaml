@@ -1,0 +1,18 @@
+task_id: task_202603_004_step_znmgo-berry-phase-inputs
+title: input decks for the Berry-phase polarization path of wurtzite Zn$_{1-x}$Mg$_x$O
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-05
+earliest_public_date: 2026-03-05
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [qe]
+docs: [qe]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

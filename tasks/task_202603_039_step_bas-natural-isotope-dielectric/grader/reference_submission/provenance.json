@@ -1,0 +1,14 @@
+{
+  "source": "3_reproduction/L2/runs/reference_corrected_n256",
+  "nconfig": 256,
+  "seed": 924071835,
+  "grid_step_cm1": 0.01,
+  "rse_grid_points": 6001,
+  "formula": "100 * sample_std(abs(eps_xx), ddof=1) / sqrt(N) / mean(abs(eps_xx))",
+  "rse_max_frequency_cm1": 693.83,
+  "rse_max_sufficient_statistics_vs_direct_error": 1.7763568394002505e-15,
+  "sha256": {
+    "spectra.npz": "c7ddd04620dc3e607c38fb40f2788d310fe2a938d3852ca9cc1eb9d2c7a4e649",
+    "numerical_checks.json": "ea638d6a660c29c2d786acea618a6d27011b91c07e2e1ad1294c5ba2d3f11561"
+  }
+}

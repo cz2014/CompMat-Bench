@@ -1,0 +1,88 @@
+{
+  "subtask": "L1 gen_input",
+  "kind": "gen_input (Quantum ESPRESSO pw.x decks for the finite-displacement force-constant set of the 512-atom BAs supercell: one undisplaced reference run plus displaced runs)",
+  "provenance": "rubric constants from our as-run decks 3_reproduction/L1/hpc_computations/10_ref_512/ref_512.in and 10_disp_*_512/*.in (Quantum ESPRESSO 7.4.1), the settings table in 3_reproduction/L1/index.md, and the paper's stated method (vdw-df2-c09, 100 Ry, Gamma only, conv_thr 1e-12, 512 atoms, PAW pslibrary). Structure reference: reviewer/reference/pw_reference_512.in (our scrubbed reference deck, the 512-atom cell at a = 4.78 A).",
+  "run_labels": {
+    "reference": "pw",
+    "displaced": "pw, any label other than 'reference'; at least two displaced runs are required (one per species), any number accepted"
+  },
+  "structure_reference": "reference/pw_reference_512.in",
+  "structure_match": {
+    "max_disp_A": 0.001,
+    "method": "translation-only rigid match, species-aware, on the 512-atom cell",
+    "note": "the reference deck must reproduce the cubic 4x4x4 supercell (the prompt names the repetition) of the staged conventional cell (a = 4.78 A, 256 B + 256 As) to 0.001 A per site after a rigid translation; any supercell origin and any atom order are accepted. Each displaced deck must match the same cell with EXACTLY ONE atom off its reference site: that atom's residual displacement vector has one Cartesian component with absolute value in [0.005, 0.03] A and the other two below 0.0005 A; every other atom is within 0.001 A. The species of the displaced atom is recorded per run; across all displaced runs both species must occur."
+  },
+  "upf_identity": {
+    "B": "B.pbe-n-kjpaw_psl.1.0.0.UPF",
+    "As": "As.pbe-n-kjpaw_psl.1.0.0.UPF"
+  },
+  "species_counts": {
+    "B": 256,
+    "As": 256
+  },
+  "required_settings_every_deck": {
+    "calculation": {
+      "accepted": [
+        "scf"
+      ],
+      "default": "scf (omit passes)"
+    },
+    "input_dft": {
+      "accepted": [
+        "vdw-df2-c09"
+      ],
+      "default": "none (absence fails; case-insensitive string match, the functional the paper states)"
+    },
+    "ecutwfc": {
+      "floor_Ry": 100,
+      "default": "none (absence fails)",
+      "note": "the paper's stated cutoff; >= 100 accepted"
+    },
+    "conv_thr": {
+      "max_Ry": 1e-12,
+      "default": "1e-6 (default fails)",
+      "note": "the paper's stated threshold, restated in the prompt; <= 1e-12 accepted"
+    },
+    "tprnfor": {
+      "accepted": [
+        true
+      ],
+      "default": ".false. (default fails)",
+      "note": "forces are the product of every run"
+    },
+    "kpoints": {
+      "accepted": "K_POINTS gamma; automatic 1 1 1 0 0 0; one explicit crystal/tpiba point at the origin; or no K_POINTS card (Gamma default).",
+      "note": "Gamma-only checks the actual explicit point coordinates (absolute numerical precision 1e-12), not only the number of points. Denser or shifted sampling fails. Occupation combinations retain their existing accepted set."
+    },
+    "occupations": {
+      "accepted": [
+        "fixed",
+        "tetrahedra",
+        "tetrahedra_lin",
+        "tetrahedra_opt",
+        "smearing with degauss <= 0.01 Ry",
+        "absent (pw.x default fixed)"
+      ],
+      "note": "clean-gap semiconductor; broad metal-style smearing fails"
+    },
+    "nat_ntyp": {
+      "nat": 512,
+      "ntyp": 2,
+      "note": "consistent with the structure cards (the parser fails a deck whose nat disagrees with its positions card)"
+    },
+    "ATOMIC_SPECIES": {
+      "note": "both UPF basenames per upf_identity (case-insensitive); the masses in the card are not graded"
+    },
+    "structure": {
+      "note": "see structure_match; explicit CELL_PARAMETERS and ATOMIC_POSITIONS required by the prompt (ibrav presets without cards fail structure extraction)"
+    }
+  },
+  "not_graded": {
+    "ecutrho": "the paper does not state it; our 400 Ry (dual 4) was decided by a convergence test; the QE default 4 x ecutwfc is sound for these PAW sets (suggested density cutoff 325 Ry for B)",
+    "tstress, verbosity, disk_io, prefix, outdir, pseudo_dir, startingpot, diagonalization, mixing_beta, electron_maxstep": "run-management and our restart conventions; no effect on the forces",
+    "displacement_amplitude_value": "graded as the band [0.005, 0.03] A, not as our 0.01 A (the paper states no amplitude; reviewer ruling 2026-09-10)",
+    "plus_minus_pairs": "optional per the prompt; our set used both signs (central differences)",
+    "ALAMODE_inputs": "the fit is the analyze unit's content; no alm deck is graded"
+  },
+  "score": "1 only if the reference deck and every displaced deck pass every REQUIRED rule and the structure checks, and both species are displaced across the set (binary all-primary-pass)"
+}

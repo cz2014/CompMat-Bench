@@ -1,0 +1,58 @@
+SYSTEM = 2H-RuCl2 monolayer  optics step (b) NSCF (LOPTICS+SOC, ICHARG=11)  u=0.000 A (coarse probe)
+# Two-step optics workflow step (b). Electronic/magnetic/+U tags carried VERBATIM
+# from the L8 SOC scf deck (Sec. III / L8); the optics NSCF tail is driver-set.
+
+# --- electronic (carried verbatim from the L8 SOC scf deck) ---
+PREC = Accurate       # [L8] dense FFT grid for LASPH + DFT+U aspherical terms
+ENCUT = 500           # [L8] eV; plan-pinned (Sec. III)
+EDIFF = 1E-7          # [L8] eV; plan-pinned SCF tolerance (Sec. III) -- clean edges
+ISMEAR = 0            # [L8] Gaussian, gapped FM insulator (never ISMEAR>0 here)
+SIGMA = 0.05          # [L8]
+LREAL = .FALSE.       # [L8] reciprocal-space projection (3-atom cell)
+LASPH = .TRUE.        # [L8] REQUIRED: open Ru-d shell + DFT+U aspherical terms
+
+# --- symmetry ---
+ISYM = -1             # [L8] symmetry off for the noncollinear run; all k-points equal weight
+
+# --- noncollinear magnetism + SOC (canonical M || -c) ---
+LSORBIT = .TRUE.      # [L8] SOC gives the K/K' valley Zeeman split (the two resonances)
+GGA_COMPAT = .FALSE.  # [L8] VASP-wiki recommendation for noncollinear runs
+SAXIS = 0 0 1         # [L8] spin quantization along c
+MAGMOM = 0 0 -2  0 0 0  0 0 0    # [L8] Ru 0 0 -2 muB || -c (canonical); each Cl 0
+
+# --- DFT+U (Dudarev, single effective U on Ru-4d; carried from L8) ---
+LDAU = .TRUE.
+LDAUTYPE = 2
+LDAUL = 2 -1          # Ru: d (l=2); Cl: none (-1)
+LDAUU = 2.0 0.0
+LDAUJ = 0.0 0.0
+LDAUPRINT = 1
+LMAXMIX = 4           # [L8] REQUIRED for DFT+U on d; carried into the ICHARG=11 NSCF
+
+# --- step (b): non-self-consistent optics NSCF (driver-set; reads step-(a) CHGCAR) ---
+ISTART = 0            # [opt] fresh orbitals: do NOT read the step-(a) WAVECAR (wrong
+                      # dimensions -- different k-mesh/NBANDS; reading it OOMs).
+ICHARG = 11           # [opt] non-self-consistent: read the fixed step-(a) CHGCAR, no SCF
+ALGO = Normal         # [opt] iterative (blocked-Davidson) diagonalization at the fixed
+                      # ICHARG=11 potential. NOT ALGO=Exact: Exact builds the full dense
+                      # Hamiltonian (~22k^2, ~4+ GB/rank) and OOMs on this plane-wave count
+                      # (probe finding, job 19101134). Normal converges the low empty bands
+                      # the 0-1.5 eV optical window needs, at a fraction of the memory.
+NELM = 100         # [opt] NSCF iterations to converge the empty bands (fixed potential)
+NBANDS = 128     # [opt] NBANDS_OPT: empty-band count for the sum over states (CONVERGE)
+LOPTICS = .TRUE.      # [opt] writes the WAVEDER cder = <c|-i nabla|v> (occ->unocc), the
+                      # transition matrix elements the sum-over-states assembler consumes.
+# LVEL is deliberately NOT set. LVEL=.TRUE. forces the FULL band-pair velocity operator
+# (all NBANDS^2 pairs incl empty-empty), which we never use and which needs ~12 GB/rank
+# and blows past walltime (probe finding, job 19104311). Default LOPTICS already writes
+# the occupied->unoccupied cder_a (a=x,y,z) -- both cder_x and cder_y, so the
+# antisymmetric eps_xy = -eps_yx is recoverable from M_x M_y*.
+# CSHIFT left at the VASP default on purpose: eta is applied in OUR post-processing
+# (eps_assemble.py), NOT by VASP, so the Fig. 9 eta series is free from one run.
+IBRION = -1           # [opt] no ionic motion (frozen displaced geometry)
+NSW = 0               # [opt]
+LCHARG = .FALSE.      # [opt] no CHGCAR from the NSCF
+LWAVE = .FALSE.       # [opt] no WAVECAR -- the WAVEDER is the kept output
+
+# --- parallelization ---
+KPAR = 8         # [opt] KPAR_OPT: k-points parallelize across groups

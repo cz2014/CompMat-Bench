@@ -1,0 +1,12 @@
+{
+  "base": "/scratch/user/compmat-long-chain-runtime-20261014/runtime-v9",
+  "contract_sha256": "50aef9b5ca82c9b10e91666a0d2c4adfcf39242ed7b32b79e414c5981c4f0283",
+  "visible_sha256": {
+    "commands.md": "802abbcb502498bb970bb041c0b0ebcc6442b755f0c9d8e4e2482dc6a598f601",
+    "tool_contract.py": "0ce618fc896e83ce0cecc1ad7848e94134658208f560a22a35d4971c96338930",
+    "software.json": "98ebc5f75e0ea0b0d35c4b1c684239f72cfa7c752055253f0987402744d36a5d",
+    "agent_entry.py": "b775ec41064753ba87d823557ea4ba7546b13305a0fcab74db8ae95ee836c890",
+    "bin/bench-exec": "ceb79682a4fecd755121d93460de55da7b8ea0057d53faa613b3d629e4d5e690",
+    "bin/bench-runtime": "b9e59288122c239e8981c9f7c97afa277370565a2dd56c9e83ede6e1bb83b1ab"
+  }
+}

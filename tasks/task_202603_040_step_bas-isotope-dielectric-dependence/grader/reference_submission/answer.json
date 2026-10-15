@@ -1,0 +1,12 @@
+{
+  "n_active_modes_n10_0": 3,
+  "n_active_modes_n10_256": 3,
+  "min_eps1_n10_0": -89.20477751485329,
+  "min_eps1_n10_13": -60.819146414266356,
+  "min_eps1_n10_51": 2.1062580248197422,
+  "min_eps1_n10_128": 7.78029913321083,
+  "min_eps1_n10_251": -5.153946809844911,
+  "min_eps1_n10_256": -93.41000564975252,
+  "n10_first_positive_lower_bracket": 47,
+  "n10_first_negative_upper_bracket": 248
+}

@@ -1,0 +1,349 @@
+{
+  "subtask": "L1 gen_input",
+  "kind": "gen_input (Quantum ESPRESSO pw.x input decks, five-run pipeline)",
+  "provenance": "rubric constants and structure references from 3_reproduction/L1/ (as-run decks 01-05 and the relaxed-geometry filled decks 02/04); see ../../3_reproduction/L1/index.md and result.json. The graded pipeline is the five pw.x runs relax, scf, bands, scf_sc, bands_sc.",
+  "run_labels": {
+    "relax": "pw",
+    "scf": "pw",
+    "bands": "pw",
+    "scf_sc": "pw",
+    "bands_sc": "pw"
+  },
+  "deck_file_name": "pw.in",
+  "known_elements": [
+    "Mn",
+    "Te"
+  ],
+  "upf_identity": {
+    "Mn": "Mn.pbe-spn-kjpaw_psl.0.3.1.UPF",
+    "Te": "Te.pbe-n-kjpaw_psl.1.0.0.UPF"
+  },
+  "species_counts": {
+    "prim": {
+      "Mn": 2,
+      "Te": 2
+    },
+    "sc": {
+      "Mn": 16,
+      "Te": 16
+    }
+  },
+  "ecutwfc_floor_Ry": 50,
+  "ecutrho_min_ratio_to_ecutwfc": 4.0,
+  "conv_thr_max_Ry": 1e-06,
+  "hubbard_U_band_eV": [
+    2.7,
+    3.3
+  ],
+  "magnetization": {
+    "min_abs_per_species": 0.1,
+    "max_abs_net": 0.05,
+    "note": "AFM-A: at least two Mn sublattice species with opposite-sign, nonzero starting magnetization; Mn sites uniform-signed within each c-plane and alternating plane to plane; net Mn magnetization ~0."
+  },
+  "occupations": {
+    "accepted_plain": [
+      "fixed",
+      "tetrahedra",
+      "tetrahedra_lin",
+      "tetrahedra_opt"
+    ],
+    "smearing_max_degauss_Ry": 0.02,
+    "graded_on": [
+      "relax",
+      "scf",
+      "scf_sc"
+    ],
+    "note": "gapped magnetic semiconductor: fixed occupations (our run used smearing), tetrahedra, or smearing narrow relative to the ~0.75 eV gap. Broad metal-style smearing fails. Ungraded on the band runs (density not recomputed there)."
+  },
+  "structure_match": {
+    "lattice_rel": 0.02,
+    "max_disp_A": 0.15,
+    "note": "custom lenient match on base elements (Mn sublattice labels folded to Mn): per-axis cell length within 2%, angles within 1 deg, then a rigid-translation nearest-same-element site scan within 0.15 A. Rejects wrong phase, wrong cell size, wrong species. 2% spans both the staged start cell (a=4.148) and our relaxed cell (a=4.2066), which is why a competent relax deck carrying either cell passes."
+  },
+  "labels": {
+    "relax": {
+      "calculation": [
+        "vc-relax"
+      ],
+      "cell_kind": "prim",
+      "structure_ref": "MnTe_start.vasp",
+      "mesh": [
+        5,
+        5,
+        3
+      ],
+      "require_unshifted": null,
+      "grade_occupations": true
+    },
+    "scf": {
+      "calculation": [
+        "scf"
+      ],
+      "cell_kind": "prim",
+      "structure_ref": "relaxed_prim.in",
+      "mesh": [
+        16,
+        16,
+        10
+      ],
+      "require_unshifted": true,
+      "grade_occupations": true
+    },
+    "bands": {
+      "calculation": [
+        "bands"
+      ],
+      "cell_kind": "prim",
+      "structure_ref": "relaxed_prim.in",
+      "nbnd_min": 24,
+      "path": "prim"
+    },
+    "scf_sc": {
+      "calculation": [
+        "scf"
+      ],
+      "cell_kind": "sc",
+      "structure_ref": "relaxed_sc.in",
+      "mesh": [
+        8,
+        8,
+        5
+      ],
+      "require_unshifted": true,
+      "grade_occupations": true
+    },
+    "bands_sc": {
+      "calculation": [
+        "bands"
+      ],
+      "cell_kind": "sc",
+      "structure_ref": "relaxed_sc.in",
+      "nbnd_min": 180,
+      "path": "sc"
+    }
+  },
+  "kpath": {
+    "tol": 0.001,
+    "sc_arm_min_points": 10,
+    "sc_arm_sigma_reach": 0.4,
+    "Gamma": [
+      [
+        0.0,
+        0.0,
+        0.0
+      ]
+    ],
+    "M_star": [
+      [
+        0.5,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.5,
+        0.0
+      ],
+      [
+        0.5,
+        0.5,
+        0.0
+      ]
+    ],
+    "K_star": [
+      [
+        0.3333333333,
+        0.3333333333,
+        0.0
+      ],
+      [
+        0.6666666667,
+        0.6666666667,
+        0.0
+      ]
+    ],
+    "A_star": [
+      [
+        0.0,
+        0.0,
+        0.5
+      ]
+    ],
+    "note": "primitive bands path must cover connected Gamma-M-K-Gamma-A-L segments with both endpoints and at least one actual interior point per segment, allowing reverse traversal, supported star representatives and extra paths, and contain two literal Gamma-to-L arms reaching their respective L endpoints whose splitting-sign parities differ (parity = 60-degree azimuthal sector index XOR (k_z < 0); an arm within nodal_margin_deg of a 60-degree-multiple azimuth lies in a spin-degenerate mirror plane and is rejected). This is the inequivalent L, L' requirement: it rejects L' = -L, a C3-equivalent partner (same parity), and a nodal-direction endpoint such as literal (1/2, 1/2, 1/2). No independent total-point floor; explicit-list integration weights do not count as samples. Supercell bands must sample the folded L-Gamma-L' line: each supercell k-point g is mapped to a half-preimage f = (g+m)/2 (m in {0,1}^3) lying on one of the six canonical hexagonal Gamma-to-L directions (x k_z sign); on a folded leg the point carries both primitive preimages s and 1-s, so reach = max over points of min(s, 1-s) >= sc_arm_sigma_reach, i.e. the leg reaches the supercell zone boundary. Two legs of differing splitting-sign parity, each with >= sc_arm_min_points points, are required (the on-line preimages are an arm and its inversion image, which share parity, so folded-leg parity is well defined). No independent total-point floor. Points on other folded segments of the primitive path are ignored.",
+    "arm_tol": 0.005,
+    "arm_t_lo": 0.15,
+    "arm_t_hi": 0.85,
+    "arm_min_points": 3,
+    "nodal_margin_deg": 5.0,
+    "L_arm_note": "primitive arm detector: literal Gamma-to-endpoint directions enumerated in code as (i/2, j/2, +-1/2), i,j in {-1,0,1}, (i,j) != (0,0) (16 directions: the twelve antinodal M/L azimuths x k_z sign, plus the four 60-degree nodal directions, which are detected and then rejected by the parity classifier). Accepts crystal, crystal_b (expanded with QE band-path semantics), tpiba and tpiba_b (converted through the deck's own cell). The primitive endpoint test uses literal coordinates and the existing vertex tolerance. Integration decks accept automatic or complete equal-positive-weight uniform crystal/tpiba meshes with the existing per-axis floors and centering.",
+    "sc_note": "supercell coverage rule: folded-L legs detected as half-preimages of the six canonical hexagonal L directions (x k_z sign); reach = max min(s,1-s) >= sc_arm_sigma_reach (the leg folds back at the supercell zone boundary), >= sc_arm_min_points points per leg, two qualifying legs of differing splitting-sign parity; points on other folded segments of the primitive path are allowed",
+    "count_policy": "Required named nodal segments, endpoints, actual interior samples, two inequivalent arms, and existing arm_min_points=3/sc_arm_min_points=10 plus reach/parity tests remain. These retained local coverage guards are not claimed as scientifically minimal convergence bounds. Redundant global100/60 point floors removed; no replacement count inferred from an archived answer."
+  },
+  "cross_deck": {
+    "chains": [
+      [
+        "scf",
+        "bands"
+      ],
+      [
+        "scf_sc",
+        "bands_sc"
+      ]
+    ],
+    "note": "Within each supplied SCF-to-bands pair, effective prefix is the same logical dataset identifier. Ordered species/type and physical spin-model compatibility are checked separately. Output directories, working-directory placement and runtime-file existence are not scored. Relaxation feeds geometry and is not a saved-data pair; prefixes across different pairs are unconstrained."
+  },
+  "score": "1 only if all five decks pass every REQUIRED check (calculation, nspin=2, AFM-A sublattice encoding, Mn-3d Hubbard U in band, UPF identity, species counts, ecutwfc floor, ecutrho >= 4x, conv_thr upper bound on the three self-consistent runs, structure match, per-label mesh/path/nbnd, occupations on the self-consistent runs) and both scf->bands chains are prefix (runtime directories ungraded)-consistent. Binary all-primary-pass; any single failure scores 0.",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax": [
+        6,
+        6,
+        3
+      ],
+      "scf": [
+        6,
+        6,
+        3
+      ],
+      "scf_sc": [
+        3,
+        3,
+        1
+      ]
+    },
+    "references": {
+      "relax": {
+        "automatic_subdivisions": [
+          6,
+          6,
+          3
+        ],
+        "minimum": [
+          6,
+          6,
+          3
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "1bf7930c9d07c5fba8454fdc6a487130f96004de25e15429edd9241ff4961d68",
+        "reference_lattice_angstrom": [
+          [
+            4.148,
+            0.0,
+            0.0
+          ],
+          [
+            -2.074,
+            3.592273374897851,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            6.71
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "scf": {
+        "automatic_subdivisions": [
+          6,
+          6,
+          3
+        ],
+        "minimum": [
+          6,
+          6,
+          3
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "fce72d84976d64f2f1e2020813062ead57c8e6d9a6d0db9f69aa947d2cb567b4",
+        "reference_lattice_angstrom": [
+          [
+            4.206583089017,
+            -0.0,
+            0.0
+          ],
+          [
+            -2.103291544508,
+            3.643007818669,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            6.690800592745
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "scf_sc": {
+        "automatic_subdivisions": [
+          3,
+          3,
+          1
+        ],
+        "minimum": [
+          3,
+          3,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "24e11c181da23334a0b3a04aae548c0d980931f9583eed792890fd716e29fc63",
+        "reference_lattice_angstrom": [
+          [
+            8.413166178034,
+            0.0,
+            0.0
+          ],
+          [
+            -4.206583089017,
+            7.286015637337,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            13.38160118549
+          ]
+        ],
+        "reference_atom_count": 32
+      }
+    }
+  },
+  "reference_submission_note": "Grading reference decks use the automatic-kmesh-v1 lower bound. Some K_POINTS cards were updated for acceptance; original reproduction inputs and computed outputs remain unchanged. These revised decks are not claimed to be executed reproduction runs.",
+  "runtime_directory_policy": "Output directories, working-directory placement and directory equivalence are not scored. Required submitted files and logical file identities remain part of the input task. User decision 2026-09-17.",
+  "saved_afm_handoff": {
+    "rule": "AFM starting seeds remain required on relaxation and SCF producers. Collinear bands inherit the supplied SCF spin density: do not score repeated bands starting_magnetization. Require nspin=2, compatible ordered species labels/type indices and UPF identities; test consumer basal-plane encoding with producer seeds. Existing Hubbard, species counts and structure rules remain. No runtime files or directory settings are scored.",
+    "source": "QE 7.5 PW/src/input.f90, potinit.f90 and io_rho_xml.f90; documented source trace in docs/review/grader_semantics_20260917/physics/followup.md. This is the submitted collinear SCF->bands route, not a general noncollinear waiver."
+  }
+}

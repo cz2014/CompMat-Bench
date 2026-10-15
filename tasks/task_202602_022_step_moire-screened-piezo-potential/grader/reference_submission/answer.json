@@ -1,0 +1,11 @@
+{
+  "WS2_pp_meV": 170.934,
+  "WS2_vrp_Rhh_meV": -5.505,
+  "WS2_vrp_RXh_meV": -32.499,
+  "WS2_vrp_RMh_meV": 37.886,
+  "WSe2_pp_meV": 76.99,
+  "WSe2_vrp_Rhh_meV": 2.305,
+  "WSe2_vrp_RXh_meV": 16.567,
+  "WSe2_vrp_RMh_meV": -19.201,
+  "ratio_pp_WS2_over_WSe2": 2.2202
+}

@@ -1,0 +1,37 @@
+{
+  "chain": "C10",
+  "status": "verified",
+  "reference_scope": "numerically_checked_effective_chain_model",
+  "approval": {
+    "by": "user",
+    "date": "2026-10-13",
+    "scope": "Model, three couplings, three reference speeds and absolute tolerances"
+  },
+  "fields": {
+    "v_K1_0_sites_per_ps": {
+      "truth": 28.200155968939207,
+      "atol": 0.1,
+      "rtol": 0.0
+    },
+    "v_K1_5_sites_per_ps": {
+      "truth": 59.2804180106571,
+      "atol": 0.1,
+      "rtol": 0.0
+    },
+    "v_K2_0_sites_per_ps": {
+      "truth": 79.3273021871793,
+      "atol": 0.1,
+      "rtol": 0.0
+    }
+  },
+  "grading_policy": "Compare three final scalars only; all must pass. Ignore extra ungraded fields. No method or intermediate checks.",
+  "reference_method": "Independent DOP853, N=512, M=32; median downstream window speeds. Provenance only, not agent requirements.",
+  "tolerance_basis": "Observed molecular-energy and numerical sensitivity envelope, not a statistical confidence interval.",
+  "limitations": [
+    "Finite numerical evidence, not a statistical confidence interval.",
+    "Box/electronic/NEB shifts transferred from existing 520 eV tests; no new 650 eV box reoptimization.",
+    "Five-hour end-to-end runtime on the cluster has not been newly measured."
+  ],
+  "source": "[internal path removed]",
+  "source_sha256": "4b92dff15b8a085c36663a49f3b075e0c58fe6d17c8a2e5f4ccdc994ecfa39c9"
+}

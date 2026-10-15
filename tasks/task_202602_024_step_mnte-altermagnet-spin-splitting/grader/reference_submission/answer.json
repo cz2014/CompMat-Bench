@@ -1,0 +1,8 @@
+{
+  "gap_eV": 0.7479,
+  "mn_lsm_muB": 4.4911,
+  "amss_valence_max_eV": 0.8862,
+  "split_mean_LG_eV": 0.3123,
+  "split_mean_GLp_eV": -0.3123,
+  "sc_vbm_at_gamma": true
+}

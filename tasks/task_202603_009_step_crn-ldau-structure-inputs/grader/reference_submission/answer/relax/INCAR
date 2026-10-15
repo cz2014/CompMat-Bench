@@ -1,0 +1,56 @@
+SYSTEM = CrN variant (iii) |++--> AFM, LDA+U, ISIF=3 full relaxation
+
+# --- basis and accuracy -------------------------------------------------------
+PREC   = Accurate
+ENCUT  = 520          # 1.3 x ENMAX(N) = 1.3 x 400 eV, the MP/atomate2 floor
+                      # for a cell relaxation (Pulay stress under ISIF>=3)
+LREAL  = .FALSE.
+ALGO   = Normal
+NELM   = 200
+EDIFF  = 1E-6
+NBANDS = 56           # NELECT = 4x12(Cr_pv) + 4x5(N) = 68 -> 34 occupied per spin;
+                      # sized for L4's 32 Wannier functions per spin channel
+
+# --- spin and the |++--> magnetic order ---------------------------------------
+ISPIN  = 2
+MAGMOM = 3.0 -3.0 -3.0 3.0 0.0 0.0 0.0 0.0
+                      # POSCAR site order: Cr at x = 0.135, 0.365, 0.635, 0.865,
+                      # then N. Same-spin pairs are the ones across the WIDE
+                      # 2 x_Cr a gap (Fig. 3(a): 1.559 A), i.e. {x_Cr, 1-x_Cr}.
+LASPH  = .TRUE.       # aspherical PAW gradient corrections: open 3d shell + DFT+U
+LMAXMIX = 4           # d-electron DFT+U charge-density mixing
+LORBIT = 11           # per-ion sphere moments
+
+# --- LDA+U (Dudarev, U_eff = U - J = 4.1 eV on Cr 3d) -------------------------
+# The functional is LDA: it comes from the POTCAR (LEXCH = CA, potpaw_LDA.54),
+# NOT from a GGA tag here.
+LDAU      = .TRUE.
+LDAUTYPE  = 2
+LDAUL     = 2 -1
+LDAUU     = 4.1 0.0
+LDAUJ     = 0.0 0.0
+LDAUPRINT = 1
+
+# --- symmetry -----------------------------------------------------------------
+ISYM = 0              # the nuclear cell keeps a pure (1/2,0,0) translation that
+                      # maps a spin-up Cr onto a spin-down Cr; never let VASP use it
+
+# --- smearing: insulator, forces needed -> Gaussian, small width --------------
+ISMEAR = 0
+SIGMA  = 0.05
+
+# --- relaxation ---------------------------------------------------------------
+IBRION = 2
+NSW    = 100
+ISIF   = 3            # ions + cell shape + volume ("fully optimized")
+EDIFFG = -0.005       # negative: force criterion, 5 meV/A
+
+# --- restart / I/O ------------------------------------------------------------
+ISTART = 0
+ICHARG = 2
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+
+# --- parallel layout (32 ranks on a shared cluster node) -------------------------------
+KPAR  = 8
+NCORE = 4

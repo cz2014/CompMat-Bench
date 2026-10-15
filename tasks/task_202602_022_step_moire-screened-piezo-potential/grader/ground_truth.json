@@ -1,0 +1,68 @@
+{
+  "subtask": "L8 analyze",
+  "kind": "analyze (screened 2D Poisson electrostatics from a staged charge field; no DFT, no structure build)",
+  "provenance": "values from 3_reproduction/L8/result.json and compute_screened_potential.py (per-layer screened 2D Poisson solve of L7's piezocharge). Ground truth is OUR reproduction on the staged charge field; the paper's ~90/40 meV is the fidelity check, not the graded number. Paper magnitude comparison definition and fidelity disposition remain pending; verified task computation is not a full paper-fidelity pass.",
+  "staged_input": "agent/piezocharge.csv is a cleaned local copy of the consumed L7 field.",
+  "convention_note": "The absolute sign of V^RP is convention-soft (the staged bound charge is defined up to an overall sign). The graded quantities are sign-robust: peak-to-peak amplitudes, the layer ratio, the per-locale MAGNITUDES, the extremum locale (argmax magnitude), and the sign-CONTRAST topology (products), all invariant under a global sign flip. The all-atom (nearest-locale mean) binning is graded because the prompt asks for the mean over all sites of each locale (the natural binning from the staged locale column).",
+  "scalars": {
+    "WS2_pp_meV": {
+      "truth": 170.9,
+      "rule": "within 10% of the true value (band 153.8-188.0)"
+    },
+    "WSe2_pp_meV": {
+      "truth": 77.0,
+      "rule": "within 10% of the true value (band 69.3-84.7)"
+    },
+    "ratio_pp_WS2_over_WSe2": {
+      "truth": 2.219,
+      "rule": "within 10% of the true value (band 1.997-2.441); sign-free, scale-free relative-layer check"
+    }
+  },
+  "profile_magnitude": {
+    "rule": "The per-locale |V^RP| profile is graded as one curve, matched point-by-point; tol_i = max(0.10*|truth_i|, floor), floor = 0.10*max = 3.789 meV. Sign-robust (magnitudes).",
+    "order": [
+      "WS2:R^h_h",
+      "WS2:R^X_h",
+      "WS2:R^M_h",
+      "WSe2:R^h_h",
+      "WSe2:R^X_h",
+      "WSe2:R^M_h"
+    ],
+    "truth_abs_meV": [
+      5.505,
+      32.499,
+      37.886,
+      2.305,
+      16.567,
+      19.201
+    ],
+    "floor_meV": 3.789
+  },
+  "extremum_locale": {
+    "rule": "The largest absolute locale mean is at R^M_h in both layers. This checks the three submitted means, not the location of extrema in the full spatial field.",
+    "truth": {
+      "WS2": "R^M_h",
+      "WSe2": "R^M_h"
+    }
+  },
+  "sign_topology": {
+    "rule": "sign-CONTRAST, invariant under a global flip: within each layer V^RP(R^X_h) and V^RP(R^M_h) have opposite sign; across layers V^RP_WS2(R^M_h) and V^RP_WSe2(R^M_h) have opposite sign. Evaluated on the agent's OWN submitted values (products < 0).",
+    "checks": [
+      "WS2: R^X_h * R^M_h < 0",
+      "WSe2: R^X_h * R^M_h < 0",
+      "between: WS2_R^M_h * WSe2_R^M_h < 0"
+    ]
+  },
+  "score": "1 only if all four groups pass (all checks must pass; any single failure scores 0): (a) the three scalars, (b) the 6-point magnitude profile, (c) the extremum locale R^M_h in both layers, (d) the three sign-contrast relations.",
+  "self_check_2026-06-22": {
+    "direction1_our_reproduction_as_submission": "score 1 (raw-sign and physics-pinned-sign submissions both pass; sign-robust)",
+    "designed_wrong_must_fail": [
+      "all |V^RP| reported as positive (no contrast) -> sign_topology fails",
+      "WS2/WSe2 pp swapped (ratio ~0.45) -> ratio + pp fail",
+      "extremum reported at R^X_h (R^X_h mean larger than R^M_h) -> extremum_locale fails",
+      "paper amplitudes 90/40 instead of our 171/77 -> pp fail (self-consistent ground truth)",
+      "flat field (all locale means equal) -> profile + extremum + sign_topology fail"
+    ]
+  },
+  "coverage_note": "Magnitude profiles and the three listed RXh/RMh sign products are graded. Rhh signs and arithmetic consistency of the separately reference-graded submitted ratio are not additional conditions."
+}

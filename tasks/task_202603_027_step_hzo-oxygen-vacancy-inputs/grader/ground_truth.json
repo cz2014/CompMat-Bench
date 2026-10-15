@@ -1,0 +1,208 @@
+{
+  "subtask": "L2 gen_input",
+  "kind": "gen_input (the q = +2 oxygen-vacancy cell at the 4Zr representative site of the relaxed x = 0.50 supercell + its fixed-lattice relaxation deck + its potential-writing static deck, and the total electronic-plus-ionic static dielectric deck on the staged 12-atom cell)",
+  "provenance": "3_reproduction/L2/ (reproduced 2026-09-06 on reviewer's rulings, commit ef2b641): as-run decks hpc_computations/x050_o95_4Zr/q+2/{relaxB,static}/{INCAR,KPOINTS} and hpc_computations/eps/hf2zr2/dfpt/{INCAR,KPOINTS,POSCAR}; the starting cell is L1's relaxed pristine cell minus site 95 (asserted equal to x050_o95_4Zr/q0/relaxA/POSCAR by reviewer/make_reference.py). Upstream context (the nine representative sites) from 3_reproduction/L1/site_index_map.json.",
+  "run_labels": [
+    "relax",
+    "static",
+    "dfpt"
+  ],
+  "graded_object": "the vacancy cell (the right oxygen removed from the staged relaxed cell, nothing else changed), the two supercell decks' REQUIRED settings (a charged, spin-unpolarised, fixed-lattice relaxation to the pinned force criterion; a static that writes the electrostatic potential at the same electron count), and the dielectric deck's REQUIRED settings (total electronic-plus-ionic response with the existing accepted VASP routes)",
+  "structure_references": {
+    "vacancy": "reference/vacancy_start.vasp",
+    "eps_cell": "reference/eps_cell.vasp"
+  },
+  "structure_match": {
+    "max_disp_A": 0.001,
+    "method": "rigid_bijective",
+    "note": "The vacancy start is the supplied pristine cell minus the requested oxygen; the dielectric cell is the supplied cell unchanged. Periodic global translations and atom reordering are allowed through a species-aware bijection; no inversion mapping. The 0.001 A tolerance covers coordinate serialization: translated/reordered POSCARs printed to six decimals differ by at most 1.21e-5 A in the verified fixtures. A relaxed replacement is outside the given-coordinate contract. Existing lattice tolerances remain unchanged."
+  },
+  "poscar_species": {
+    "vacancy": {
+      "Hf": 16,
+      "Zr": 16,
+      "O": 63
+    },
+    "eps_cell": {
+      "Hf": 2,
+      "Zr": 2,
+      "O": 8
+    }
+  },
+  "declared_pins": {
+    "nelect_vacancy_q_plus_2": 728,
+    "nelect_eps_cell_neutral": 92,
+    "force_criterion_eV_per_A": 0.0001,
+    "note": "728 is NOT printed in the prompt: it follows from the charge state q = +2 (printed, the task's definition) and the catalog valences (16 x 10 + 16 x 12 + 63 x 6 = 730 for the neutral cell); graded on the effective value, the VASP default being the neutral count, so an absent NELECT fails. The force criterion 1e-4 eV/A is the paper's own and is printed (declared pin, notes.md). Spin-unpolarised treatment is printed (reviewer ruling (d), 2026-09-06). 92 is the neutral count of the staged 12-atom cell (2 x 10 + 2 x 12 + 8 x 6): the dielectric deck is graded on the effective NELECT so a supercell count copied into it fails; the default (absent) passes."
+  },
+  "encut_catalog": "graderlib/grader_potcar_vasp54.yaml (Hf_pv 220.334, Zr_sv 229.898, O 400.000 eV); floor 400 eV, REQUIRED-explicit, for all three runs",
+  "kmesh_reference": {
+    "supercell": [
+      2,
+      2,
+      2
+    ],
+    "eps_cell": [
+      6,
+      6,
+      6
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "incar_required": {
+    "note": "Each rule is on the EFFECTIVE value (explicit if set, else the VASP default). Only these settings are graded; the per-tag triage is in notes.md.",
+    "all_runs": "ENCUT >= 400 eV explicit; ISMEAR in {-5, 0}; EDIFF <= 1e-5; GGA absent or Pe; ISPIN effectively 1 (default 1 passes, 2 fails: pinned); POSCAR species as listed; k-mesh per-axis floor",
+    "relax": "ISIF effectively in {0, 1, 2} (all fixed-lattice; 3 fails), IBRION in {1, 2, 3}, EDIFFG < 0 with |EDIFFG| <= 1e-4; NSW >= 1; NELECT effectively 728",
+    "static": "NSW effectively 0 or IBRION = -1; LVHAR = .TRUE. or WRT_POTENTIAL output carrying both Hartree and ionic components on a supporting VASP version (6.4.3+ with HDF5); total potential with XC alone and incomplete components fail; NELECT effectively 728",
+    "dfpt": "LEPSILON or LCALCEPS effectively .TRUE. with IBRION in {5, 6, 7, 8}; NSW >= 1 (the IBRION = 8 at NSW = 0 no-op trap, observed on VASP 6.1.0; default 0 fails); NELECT effectively 92 (the neutral cell; default passes)"
+  },
+  "not_graded": "NCORE/NPAR: machine-dependent parallelisation tags, not graded (reviewer ruling 2026-09-11; handbook 5.2)",
+  "score": "1 only if all three runs pass their structure match and every REQUIRED check (binary all-primary-pass)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax": [
+        2,
+        2,
+        2
+      ],
+      "static": [
+        2,
+        2,
+        2
+      ],
+      "dfpt": [
+        4,
+        5,
+        4
+      ]
+    },
+    "references": {
+      "relax": {
+        "automatic_subdivisions": [
+          2,
+          2,
+          2
+        ],
+        "minimum": [
+          2,
+          2,
+          2
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "ecaec6c6fca8ea4ae6deef2f424b2c86379575072c1f13b9fb368a3d891a07fe",
+        "reference_lattice_angstrom": [
+          [
+            10.46,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.1
+          ]
+        ],
+        "reference_atom_count": 95
+      },
+      "static": {
+        "automatic_subdivisions": [
+          2,
+          2,
+          2
+        ],
+        "minimum": [
+          2,
+          2,
+          2
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "ecaec6c6fca8ea4ae6deef2f424b2c86379575072c1f13b9fb368a3d891a07fe",
+        "reference_lattice_angstrom": [
+          [
+            10.46,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.1
+          ]
+        ],
+        "reference_atom_count": 95
+      },
+      "dfpt": {
+        "automatic_subdivisions": [
+          4,
+          5,
+          4
+        ],
+        "minimum": [
+          4,
+          5,
+          4
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "efe1bf40122474c353c3b7c1168abe2de3dfbbdac6cd4377619d9c24b1fcb502",
+        "reference_lattice_angstrom": [
+          [
+            5.23,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.05
+          ]
+        ],
+        "reference_atom_count": 12
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (deterministic extraction of a curve from staged LOCPOTs)",
+  "provenance": "values from 3_reproduction/L1/result.json and dVsl_vs_nu_ac.csv (run 20260530_li_L1_opus_think + nu_0.333 gap-fix 2026-06-11)",
+  "definition": "dVsl = (top vacuum) minus (bottom vacuum) xy-planar-averaged potential offset, V; antisymmetric about nu_ac=1/2",
+  "sign_convention": "levels are the values stored in LOCPOT, used as stored and not negated (VASP stores the potential energy of an electron). Stated in the prompt. The sibling units L3_analyze and L4_analyze grade the opposite reading, phi = -LOCPOT; a negated map scores 0 here on map_per_point.",
+  "map": [
+    {
+      "nu_ac": 0.0,
+      "dVsl_V": 0.0
+    },
+    {
+      "nu_ac": 0.0833,
+      "dVsl_V": 0.0075
+    },
+    {
+      "nu_ac": 0.1667,
+      "dVsl_V": 0.0464
+    },
+    {
+      "nu_ac": 0.25,
+      "dVsl_V": 0.103
+    },
+    {
+      "nu_ac": 0.3333,
+      "dVsl_V": 0.1321
+    },
+    {
+      "nu_ac": 0.4167,
+      "dVsl_V": 0.0955
+    },
+    {
+      "nu_ac": 0.5,
+      "dVsl_V": 0.0
+    },
+    {
+      "nu_ac": 0.5833,
+      "dVsl_V": -0.0955
+    },
+    {
+      "nu_ac": 0.6667,
+      "dVsl_V": -0.1321
+    },
+    {
+      "nu_ac": 0.75,
+      "dVsl_V": -0.103
+    },
+    {
+      "nu_ac": 0.8333,
+      "dVsl_V": -0.0464
+    },
+    {
+      "nu_ac": 0.9167,
+      "dVsl_V": -0.0075
+    }
+  ],
+  "grading": {
+    "map_per_point": "per-point tolerance tol_i = max(0.10*|truth_i|, 0.10*max|truth|) = max(0.10*|t|, 0.01321 V), i.e. 10% relative with a floor of 10% of the largest value; all 12 points within tol",
+    "extremum_abs_V": {
+      "truth": 0.1321,
+      "rule": "within 10% relative tolerance"
+    },
+    "antisymmetry": {
+      "flag_must_be": true,
+      "verified_from_submission": "Every canonical periodic aligned pair, including self-pairs, must satisfy abs(pair sum) <= 0.10 * max(abs(aligned submitted steps)). The zero-map scale is zero."
+    },
+    "nu_match_tol": 0.02,
+    "extremum_consistency": {
+      "rule": "Reported extremum equals maximum absolute value in the full submitted map, allowing independent decimal reporting roundoff and a minimum 0.002 V arithmetic allowance.",
+      "arithmetic_floor_V": 0.002
+    },
+    "duplicate_consistency": "Validate all periodic-equivalent coordinate pairs using 1e-12 coordinate roundoff tolerance, separate from the 0.02 sampling match band. All values in each duplicate group must be pairwise consistent under existing decimal reporting roundoff / 0.002 V allowance; input order cannot hide a conflict."
+  },
+  "score": "1 only if all four primary checks pass (all checks must pass; any single failure scores 0)"
+}

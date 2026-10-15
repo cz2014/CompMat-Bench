@@ -1,0 +1,285 @@
+{
+  "subtask": "L8 gen_input",
+  "kind": "gen_input (Quantum ESPRESSO pw.x input decks; two doped-supercell chains, six labels: relax -> scf -> bands per configuration)",
+  "provenance": "Rubric constants and structure references come from our own reproduction of the two doped MnTe supercell chains: the as-run relax decks and the filled scf/bands decks under the leaf's run record. The unrelaxed doped builds under reference/ are regenerated deterministically from the relaxed primitive host cell plus the two dopant-site pairs (see notes.md, 'Structure staging'); the relaxed geometries under reference/ are extracted from the filled scf decks. The paper's reported values serve only as a fidelity check; the graded ground truth is our reproduction.",
+  "reference_dir": "reference",
+  "configs": {
+    "sb_alt": {
+      "dopant": "Sb",
+      "dopant_upf": [
+        "Sb.pbe-n-kjpaw_psl.1.0.0.UPF"
+      ],
+      "unrelaxed_ref": "unrelaxed_Sb_Pmm2.vasp",
+      "relaxed_ref": "relaxed_Sb_Pmm2.vasp"
+    },
+    "i_quasi": {
+      "dopant": "I",
+      "dopant_upf": [
+        "I.pbe-n-kjpaw_psl.1.0.0.UPF"
+      ],
+      "unrelaxed_ref": "unrelaxed_I_C2m.vasp",
+      "relaxed_ref": "relaxed_I_C2m.vasp"
+    }
+  },
+  "stage_labels": {
+    "sb_alt": {
+      "relax": "relax_sb_alt",
+      "scf": "scf_sb_alt",
+      "bands": "bands_sb_alt"
+    },
+    "i_quasi": {
+      "relax": "relax_i_quasi",
+      "scf": "scf_i_quasi",
+      "bands": "bands_i_quasi"
+    }
+  },
+  "upf_identity": {
+    "Mn": [
+      "Mn.pbe-spn-kjpaw_psl.0.3.1.UPF"
+    ],
+    "Te": [
+      "Te.pbe-n-kjpaw_psl.1.0.0.UPF"
+    ]
+  },
+  "ecutwfc_floor_Ry": 50,
+  "ecutrho_min_ratio_to_ecutwfc": 4.0,
+  "conv_thr_max_Ry": 1e-06,
+  "hubbard_u_band_eV": [
+    2.7,
+    3.3
+  ],
+  "degauss_max_Ry": 0.05,
+  "kmesh_reference": {
+    "relax": [
+      5,
+      5,
+      3
+    ],
+    "scf": [
+      8,
+      8,
+      5
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "nbnd_bands_min": 180,
+  "structure_match": {
+    "method": "fallback",
+    "relax_max_disp_A": 0.1,
+    "scfbands_max_disp_A": 0.35,
+    "note": "The deck's ATOMIC_SPECIES labels are mapped through UPF element identity to plain elements before structure construction and matching. Fallback = rigid-translation, species-aware; the AFM sublattice split is graded separately, so no lattice-symmetry op can absorb a wrong dopant placement. Relax decks match the UNRELAXED doped build within 0.1 A; scf/bands decks match our RELAXED geometry within 0.35 A, which also accepts an agent that submits the unrelaxed build to scf/bands (our ionic relaxations moved sites at most ~0.28 A)."
+  },
+  "required_summary": {
+    "note": "Each check is on the EFFECTIVE value (the tag if set, else the QE default in graderlib/grader_qe_inputs.py QE_DEFAULTS). Only the settings below are graded; the per-tag triage is in notes.md. Identity/count/Hubbard/AFM checks key on the UPF element, never on the agent's species-label strings.",
+    "all_six": "nspin = 2; AFM-A on at least two Mn species (producer seeds for relax/scf; bands inherit the supplied SCF model); Hubbard U in [2.7,3.3] eV on the exact 3d manifold of every Mn species and no other species (HUBBARD card any projector, or legacy lda_plus_u); UPF identity by element for every species label; element counts 16 Mn + 14 Te + 2 dopant; ecutwfc >= 50 Ry; ecutrho >= 4 x ecutwfc; occupations 'smearing' with 0 < degauss <= 0.05 Ry (metallic doped cell)",
+    "relax": "calculation 'relax' (fixed cell: the lattice is pinned by the doping convention; 'vc-relax' fails); K_POINTS automatic or equivalent complete equal-weight uniform crystal/tpiba mesh vs [5,5,3] per-axis floor, shift ungraded; structure matches the unrelaxed doped build within 0.1 A; conv_thr <= 1e-6 Ry",
+    "scf": "calculation 'scf'; K_POINTS automatic or equivalent complete equal-weight uniform crystal/tpiba mesh vs [8,8,5] per-axis floor, unshifted; structure matches the relaxed geometry within 0.35 A; conv_thr <= 1e-6 Ry",
+    "bands": "calculation 'bands'; nbnd >= 180 on the effective value (pw.x default computed from the catalog valences when omitted); K_POINTS explicit list (crystal/crystal_b/tpiba/tpiba_b) tracing the folded L-Gamma-L' line: every point on a folded-L leg, Gamma present, two folded-L legs of differing splitting-sign parity each reaching the supercell zone boundary (reach = max min(s,1-s) >= 0.4); no independent total-point floor; structure matches the relaxed geometry within 0.35 A"
+  },
+  "cross_deck": {
+    "note": "Within each supplied SCF-to-bands pair, effective prefix is the same logical dataset identifier. Ordered species/type and physical spin-model compatibility are checked separately. Output directories, working-directory placement and runtime-file existence are not scored. Relaxation feeds geometry and is not a saved-data pair; prefixes across different pairs are unconstrained."
+  },
+  "score": "1 only if all six runs pass every REQUIRED check, the six structure extractions match their per-stage reference, and both per-config scf->bands chains are consistent (binary all-primary-pass; any single failure scores 0).",
+  "z_valence": {
+    "Mn": 15,
+    "Te": 6,
+    "Sb": 5,
+    "I": 7
+  },
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax_sb_alt": [
+        3,
+        3,
+        1
+      ],
+      "scf_sb_alt": [
+        3,
+        3,
+        1
+      ],
+      "relax_i_quasi": [
+        3,
+        3,
+        1
+      ],
+      "scf_i_quasi": [
+        3,
+        3,
+        1
+      ]
+    },
+    "references": {
+      "relax_sb_alt": {
+        "automatic_subdivisions": [
+          3,
+          3,
+          1
+        ],
+        "minimum": [
+          3,
+          3,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "dd040ab3e18fb2fc5fcdf84db38423659662901578406d3ded45187242a39fa6",
+        "reference_lattice_angstrom": [
+          [
+            8.413166178034,
+            0.0,
+            0.0
+          ],
+          [
+            -4.206583089016,
+            7.286015637338,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            13.38160118549
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "scf_sb_alt": {
+        "automatic_subdivisions": [
+          3,
+          3,
+          1
+        ],
+        "minimum": [
+          3,
+          3,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "15f4009c7927276837b83f701af1bf35f721a5f46819fa20c2af58c0c2856014",
+        "reference_lattice_angstrom": [
+          [
+            8.413166178034,
+            0.0,
+            0.0
+          ],
+          [
+            -4.206583089016,
+            7.286015637338,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            13.38160118549
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "relax_i_quasi": {
+        "automatic_subdivisions": [
+          3,
+          3,
+          1
+        ],
+        "minimum": [
+          3,
+          3,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "8dc47ecfdaab4caadb15ffce8e0bbf2b95d4b5911d7cd6f20052ed78b78befc9",
+        "reference_lattice_angstrom": [
+          [
+            8.413166178034,
+            0.0,
+            0.0
+          ],
+          [
+            -4.206583089016,
+            7.286015637338,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            13.38160118549
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "scf_i_quasi": {
+        "automatic_subdivisions": [
+          3,
+          3,
+          1
+        ],
+        "minimum": [
+          3,
+          3,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "d63fcdf30ec72fed45fc8d40864605b753918a7efffb5dd352eb2acb0f79391d",
+        "reference_lattice_angstrom": [
+          [
+            8.413166178034,
+            0.0,
+            0.0
+          ],
+          [
+            -4.206583089016,
+            7.286015637338,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            13.38160118549
+          ]
+        ],
+        "reference_atom_count": 32
+      }
+    }
+  },
+  "runtime_directory_policy": "Output directories, working-directory placement and directory equivalence are not scored. Required submitted files and logical file identities remain part of the input task. User decision 2026-09-17.",
+  "saved_afm_handoff": {
+    "rule": "AFM starting seeds remain required on relaxation and SCF producers. Collinear bands inherit the supplied SCF spin density: do not score repeated bands starting_magnetization. Require nspin=2, compatible ordered species labels/type indices and UPF identities; test consumer basal-plane encoding with producer seeds. Existing Hubbard, species counts and structure rules remain. No runtime files or directory settings are scored.",
+    "source": "QE 7.5 PW/src/input.f90, potinit.f90 and io_rho_xml.f90; documented source trace in docs/review/grader_semantics_20260917/physics/followup.md. This is the submitted collinear SCF->bands route, not a general noncollinear waiver."
+  },
+  "band_path_count_policy": "Keep Gamma, two nondegenerate inequivalent arms, no off-line samples and existing folded boundary reach/parity checks. Remove the unsupported aggregate40 count; no replacement magic number. Endpoint-only full primitive folded images collapse to Gamma and cannot meet the two-arm reach tests.",
+  "conv_thr_scope": "SCF and relax only; bands conv_thr is not graded."
+}

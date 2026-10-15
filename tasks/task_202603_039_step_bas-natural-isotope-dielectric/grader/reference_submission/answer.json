@@ -1,0 +1,14 @@
+{
+  "omega_TO_vc_cm1": 696.6750620721535,
+  "eps2_max_below_710_cm1": 693.4300000000001,
+  "eps2_max_below_710_value": 29.894140792112633,
+  "eps2_max_above_710_cm1": 713.56,
+  "eps2_max_above_710_value": 1.4501205573552527,
+  "eps1_max_700_740_cm1": 711.61,
+  "eps1_min_above_max_cm1": 716.52,
+  "min_eps1_disordered_680_740": 2.2785926103226952,
+  "min_eps1_baseline_680_740": -90.04072596429168,
+  "rse_max_xx_percent": 2.82981500571374,
+  "strength_centroid_split_cm1": 22.943696544867294,
+  "off_vc_strength_fraction": 0.9224709114109979
+}

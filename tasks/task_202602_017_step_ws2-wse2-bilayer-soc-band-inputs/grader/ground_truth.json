@@ -1,0 +1,217 @@
+{
+  "subtask": "L5 gen_input",
+  "kind": "gen_input (VASP input set + generated structure)",
+  "provenance": "rubric and structure reference from 3_reproduction/L5/ (VASP+SOC band-offset run on the HPC cluster, reproduced 2026-06-21); see ../../../3_reproduction/L5/index.md and hpc_computations/RUN_RECORD.md. Ground truth = our as-run inputs, not the paper.",
+  "system": "1x1 commensurate R^X_h WS2/WSe2 heterobilayer, 6 atoms (W2 S2 Se2); WS2 lower, WSe2 upper; a_comm=3.235 A, c=29.54 A, 20 A vacuum along z",
+  "run_labels": [
+    "relax",
+    "static",
+    "band"
+  ],
+  "structure_reference": "reference/POSCAR_RXh_bilayer.vasp",
+  "structure_match": {
+    "labels": [
+      "relax"
+    ],
+    "max_disp_A": 0.1,
+    "method": "fallback",
+    "note": "Full structure match applies only to the relax label (the built bilayer). static/band carry the same built geometry as context for the SOC/band inputs, so they are graded by species+vacuum sanity only (their production geometry is the relax chain output, unavailable at input-writing time). method='fallback' (rigid-translation scan + nearest-same-species, no symmetry ops) is REQUIRED because this is a polar heterobilayer: method='matcher' wrongly PASSES a layer-z-swap (WS2/WSe2 exchanged top/bottom, disp 9.46 A) since a rigid layer swap is equivalent to the horizontal mirror in the hexagonal lattice point group (D6h), which StructureMatcher legitimately applies -- the polar-flip analogue of the hBN B/N-swap failure. fallback has no symmetry ops, so it fails the swap. Verified in selfcheck: fallback PASSES the correct R^X_h build and a translated+wrapped copy, and FAILS wrong-registry (R^h_h, no shift; disp 1.87 A), wrong-a_comm (3.17 A; lattice mismatch), and layer-z-swap (disp 9.46 A)."
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      18,
+      18,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "encut_floor": {
+    "factor": 1.0,
+    "max_enmax_eV": 280.0,
+    "floor_eV": 280.0,
+    "note": "1.0 * max(ENMAX over W,S,Se) from grader_potcar_vasp54.yaml; S ENMAX 280 eV is the max; our as-run ENCUT is 520 eV"
+  },
+  "kpath": {
+    "Gamma": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "M": [
+      0.5,
+      0.0,
+      0.0
+    ],
+    "K": [
+      0.3333333333,
+      0.3333333333,
+      0.0
+    ],
+    "note": "band-step line-mode KPOINTS must contain these three physical vertices; Reciprocal or Cartesian interpreted with the submitted lattice and POSCAR scale; existing tolerance 1e-3 per fractional component; segment order and extra vertices ungraded"
+  },
+  "poscar_species": {
+    "W": 2,
+    "S": 2,
+    "Se": 2
+  },
+  "poscar_min_vacuum": {
+    "axis": 2,
+    "min_A": 15.0
+  },
+  "incar_required": {
+    "note": "Each rule applies to the effective value: the tag if explicitly set, else the VASP default. Only the settings listed here are graded; the per-tag reasoning is in notes.md (C6).",
+    "relax": {
+      "LSORBIT_false": "LSORBIT effectively false (no SOC relaxation; omitted defaults to false)",
+      "IVDW_set": "IVDW nonzero (vdW-bonded bilayer; default 0)",
+      "relax_fixed_cell": "ISIF effectively in {0,1,2} (fixed cell; default 2) + IBRION in {1,2,3} + force-based EDIFFG<0 with |EDIFFG|<=0.05 eV/A",
+      "NSW_ge_1": "NSW >= 1 explicit (a static default 0 would not relax)",
+      "ENCUT_floor": "ENCUT >= the largest ENMAX over W,S,Se = 280 eV (the pseudopotential's own floor)",
+      "ISMEAR_set": "ISMEAR in {-5,0} (gapped system; 18x18x1 qualifies for -5, ours used 0)",
+      "LASPH_true": "LASPH = .TRUE. explicit (W 5d band edges; VASP default .FALSE.; our as-run decks set it -- handbook 5.2b easy-to-mistake tags)",
+      "functional": "PBE: GGA absent or GGA=Pe",
+      "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+      "structure": "POSCAR matches reference/POSCAR_RXh_bilayer.vasp (method=fallback, max_disp 0.1 A)",
+      "poscar_species": "W2 S2 Se2",
+      "poscar_vacuum": ">= 15 A along z"
+    },
+    "static": {
+      "LSORBIT_true": "LSORBIT=.TRUE. (spin-orbit coupling; default .FALSE.)",
+      "ISYM_off": "ISYM in {-1,0}; -1 disables symmetry entirely; 0 retains k/-k reduction (default 2 for PAW fails)",
+      "LORBIT_weights": "LORBIT in {11,12,14} (per-site orbital weights; omitted fails)",
+      "static": "NSW effectively 0 (default 0)",
+      "EDIFF_floor": "EDIFF <= 1e-5 eV (default 1e-4)",
+      "ENCUT_floor": "ENCUT >= 280 eV",
+      "ISMEAR_set": "ISMEAR in {-5,0}",
+      "LASPH_true": "LASPH = .TRUE. explicit (W 5d band edges; VASP default .FALSE.; our as-run decks set it -- handbook 5.2b easy-to-mistake tags)",
+      "functional": "PBE: GGA absent or GGA=Pe",
+      "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+      "poscar_species": "W2 S2 Se2 (geometry sanity only; production geometry = relax chain)",
+      "poscar_vacuum": ">= 15 A along z"
+    },
+    "band": {
+      "ICHARG_11": "ICHARG=11 (non-self-consistent, reads the static charge density; default 2)",
+      "LSORBIT_true": "LSORBIT=.TRUE. (spin-orbit coupling)",
+      "LORBIT_weights": "LORBIT in {11,12,14} (per-site orbital weights consumed downstream)",
+      "static": "NSW effectively 0 (default 0)",
+      "ENCUT_floor": "ENCUT >= 280 eV",
+      "LASPH_true": "LASPH = .TRUE. explicit (W 5d band edges; VASP default .FALSE.; our as-run decks set it -- handbook 5.2b easy-to-mistake tags)",
+      "functional": "PBE: GGA absent or GGA=Pe",
+      "kpath": "line-mode vertices at physical Gamma, M, K; Reciprocal/Cartesian coordinates normalized to the submitted reciprocal basis",
+      "poscar_species": "W2 S2 Se2 (geometry sanity only)",
+      "poscar_vacuum": ">= 15 A along z"
+    }
+  },
+  "score": "1 only if the relax POSCAR matches the reference AND all three runs satisfy their REQUIRED INCAR/KPOINTS/POSCAR rubric (all checks must pass; any single failure scores 0)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax": [
+        8,
+        8,
+        1
+      ],
+      "static": [
+        8,
+        8,
+        1
+      ]
+    },
+    "references": {
+      "relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "e4c7dfd5b30e4d9d7e40f3f91770c7a55c02baa86d9be23817168945176647c4",
+        "reference_lattice_angstrom": [
+          [
+            3.235,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6175,
+            2.801592181242659,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            29.540000000000003
+          ]
+        ],
+        "reference_atom_count": 6
+      },
+      "static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "e4c7dfd5b30e4d9d7e40f3f91770c7a55c02baa86d9be23817168945176647c4",
+        "reference_lattice_angstrom": [
+          [
+            3.235,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6175,
+            2.801592181242659,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            29.540000000000003
+          ]
+        ],
+        "reference_atom_count": 6
+      }
+    }
+  }
+}

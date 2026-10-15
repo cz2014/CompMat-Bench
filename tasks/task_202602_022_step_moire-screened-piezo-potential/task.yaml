@@ -1,0 +1,18 @@
+task_id: task_202602_022_step_moire-screened-piezo-potential
+title: screen a moire piezoelectric charge and compute its band-edge potential
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-02
+source_date: 2026-02-04
+earliest_public_date: 2026-02-04
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: []
+docs: []
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

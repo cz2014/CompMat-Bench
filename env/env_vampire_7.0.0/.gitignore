@@ -1,0 +1,107 @@
+#----------------------------------------------
+# Git Ignore file for vampire source code
+#----------------------------------------------
+
+#----------------------------------------------
+# Ignore object files
+#----------------------------------------------
+*.o
+
+#----------------------------------------------
+# Ignore temporary editor files
+#----------------------------------------------
+*~
+*.swp
+*.swo
+
+
+#----------------------------------------------
+# Povray files
+#----------------------------------------------
+*.png
+*.pov
+*.inc
+*.ini
+
+#----------------------------------------------
+# OSX/macOS files
+#----------------------------------------------
+*.DS_Store
+
+#----------------------------------------------
+# Other sundry files
+#----------------------------------------------
+*old.cpp
+*old.hpp
+*.bkp
+*.json
+vampire.pkg # installation package
+
+#----------------------------------------------
+# Profiling and debugging extensions
+#----------------------------------------------
+*.gcno
+
+#----------------------------------------------
+# Manual files to be ignored
+#----------------------------------------------
+vampire_manual.pdf
+vampire_manual.out
+vampire_manual.synctex.gz
+.texpadtmp
+
+#----------------------------------------------
+# Data file formats in vampire
+#----------------------------------------------
+*.cfg
+*.data
+*.meta
+*.vtu
+*.txt
+crystal.xyz
+log
+grain
+output
+MPI-compute-times
+MPI-wait-times
+tags
+.vimrc
+*.d
+MAT.mat
+UC.ucf
+exchange-template
+mm_output
+
+#----------------------------------------------
+# Executables
+#----------------------------------------------
+vampire-serial
+vampire-parallel
+vampire*
+util/vdc/vdc
+test/integration/integration_tests
+test/unit/unit_tests
+#----------------------------------------------
+# Obsolete
+#----------------------------------------------
+cfg2povray
+cfg2rasmol
+log.*
+run/unit-cell-creator
+
+#----------------------------------------------
+# Eclipse project files and folders
+#----------------------------------------------
+.cproject
+.project
+.settings/
+
+#----------------------------------------------
+# Vscode and Clang project files and folders
+#----------------------------------------------
+.vscode/
+.cache/
+.clang-tidy
+
+temp/*
+#EOF

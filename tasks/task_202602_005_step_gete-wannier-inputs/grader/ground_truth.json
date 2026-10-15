@@ -1,0 +1,156 @@
+{
+  "subtask": "L3 gen_input",
+  "kind": "gen_input (Quantum ESPRESSO + wannier90 input decks, four-run pipeline)",
+  "provenance": "rubric constants and structure reference from 3_reproduction/L3/ canonical run5 (01_scf.in, 02_nscf.in, 04_pw2wan.in, gete.win); see ../../3_reproduction/L3/index.md. The 03_bands.in fidelity-gate run is not part of the graded pipeline (notes.md).",
+  "run_labels": {
+    "scf": "pw",
+    "nscf": "pw",
+    "pw2wan": "pw2wan",
+    "wannier": "w90"
+  },
+  "structure_reference": "reference/POSCAR_GeTe_expt.vasp",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "fallback",
+    "note": "translation-only rigid match, species-aware. The 2-atom R3m cell's graded content is the ferroelectric distortion x_Te = 0.526; the fallback scan anchors on Ge and measures the Te displacement directly. 0.1 A rejects the undistorted (x_Te = 0.5, ~0.28 A) and the over-distorted mp-938 (x_Te ~ 0.537, ~0.11 A) cells. Applied to the scf and nscf decks (extracted from the cell and positions cards) and to the wannier deck (extracted from its cell and atomic-sites blocks)."
+  },
+  "upf_identity": {
+    "Ge": "Ge_ONCV_PBE_FR-1.0.upf",
+    "Te": "Te_ONCV_PBE_FR-1.1.upf"
+  },
+  "species_counts": {
+    "Ge": 1,
+    "Te": 1
+  },
+  "ecutwfc_floor_Ry": 60,
+  "ecutrho_min_ratio_to_ecutwfc": 4.0,
+  "conv_thr_max_Ry": 1e-08,
+  "occupations_scf": {
+    "accepted": [
+      "fixed",
+      "tetrahedra",
+      "tetrahedra_lin",
+      "tetrahedra_opt",
+      "smearing"
+    ],
+    "smearing_max_degauss_Ry": 0.01,
+    "note": "gapped system: fixed occupations (our run), tetrahedra, or smearing narrow relative to the ~0.5 eV gap. Broad metal-style smearing fails. nscf occupations are not graded (eigenvalues do not depend on them)."
+  },
+  "scf_kmesh_reference": {
+    "subdivisions": [
+      7,
+      7,
+      7
+    ],
+    "require_unshifted": true,
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "wannier_grid": [
+    16,
+    16,
+    16
+  ],
+  "band_bookkeeping": {
+    "n_lower_excluded": 24,
+    "n_target": 12,
+    "nscf_nbnd_min": 36,
+    "note": "30 valence electrons (Ge 14 + Te 16, catalog valence configurations) -> 24 semicore/s-derived spinor bands below the 12-band p manifold (bands 25-36). nbnd must reach at least 36; exclude_bands must remove exactly the 24 lower bands and any bands above 36, never bands 25-36, leaving exactly 12."
+  },
+  "required_summary": {
+    "note": "Each check is on the EFFECTIVE value: the tag if explicitly set, else the engine default (QE_DEFAULTS / W90_DEFAULTS / PW2WAN_DEFAULTS in graderlib/grader_qe_inputs.py). Only the settings listed here are graded; the per-tag triage is in notes.md.",
+    "scf": "calculation scf; noncolin AND lspinorb true (fully relativistic SOC, defaults false); occupations per occupations_scf; ecutwfc >= 60 Ry; ecutrho >= 4 x ecutwfc (the norm-conserving density support; default 4x passes); conv_thr <= 1e-8 Ry (default 1e-6 fails); UPF identity per upf_identity; species counts 1 Ge + 1 Te; K_POINTS automatic or an equivalent full uniform explicit crystal/tpiba integration list with equal positive weights; unshifted, >= 6 per axis; structure match",
+    "nscf": "calculation nscf or bands; noncolin AND lspinorb true; ecutwfc >= 60 Ry; ecutrho >= 4 x ecutwfc; UPF identity; species counts; nosym true for an explicit nscf crystal list (noinv is not required because the list is used as supplied); nosym AND noinv true for automatic grids; neither flag required for a bands run with an explicit k-list; nbnd >= 36; k-points cover the full unshifted 16x16x16 grid (automatic 16 16 16 0 0 0, or an explicit crystal list of exactly the 4096 grid points); structure match",
+    "pw2wan": "write_amn true (default true); write_mmn true (default true); write_spn true (default false); spn_formatted true (default false); prefix set and equal to the pw runs' effective prefix; runtime output directories are ungraded",
+    "wannier": "num_wann = 12; effective num_bands = 12 (isolated group, no disentanglement window needed); spinors true; projections = the full p shell centred on Ge and on Te (declared pin in the prompt; lines accumulated per element, tokens p / l=1 / px,py,pz / l=1,mr=k accepted, explicit default (u,d) accepted; site-coordinate forms, partial spin selections, and rotated/malformed axes fail); mp_grid = 16 16 16; explicit kpoints block covering all 4096 distinct unshifted grid points and matching the NSCF point at every index; write_hr true; write_u_matrices true; exclude_bands consistent with the nscf nbnd per band_bookkeeping; structure (cell + atomic sites blocks) match; projection syntax parsed by Wannier90 3.1.0; selected independent spinor p shells per site, species-centred and unrotated axes"
+  },
+  "cross_deck": {
+    "prefix": "effective prefix identical across scf, nscf, pw2wan (pw2wan must set it explicitly; it has no usable default)",
+    "outdir": "Ungraded runtime placement; omission, differing paths and arbitrary directory names do not affect the score. Logical prefix consistency remains required.",
+    "exclude_bands": "see band_bookkeeping",
+    "kpoint_handoff": "Wannier and NSCF indexed coordinates agree within 1e-6 in QE 2pi/alat units; no independent sorting or modulo reduction for this comparison. Automatic NSCF coordinates use QE k-fastest order and q-NINT(q) representatives; explicit lists retain their supplied order and representatives."
+  },
+  "score": "1 only if all four runs pass every REQUIRED check, the three structure extractions match the reference, and the cross-deck consistency checks pass (binary all-primary-pass; any single failure scores 0)",
+  "projections": {
+    "required": "full p shell on each species, species-centred",
+    "accepted_tokens": [
+      "p",
+      "l=1",
+      "px;py;pz or px,py,pz (components may be accumulated across lines)",
+      "l=1,mr=1,2,3 (or individual mr components across lines)",
+      "optional explicit (u,d), with omitted or explicit default spatial/spin axes"
+    ],
+    "rejected": [
+      "any non-p orbital",
+      "an incomplete p shell",
+      "site-coordinate site fields (f=..., c=...)",
+      "rotated or malformed spatial/spin axes",
+      "partial spin-channel specifications"
+    ],
+    "note": "The prompt pins species-centred full p shells and no rotated axes. Optional radial fields remain ungraded. Default axis direction is x=(1,0,0), z=(0,0,1), spin=(0,0,1); positive rescalings preserve the direction."
+  },
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "scf": [
+        6,
+        6,
+        6
+      ]
+    },
+    "references": {
+      "scf": {
+        "automatic_subdivisions": [
+          6,
+          6,
+          6
+        ],
+        "minimum": [
+          6,
+          6,
+          6
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "967563fae295e431b8772255bec6a5c3b33daeb5c0d4ae8163a244e45f012abc",
+        "reference_lattice_angstrom": [
+          [
+            3.64972731732,
+            0.0,
+            2.285920549627
+          ],
+          [
+            1.26554224088,
+            3.423289693751,
+            2.285920549627
+          ],
+          [
+            0.0,
+            0.0,
+            4.3065
+          ]
+        ],
+        "reference_atom_count": 2
+      }
+    }
+  },
+  "runtime_directory_policy": "Output directories, working-directory placement and directory equivalence are not scored. Required submitted files and logical file identities remain part of the input task. User decision 2026-09-17.",
+  "conv_thr_scope": "SCF only; NSCF/bands conv_thr is not graded."
+}

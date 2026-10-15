@@ -1,0 +1,29 @@
+{
+  "subtask": "L5 analyze",
+  "kind": "analyze (conventional diffuse-mismatch transmission across the Si/Ge interface from tabulated bulk spectra; window means and the bandwidth over which the wave-based reference exceeds it)",
+  "provenance": "3_reproduction/L5/result.json key primary_metrics (commit af1723c, reviewer human audit 2026-09-06), re-derived on the staged tables by reviewer/make_reference_submission.py on 2026-09-10; every graded value equals the record to the last digit (relative difference 0). Tolerances: result.json key proposed_relative_grading_tolerance (0.1).",
+  "primary": {
+    "mean_T_dmm_0p5_4p5THz": {
+      "truth": 0.6730751370393173,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); trapezoid mean of the Si-incident DMM transmission over 0.5-4.5 THz"
+    },
+    "mean_T_dmm_4p5_7p5THz": {
+      "truth": 0.35139538531285774,
+      "rule": "+/-10 percent relative; same over 4.5-7.5 THz"
+    },
+    "mean_T_dmm_7p5_11p5THz": {
+      "truth": 0.5750070526683837,
+      "rule": "+/-10 percent relative; same over 7.5-11.5 THz"
+    },
+    "agf_above_dmm_bandwidth_THz": {
+      "truth": 3.2792527030273417,
+      "rule": "+/-10 percent relative. A physical interval length (the frequency measure of AGF > DMM within 0.5-7.5 THz, piecewise-linear crossings), graded two-sided; it is not an agreement-error metric, so the one-sided rule 2(3) does not apply"
+    }
+  },
+  "not_graded": {
+    "T_dmm_curve": "the per-frequency DMM transmission enters only through the three means and the bandwidth",
+    "apparent_cutoffs": "the 1%-of-own-peak cutoff offset between the two curves is a recorded comparison of the leaf, not a graded value",
+    "reverse_direction": "the Ge-incident transmission is the complement of the model and is not requested"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

@@ -1,0 +1,63 @@
+{
+  "chain": "C05",
+  "status": "verified",
+  "notes": "Accepted observable repeatability retained; an excessive residual alone is not a rejection criterion.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "5767738824c5fc14c6b57f280de33b2cf3faab1a08708689d182af26c0ac79fa",
+  "fields": {
+    "P_sp_x0.0": {
+      "truth": 0.8498546242905721,
+      "atol": 0.015,
+      "rtol": 0,
+      "rule": "tolerance"
+    },
+    "P_sp_x0.25": {
+      "truth": 0.832140746887983,
+      "atol": 0.015,
+      "rtol": 0,
+      "rule": "tolerance"
+    },
+    "P_sp_x0.5": {
+      "truth": 0.8077217649412133,
+      "atol": 0.015,
+      "rtol": 0,
+      "rule": "tolerance"
+    },
+    "P_sp_x0.75": {
+      "truth": 0.7704950595328035,
+      "atol": 0.015,
+      "rtol": 0,
+      "rule": "tolerance"
+    },
+    "P_sp_x1.0": {
+      "truth": 0.7042138020161308,
+      "atol": 0.015,
+      "rtol": 0,
+      "rule": "tolerance"
+    },
+    "alpha0_GJ_m_C-2": {
+      "truth": 3.081505415918418,
+      "atol": 0.01,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "gamma_star_GJ_m5_C-4": {
+      "truth": 4.941788286592786,
+      "atol": 0.01,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "omega_GJ_m9_C-6": {
+      "truth": 8.269370420772832,
+      "atol": 0.01,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "xc": {
+      "truth": 2.5581430019805635,
+      "atol": 0.01,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    }
+  }
+}

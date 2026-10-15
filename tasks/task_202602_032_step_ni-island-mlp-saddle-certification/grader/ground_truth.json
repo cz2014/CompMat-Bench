@@ -1,0 +1,37 @@
+{
+  "subtask": "L7 analyze (Option A, MACE saddle certification)",
+  "kind": "analyze (ML-potential FD-Hessian certification; no DFT)",
+  "provenance": "recomputed fresh from agent/system_cases.npz + the staged MACE-MP-0a medium checkpoint; graded only against these MACE answer-key values, never the paper (self-consistent ground-truth rule)",
+  "checkpoint_sha256": "75428afe3a1d7d8062e19bcaabd5c433623cabf308242ec9fb493e38604fb638",
+  "rel_tol": 0.1,
+  "n_negative_expected": 1,
+  "cases": {
+    "case_a": {
+      "dE_eV": 0.5915554496345976,
+      "lambda1_eV_A2": -0.685247455120953,
+      "lambda2_eV_A2": 0.1885970197680544,
+      "n_negative": 1
+    },
+    "case_b": {
+      "dE_eV": 0.886781077030264,
+      "lambda1_eV_A2": -0.9782321506465277,
+      "lambda2_eV_A2": 0.37481926416446454,
+      "n_negative": 1
+    }
+  },
+  "grading_rules": {
+    "dE_eV": "handbook 2(1): +/-10% relative, sign part of value",
+    "lambda1_eV_A2": "handbook 2(1): +/-10% relative, sign part of value",
+    "lambda2_eV_A2": "handbook 2(1): +/-10% relative, sign part of value",
+    "n_negative": "handbook 2(4): exact integer == 1"
+  },
+  "score": "1 only if all primary checks pass for both cases (binary all-primary-pass)",
+  "versions": {
+    "mace_torch": "0.3.16",
+    "torch": "2.13.0",
+    "ase": "3.29.0",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "python": "3.12.11"
+  }
+}

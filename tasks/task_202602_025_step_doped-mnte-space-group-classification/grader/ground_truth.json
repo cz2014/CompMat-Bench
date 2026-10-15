@@ -1,0 +1,16 @@
+{
+  "subtask": "L5 analyze",
+  "kind": "analyze (implement-and-run: enumerate + space-group classify the 120 pair-doped 2x2x2 MnTe supercells, partition altermagnet vs quasi)",
+  "provenance": "From 3_reproduction/L5/result.json (light leaf; pymatgen 2026.5.4 SpacegroupAnalyzer over spglib 2.7.0, symprec 1e-3, Mn crystallographically identical). The 2x2x2 supercell of L1's relaxed primitive cell has 16 Te sites; all C(16,2) = 120 unordered Te-site pairs are enumerated and classified. The staged agent/MnTe_relaxed.vasp is L1's relaxed primitive cell; re-running the pipeline on it reproduces this table exactly (audited).",
+  "families": [
+    {"sg_number": 12, "count": 48, "altermagnetic": false},
+    {"sg_number": 25, "count": 24, "altermagnetic": true},
+    {"sg_number": 42, "count": 24, "altermagnetic": true},
+    {"sg_number": 164, "count": 16, "altermagnetic": false},
+    {"sg_number": 187, "count": 8, "altermagnetic": true}
+  ],
+  "families_rule": "exact multiset match of the (sg_number, count, altermagnetic) triples; order-independent (the prompt asks for descending-count order but content is what is graded). The five space groups are C2/m(12), Pmm2(25), Fmm2(42), P-3m1(164), P-6m2(187); the altermagnet families are Pmm2, Fmm2, P-6m2 (a rotation/rotoinversion/mirror connects the opposite-spin Mn sublattices), the quasi-altermagnet families C2/m and P-3m1 (only translation/inversion connects them, or neither).",
+  "n_altermagnetic_configs": {"truth": 56, "rule": "exact integer match; = 24 + 24 + 8 over the three altermagnet families (46.67% of 120)."},
+  "counts_total": {"truth": 120, "rule": "gating: the reported family counts must sum to 120 (the raw C(16,2) enumeration); a submission that does not exhaust the enumeration scores 0 before the primary checks."},
+  "score": "1 only if the families multiset matches exactly AND n_altermagnetic_configs == 56 (and the format/counts gate passes); any single failure scores 0."
+}

@@ -1,0 +1,18 @@
+task_id: task_202602_030_step_spin-lattice-hessian-minimum-modes
+title: minimum modes of the tangent-space Hessian of a lattice spin model
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-02
+source_date: 2026-02-06
+earliest_public_date: 2025-09-30
+promoted: 2026-09-13
+env_bundles: []
+requires: [torch==2.13.0+cpu]
+third_party_docs: []
+codes: []
+docs: []
+image: torch-mace-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

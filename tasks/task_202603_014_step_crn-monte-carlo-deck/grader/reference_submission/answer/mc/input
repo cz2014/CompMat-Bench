@@ -1,0 +1,31 @@
+create:full
+create:periodic-boundaries-x
+create:periodic-boundaries-y
+create:periodic-boundaries-z
+material:file = material.mat
+material:unit-cell-file = unitcell.ucf
+dimensions:unit-cell-size-x = 5.775871 !A
+dimensions:unit-cell-size-y = 2.965491 !A
+dimensions:unit-cell-size-z = 4.143072 !A
+dimensions:system-size-x = 57.75871000000001 !A
+dimensions:system-size-y = 59.30982 !A
+dimensions:system-size-z = 58.003008 !A
+sim:integrator = monte-carlo
+montecarlo:algorithm = adaptive
+sim:integrator-random-seed = 1000001
+sim:program = curie-temperature
+sim:minimum-temperature = 0.0
+sim:maximum-temperature = 350.0
+sim:temperature-increment = 5.0
+sim:equilibration-time-steps = 5000
+sim:loop-time-steps = 15000
+sim:time-steps-increment = 1
+output:temperature
+output:material-mean-magnetisation-length
+output:material-mean-magnetisation
+output:material-mean-susceptibility
+output:mean-specific-heat
+output:mean-exchange-energy
+output:mean-total-energy
+output:column-headers = true
+output:precision = 8

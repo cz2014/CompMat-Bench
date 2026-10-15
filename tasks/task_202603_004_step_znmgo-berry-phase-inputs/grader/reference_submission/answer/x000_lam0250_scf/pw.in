@@ -1,0 +1,41 @@
+&CONTROL
+  calculation   = 'scf'
+  prefix        = 'x000_lam0250'
+  outdir        = './tmp'
+  pseudo_dir    = '/home/user/pp/gbrv_pbesol'
+  tstress       = .true.
+  tprnfor       = .true.
+  etot_conv_thr = 1.0d-6
+  forc_conv_thr = 1.0d-6
+  disk_io       = 'low'
+/
+&SYSTEM
+  ibrav         = 0
+  nat           = 4
+  ntyp          = 2
+  ecutwfc       = 80.0
+  ecutrho       = 600.0
+  occupations   = 'fixed'
+  nbnd          = 30
+/
+&ELECTRONS
+  conv_thr         = 1.0d-12
+  mixing_beta      = 0.3
+  mixing_mode      = 'plain'
+  electron_maxstep = 200
+  diagonalization  = 'david'
+/
+ATOMIC_SPECIES
+  O     15.999  o_pbesol_v1.2.uspp.F.UPF
+  Zn    65.380  zn_pbesol_v1.uspp.F.UPF
+CELL_PARAMETERS angstrom
+      3.234108758000     0.000000001000     0.000000000000
+     -1.617053879000     2.800820270000     0.000000000000
+     -0.000000000000    -0.000000000000     5.217694956000
+ATOMIC_POSITIONS crystal
+  Zn      0.666667000000     0.333333000000     0.500595834900
+  Zn      0.333333000000     0.666667000000     0.000595834900
+  O       0.666667000000     0.333333000000     0.970375417450
+  O       0.333333000000     0.666667000000     0.470375417450
+K_POINTS automatic
+  8 8 5 0 0 0

@@ -1,0 +1,45 @@
+SYSTEM = CrN variant |++--> AFM, LDA+U, production static
+
+# --- basis and accuracy -------------------------------------------------------
+PREC   = Accurate
+ENCUT  = 520
+LREAL  = .FALSE.
+ALGO   = Normal
+NELM   = 200
+EDIFF  = 1E-7
+NBANDS = 56
+
+# --- spin and the |++--> magnetic order ---------------------------------------
+ISPIN  = 2
+MAGMOM = 3.0 -3.0 -3.0 3.0 0.0 0.0 0.0 0.0
+LASPH  = .TRUE.
+LMAXMIX = 4
+LORBIT = 11
+
+# --- LDA+U (Dudarev, U_eff = 4.1 eV on Cr 3d); LDA comes from the POTCAR ------
+LDAU      = .TRUE.
+LDAUTYPE  = 2
+LDAUL     = 2 -1
+LDAUU     = 4.1 0.0
+LDAUJ     = 0.0 0.0
+LDAUPRINT = 1
+
+# --- symmetry -----------------------------------------------------------------
+ISYM = 0
+
+# --- smearing: tetrahedron with Bloechl corrections for the energy and the gap -
+ISMEAR = -5
+
+# --- fixed geometry -----------------------------------------------------------
+IBRION = -1
+NSW    = 0
+
+# --- run from scratch, so MAGMOM is a genuine initial condition ---------------
+ISTART = 0
+ICHARG = 2
+LWAVE  = .TRUE.       # L4 restarts the Wannier90 run from these
+LCHARG = .TRUE.
+
+# --- parallel layout (32 ranks on a shared cluster node) -------------------------------
+KPAR  = 8
+NCORE = 4

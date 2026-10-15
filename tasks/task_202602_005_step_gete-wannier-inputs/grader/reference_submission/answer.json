@@ -1,0 +1,2 @@
+{"runs": {"scf": "answer/scf", "nscf": "answer/nscf",
+          "pw2wan": "answer/pw2wan", "wannier": "answer/wannier"}}

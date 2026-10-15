@@ -1,0 +1,11 @@
+{
+  "_doc": "L7 analyze ground truth = our self-consistent reproduction (3_reproduction/L7/pin_N56/pin_record.json, canonical block: paper-x=[11-2] projection, canonical field, N=56 (benchmark re-pin, reviewer 2026-09-03; the stage-3 N=72 record is 3_reproduction/L7/pin_record.json), gamma=50 meV, both poles, spectral weight |v|^2/(E_u - E_l) per occupied-to-empty pair with no explicit omega factor). All five graded fields are dimensionless ratios, so the reproduction's ungraded overall prefactor drops out. The top-two peak ordering (p5.3e20 vs p1.1e21) is a near-tie in our reproduction (+0.55% at N=56, +0.14% at N=72, sign-oscillates with mesh, flips within the L3 +/-5 meV E_F tolerance) and is deliberately NOT graded; no answer field encodes it.",
+  "retention_p1.1e21": 0.7181610823634083,
+  "retention_p5.3e20": 0.7703235958265203,
+  "retention_p1.8e19": 0.8058742659840284,
+  "peak_ratio_p1.1e21": 1.9026418505421168,
+  "peak_ratio_p5.3e20": 1.9130704038863093,
+  "_rules": {
+    "all_five_fields": "handbook 2(1) scalar +/-10% relative. Bands: retention_p1.1e21 0.64634-0.78998, retention_p5.3e20 0.69329-0.84736, retention_p1.8e19 0.72529-0.88646, peak_ratio_p1.1e21 1.71238-2.09291, peak_ratio_p5.3e20 1.72176-2.10438."
+  }
+}

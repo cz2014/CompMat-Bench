@@ -1,0 +1,16 @@
+{
+  "source": "3_reproduction/L12/ (light leaf: single-orbital Slater-Koster tight-binding model of an 8-orbital pair-doped chain; sktb_quasi.py builds it, result.json records the guard values). The Gamma eigenvalues were recomputed from the leaf construction and independently cross-checked. The base-set path maximum is also recorded at guards.G8_figure_match.branch_observables.ideal.max_split_Lp_eV in result.json (the larger ideal branch maximum), and independently checked on the prescribed 401-point path (see notes.md).",
+  "eig_up_gamma_base_eV": {
+    "truth": [-5.160321223516312, -4.947395729937207, -4.741153647133351, -4.61907185560385, -2.4026042700627923, -2.3932556243936305, -0.608846352866652, -0.5273512964862066],
+    "rule": "per component within +/-10% (each of the 8 up-spin eigenvalues at Gamma, base set, ascending)"
+  },
+  "gamma_split_base_eV": {
+    "truth": 0.0,
+    "abs_tol": 0.001,
+    "rule": "symmetry-forced zero: absolute band. Correct build gives ~2e-15 eV; the smallest non-degenerate split among the perturbed sets is 0.024 eV, far outside the band."
+  },
+  "gamma_split_A_eV": {"truth": 0.19837915943568163, "rule": "within +/-10%"},
+  "gamma_split_B_eV": {"truth": 0.023833132752439035, "rule": "within +/-10%"},
+  "gamma_split_C_eV": {"truth": 0.09429438434301007, "rule": "within +/-10%"},
+  "path_max_split_base_eV": {"truth": 0.13615686943343253, "rule": "within +/-10%"}
+}

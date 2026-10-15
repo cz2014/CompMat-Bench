@@ -1,0 +1,37 @@
+{
+  "subtask": "L4 analyze",
+  "kind": "analyze (sixth-order Landau-Devonshire fit of stress-free wurtzite Zn(1-x)Mg(x)O: two-stage determination of alpha0, gamma*, omega, xc from five DFT P_sp(x) values plus the pure-ZnO kappa(0) and delta f(0); evaluation of the model's kappa and delta f at x = 1)",
+  "provenance": "3_reproduction/L4/result.json keys metrics.M1_coefficients, metrics.M2_kappa_of_x, metrics.M3_df_of_x (commit dea8ef8, reviewer ruling 2026-09-05: our own P_sp(0) = 0.849369, separation by division). Re-derived from the leaf module by reviewer/make_reference_submission.py; identical to the record.",
+  "primary": {
+    "alpha0_GJ_m_per_C2": {
+      "truth": 3.0746247409181326,
+      "rule": "+/-5 percent relative (handbook 2(5) exception, reviewer ruling 2026-09-10: a copy of the source paper table passes the complete 10 percent check but fails the approved 5 percent coefficient bands. The single-composition fit already fails at 10 percent: alpha0 +10.354 percent and |df(1)| differs by 11.175 percent). Sign is part of the value."
+    },
+    "gamma_star_GJ_m5_per_C4": {
+      "truth": 4.991775265498329,
+      "rule": "+/-5 percent relative (same exception; the paper's table value 4.708 sits at -5.7 percent)"
+    },
+    "omega_GJ_m9_per_C6": {
+      "truth": 8.257571713052988,
+      "rule": "+/-5 percent relative (same exception; recorded softness: the paper's table value 8.501 sits at +2.9 percent and passes this field alone)"
+    },
+    "xc": {
+      "truth": 2.5690691494046987,
+      "rule": "+/-5 percent relative (same exception; recorded softness: the paper's table value 2.4425 sits at -4.9 percent and passes this field alone)"
+    },
+    "kappa_x1": {
+      "truth": 12.004946225695118,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); the ionic-only reading (8.005) and the no-electronic-term fit (NC2) both fail"
+    },
+    "df_x1_GJ_per_m3": {
+      "truth": -0.7233605824697076,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value (wurtzite minus layered-hexagonal reference, negative)"
+    }
+  },
+  "not_graded": {
+    "alpha0_xc_product": "7.898923567889189 GJ m C^-2, fixed exactly by stage 1; implied by alpha0 and xc, not requested separately",
+    "fit_rmse": "0.012621 C/m^2 on our five points; a self-reported consistency metric is a pure-guesser hole and is not requested",
+    "model_P_sp_at_five_x": "0.849369, 0.821526, 0.791235, 0.757947, 0.720892 C/m^2; implied by the coefficients, not requested"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

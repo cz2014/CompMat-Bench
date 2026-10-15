@@ -1,0 +1,18 @@
+{
+  "profile_id": "long-chain-single-node-v1",
+  "status": "accepted_highmem",
+  "max_steps": 5000,
+  "wall_budget_s": 18000,
+  "memory_gib": 240,
+  "memory_bytes": 257698037760,
+  "cpus": 128,
+  "gpus": 0,
+  "concurrent_attempts": 1,
+  "numerical_threads_default": 1,
+  "queue_time_counts": false,
+  "model_and_retry_time_counts": true,
+  "dynamic_prompt_time_notices": false,
+  "runtime_metadata_path": "/run/bench/runtime.json",
+  "workspace": "/work/ws",
+  "base_image_digest": "sha256:b550622f27f5eb948e6bdef4a79c3ab87f31344a2cdf5b1c9fa0d688dcae59b1"
+}

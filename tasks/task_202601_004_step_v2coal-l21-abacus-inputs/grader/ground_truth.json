@@ -1,0 +1,111 @@
+{
+  "subtask": "L3 gen_input",
+  "kind": "gen_input (ABACUS spin-polarized LCAO single-point SCF deck for the L2_1 V2CoAl moments)",
+  "provenance": "rubric and references from 3_reproduction/L3/ (job 18722313, the HPC cluster); as-run deck at auditor/deck/{INPUT,STRU,KPT}; geometry is L2's relaxed L2_1 CONTCAR",
+  "run_labels": [
+    "scf"
+  ],
+  "structure_reference": "reference/CONTCAR",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "matcher",
+    "note": "the STRU must describe the same fixed relaxed L2_1 cell that is staged as POSCAR_relaxed; three distinct species (V/Co/Al), no two-sublattice polarity degeneracy, so StructureMatcher with ElementComparator is safe"
+  },
+  "expected_counts": {
+    "V": 8,
+    "Co": 4,
+    "Al": 4
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      9,
+      9,
+      9
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "orbital_cutoff_Ry": 100,
+  "magnetic_species": [
+    "V",
+    "Co"
+  ],
+  "abacus_required": {
+    "note": "Each rule applies to the effective value: the tag if explicitly set, else the ABACUS default. Only the settings listed here are graded; the per-tag reasoning is in notes.md. Implemented by grader_abacus_inputs (REQUIRED-only, no forbidden/free lists).",
+    "scf": "SCF, LCAO, nspin2, effective PBE with no U; effective cutoff>=100 Ry; true Mulliken output; exact catalog pseudopotential/orbital identities; automatic Gamma or MP mesh with >=8 per axis; atomwise FM V/Co seed; required structure/species."
+  },
+  "score": "1 only if the required run passes all method, effective-PBE/no-U, output, catalog identity, cutoff, k-mesh, effective atomwise magnetic-seed and structure conditions recorded here; unlisted settings are not graded.",
+  "effective_defaults": {
+    "version": "ABACUS 3.10.1",
+    "ecutwfc_lcao_Ry": 100,
+    "ecutwfc_pw_Ry": 50,
+    "out_mul": false,
+    "dft_functional": "inferred from the separately checked PBE pseudopotentials",
+    "magnetic_seed": "mag and magmom are equivalent atomic overrides. For nspin=2 only, all effective atomic moments zero triggers 1.0 on every atom; partial zeros do not."
+  },
+  "coordinate_representations": "Direct fractional; Cartesian in alat units; Cartesian_au in Bohr; Cartesian_angstrom in Angstrom. Normalize to fractional coordinates for geometry and V sublattice classification.",
+  "functional_required": "Effective PBE: default/PBE/SLAPWPBXPBC with fixed PBE pseudopotentials; reject a different explicit functional. dft_plus_u remains integer 0.",
+  "magnetic_seed_required": "Every V and Co has abs(initial moment)>=1e-6; all V/Co same sign, up to global reversal.",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "scf": [
+        4,
+        4,
+        4
+      ]
+    },
+    "references": {
+      "scf": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          4
+        ],
+        "minimum": [
+          4,
+          4,
+          4
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "3680399651a097db88effe70abde2a9869b9bec5bf6d5414620ed05a5e6412fd",
+        "reference_lattice_angstrom": [
+          [
+            5.973670337413828,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.973670337413828,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.973670337413828
+          ]
+        ],
+        "reference_atom_count": 16
+      }
+    }
+  }
+}

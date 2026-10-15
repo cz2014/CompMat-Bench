@@ -1,0 +1,18 @@
+task_id: task_202603_023_step_si-ge-phonon-mc-tables
+title: build the phonon input tables of a bulk phonon Monte Carlo solver for Si and Ge
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-31
+earliest_public_date: 2026-03-31
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: []
+docs: []
+image: phonons-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

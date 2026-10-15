@@ -1,0 +1,386 @@
+import argparse
+
+import ase.units
+import yaml
+
+__all__ = ["ExchangeParams", "add_exchange_args_to_parser", "parser_argument_to_dict"]
+
+
+class ExchangeParams:
+    """
+    A class to store the parameters for exchange calculation.
+    """
+
+    efermi: float
+    smearing: float = 600.0 * ase.units.kB
+    basis = []
+    magnetic_elements = []
+    index_magnetic_atoms = None
+    include_orbs = {}
+    _kmesh = [4, 4, 4]
+    emin: float = -15
+    emax: float = 0.05
+    nz: int = 100
+    exclude_orbs = []
+    ne: int = 0
+    Rcut: float = None
+    _use_cache: bool = False
+    nproc: int = 1
+    description: str = ""
+    write_density_matrix: bool = False
+    orb_decomposition: bool = False
+    group_by_zeta: bool = False
+    mae_angles = None
+    orth = False
+    ibz = False
+    use_gpu = False
+    vectorize_energy = False
+    e_batch_size = None
+    # Debug options
+    debug_options = {
+        "compute_charge_moments": False,  # Whether to compute charge and magnetic moments with Green's function method
+        "use_density_matrix_output": True,  # Whether to use density matrix results as default output
+        "charge_moment_threshold": 1e-4,  # Threshold for printing comparison when difference > threshold
+    }
+
+    def __init__(
+        self,
+        efermi=-10.0,
+        smearing=600.0 * ase.units.kB,
+        basis=None,
+        magnetic_elements=None,
+        include_orbs=None,
+        kmesh=[4, 4, 4],
+        emin=-15,
+        emax=0.00,
+        nz=100,
+        ne=None,
+        Rcut=None,
+        use_cache=False,
+        nproc=1,
+        description="",
+        write_density_matrix=False,
+        orb_decomposition=False,
+        group_by_zeta=False,
+        output_path="TB2J_results",
+        exclude_orbs=[],
+        mae_angles=None,
+        orth=False,
+        ibz=False,
+        index_magnetic_atoms=None,
+        use_gpu=None,
+        vectorize_energy=False,
+        e_batch_size=None,
+        debug_options=None,
+        **kwargs,
+    ):
+        # Only check for GPU if use_gpu is explicitly True or None
+        # Note: setting use_gpu=None no longer auto-detects GPU to avoid
+        # importing JAX when not needed (which allocates GPU memory)
+        if use_gpu is True:
+            from TB2J.gpu.jax_utils import _is_gpu_available
+
+            platform = _is_gpu_available()
+            if platform:
+                print(f"Using GPU ({platform}) for acceleration.")
+            else:
+                print("GPU requested but not available, falling back to CPU.")
+                use_gpu = False
+        else:
+            platform = None
+            use_gpu = False
+
+        if not use_gpu:
+            print("Using CPU for calculation.")
+
+        self.efermi = efermi
+        self.smearing = smearing
+        self.basis = basis
+        # self.magnetic_elements = magnetic_elements
+        # self.include_orbs = include_orbs
+        self.magnetic_elements, self.include_orbs = self.set_magnetic_elements(
+            magnetic_elements, include_orbs
+        )
+        self._kmesh = kmesh
+        self.emin = emin
+        self.emax = emax
+        self.nz = nz
+        self.exclude_orbs = exclude_orbs
+        self.ne = ne
+        self.Rcut = Rcut
+        self._use_cache = use_cache
+        self.nproc = nproc
+        self.description = description
+        self.write_density_matrix = write_density_matrix
+        self.orb_decomposition = orb_decomposition
+        self.group_by_zeta = group_by_zeta
+        self.output_path = output_path
+        self.mae_angles = mae_angles
+        self.orth = orth
+        self.ibz = ibz
+        self.index_magnetic_atoms = index_magnetic_atoms
+        self.use_gpu = use_gpu
+        self.vectorize_energy = vectorize_energy
+        self.e_batch_size = e_batch_size
+
+        # Save other kwargs
+        for key, val in kwargs.items():
+            setattr(self, key, val)
+
+        # Initialize debug options
+        if debug_options is None:
+            self.debug_options = {
+                "compute_charge_moments": False,
+                "use_density_matrix_output": True,
+                "charge_moment_threshold": 1e-4,
+            }
+        else:
+            # Update default debug options with user-provided ones
+            default_debug = {
+                "compute_charge_moments": False,
+                "use_density_matrix_output": True,
+                "charge_moment_threshold": 1e-4,
+            }
+            default_debug.update(debug_options)
+            self.debug_options = default_debug
+
+    def set_params(self, **kwargs):
+        for key, val in kwargs.items():
+            setattr(self, key, val)
+
+    def save_to_yaml(self, fname):
+        with open(fname, "w") as myfile:
+            yaml.dump(self.__dict__, myfile)
+
+    def set_magnetic_elements(self, magnetic_elements, include_orbs):
+        # magnetic_elements = exargs.pop("magnetic_elements")
+        # include_orbs = exargs.pop("include_orbs")
+        if include_orbs is None:
+            include_orbs = {}
+        if isinstance(magnetic_elements, str):
+            magnetic_elements = [magnetic_elements]
+        for element in magnetic_elements:
+            if "_" in element:
+                elem = element.split("_")[0]
+                orb = element.split("_")[1:]
+                include_orbs[elem] = orb
+            else:
+                include_orbs[element] = None
+
+        magnetic_elements = list(include_orbs.keys())
+        return magnetic_elements, include_orbs
+
+
+def add_exchange_args_to_parser(parser: argparse.ArgumentParser):
+    parser.add_argument(
+        "--elements",
+        help="elements to be considered in Heisenberg model",
+        default=None,
+        type=str,
+        nargs="*",
+    )
+
+    parser.add_argument(
+        "--spinor",
+        help="whether the Wannier functions are spinor. Default: False",
+        action="store_true",
+        default=False,
+    )
+
+    parser.add_argument(
+        "--rcut",
+        help="cutoff of spin pair distance. The default is to calculate all commensurate R point to the k mesh.",
+        default=None,
+        type=float,
+    )
+    parser.add_argument("--efermi", help="Fermi energy in eV", default=None, type=float)
+    parser.add_argument(
+        "--smearing",
+        help="Fermi smearing width for density computation and CFR. Units: K (default) or eV. Example: '600K', '0.2eV'. Default: 600K.",
+        default="600K",
+        type=str,
+    )
+    parser.add_argument(
+        "--ne",
+        help="number of electrons in the unit cell. If not given, TB2J will use the fermi energy to compute it.",
+    )
+    parser.add_argument(
+        "--kmesh",
+        help="kmesh in the format of kx ky kz",
+        type=int,
+        nargs="*",
+        default=[5, 5, 5],
+    )
+    parser.add_argument(
+        "--emin",
+        help="energy minimum below efermi, default -14 eV",
+        type=float,
+        default=-14.0,
+    )
+    parser.add_argument(
+        "--emax",
+        help="energy maximum above efermi, default 0.0 eV",
+        type=float,
+        default=0.0,
+    )
+    parser.add_argument(
+        "--nz",
+        help="number of steps for semicircle contour, default: 100",
+        default=100,
+        type=int,
+    )
+    parser.add_argument(
+        "--cutoff",
+        help="The minimum of J amplitude to write, (in eV), default is 1e-5 eV",
+        default=1e-5,
+        type=float,
+    )
+    parser.add_argument(
+        "--exclude_orbs",
+        help="the indices of wannier functions to be excluded from magnetic site. counting start from 0",
+        default=[],
+        type=int,
+        nargs="+",
+    )
+
+    parser.add_argument(
+        "--np",
+        help="number of cpu cores to use in parallel, default: 1",
+        default=1,
+        type=int,
+    )
+
+    parser.add_argument(
+        "--use_cache",
+        help="whether to use disk file for temporary storing wavefunctions and hamiltonian to reduce memory usage. Default: False",
+        action="store_true",
+        default=False,
+    )
+
+    parser.add_argument(
+        "--description",
+        help="add description of the calculatiion to the xml file. Essential information, like the xc functional, U values, magnetic state should be given.",
+        type=str,
+        default="Calculated with TB2J.",
+    )
+
+    parser.add_argument(
+        "--orb_decomposition",
+        default=False,
+        action="store_true",
+        help="whether to do orbital decomposition in the non-collinear mode.",
+    )
+
+    parser.add_argument(
+        "--group_by_zeta",
+        default=False,
+        action="store_true",
+        help="Retain per-zeta orbital contributions instead of summing over radial zeta. Only affects LCAO backends (SIESTA/ABACUS).",
+    )
+
+    parser.add_argument(
+        "--output_path",
+        help="The path of the output directory, default is TB2J_results",
+        type=str,
+        default="TB2J_results",
+    )
+    parser.add_argument(
+        "--write_dm",
+        help="whether to write density matrix",
+        action="store_true",
+        default=False,
+    )
+
+    parser.add_argument(
+        "--orth",
+        help="whether to use lowdin orthogonalization before diagonalization (for testing only)",
+        action="store_true",
+        default=False,
+    )
+
+    parser.add_argument(
+        "--ibz",
+        help=" use irreducible k-points in the Brillouin zone. (Note: only for computing total MAE).",
+        action="store_true",
+        default=False,
+    )
+
+    parser.add_argument(
+        "--mae_angles",
+        help="angles for computing MAE, default is 0 0 0",
+        type=float,
+        nargs="*",
+        default=[0.0, 0.0, 0.0],
+    )
+    parser.add_argument(
+        "--index_magnetic_atoms",
+        help="index of magnetic atoms in the unit cell, default is None. If specified, this will be used to determine the atoms to be considered as magnetic atoms, instead of determined from magnetic elements. Note that the index starts from 1 ",
+        type=int,
+        nargs="*",
+        default=None,
+    )
+    parser.add_argument(
+        "--use_gpu",
+        help="Whether to use GPU acceleration (requires JAX). Default is True if JAX/CUDA is found.",
+        action="store_true",
+        default=None,
+    )
+    parser.add_argument(
+        "--vectorize_energy",
+        help="Whether to vectorize over the entire energy contour on GPU. Default: False",
+        action="store_true",
+        default=False,
+    )
+    parser.add_argument(
+        "--e_batch_size",
+        help="Batch size for energy points on GPU. Default: None",
+        type=int,
+        default=None,
+    )
+
+    return parser
+
+
+def parser_argument_to_dict(args) -> dict:
+    ind_mag_atoms = args.index_magnetic_atoms
+    if ind_mag_atoms is not None:
+        ind_mag_atoms = [int(i) - 1 for i in ind_mag_atoms]
+    else:
+        ind_mag_atoms = None
+
+    smearing_str = args.smearing
+    if smearing_str is None:
+        smearing = 600.0 * ase.units.kB
+    else:
+        s = smearing_str.strip().lower()
+        if s.endswith("ev"):
+            smearing = float(s[:-2])
+        elif s.endswith("k"):
+            smearing = float(s[:-1]) * ase.units.kB
+        else:
+            smearing = float(s) * ase.units.kB
+
+    return {
+        "efermi": args.efermi,
+        "smearing": smearing,
+        "magnetic_elements": args.elements,
+        "kmesh": args.kmesh,
+        "emin": args.emin,
+        "emax": args.emax,
+        "nz": args.nz,
+        "exclude_orbs": args.exclude_orbs,
+        "ne": args.ne,
+        "Rcut": args.rcut,
+        "use_cache": args.use_cache,
+        "nproc": args.np,
+        "description": args.description,
+        "write_density_matrix": args.write_dm,
+        "orb_decomposition": args.orb_decomposition,
+        "group_by_zeta": args.group_by_zeta,
+        "output_path": args.output_path,
+        "orth": args.orth,
+        "index_magnetic_atoms": ind_mag_atoms,
+        "use_gpu": args.use_gpu,
+        "vectorize_energy": args.vectorize_energy,
+        "e_batch_size": args.e_batch_size,
+    }

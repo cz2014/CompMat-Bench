@@ -1,0 +1,195 @@
+{
+  "subtask": "L6 gen_input",
+  "kind": "gen_input (projection-ready VASP static + LOBSTER control file for the defect-free x = 0.50 cell and for the q = +2 4Zr vacancy cell)",
+  "provenance": "3_reproduction/L6/ (reproduced 2026-09-06 on reviewer's ruling, commit afe9a8c): as-run decks hpc_computations/{pristine,o95_q+2}/static/{INCAR,KPOINTS,POSCAR,lobsterin}; the staged cells are L1's CONTCAR_pristine_x050.vasp and L2's CONTCAR_95_q+2.vasp, identical to the as-run POSCARs.",
+  "runs": {
+    "pristine": {
+      "nelect": 736,
+      "structure_reference": "reference/pristine_x050.vasp",
+      "n_basis_functions": 560
+    },
+    "vacancy": {
+      "nelect": 728,
+      "structure_reference": "reference/vacancy_4Zr_q+2.vasp",
+      "n_basis_functions": 556
+    }
+  },
+  "graded_object": "the two POSCARs (the staged cells unchanged), the REQUIRED settings of a wavefunction-writing static a projection can read (the three tags the leaf exists for: LWAVE, ISYM = -1 or 0, an explicit NBANDS at or above the local basis count; plus the electron count and the insulator baseline), and the lobsterin (basis set, orbital sets, smearing, energy window, cation-oxygen bond selection)",
+  "declared_pins": {
+    "basis_set": "pbeVaspFit2015",
+    "basis_functions": {
+      "Hf": [
+        "5d",
+        "5p",
+        "6s"
+      ],
+      "Zr": [
+        "4d",
+        "4p",
+        "4s",
+        "5s"
+      ],
+      "O": [
+        "2p",
+        "2s"
+      ]
+    },
+    "smearing_eV": 0.2,
+    "spin": "spin-unpolarised (reviewer ruling (d))",
+    "charge_state": "q = +2 for the vacancy run (NELECT 728, derivable from the catalog valences; 736 for the defect-free cell); neither count is printed",
+    "note": "The basis set name, orbital sets and smearing width are declared task pins. useRecommendedBasisFunctions takes precedence over manual basisFunctions lines; its potential-specific recommended orbitals equal the required sets. Bare omission of basisFunctions and the recommended switch remains an accepted alternative, but its actual default orbital choice has not been verified. The prompt asks for all Hf-O and Zr-O first-shell contacts; the agent chooses an equivalent selector from the staged geometry, without a prescribed distance window."
+  },
+  "energy_window": {
+    "lo": -10,
+    "hi": 5,
+    "note": "COHPstartEnergy <= -10 and COHPendEnergy >= 5 (LOBSTER's own defaults; ours -20 to +20); the analysis reads -10 to +5 eV. Prompt anchor (declared pin): the broadening bullet says the projected curves 'cover at least 10 eV below and 5 eV above the Fermi level'."
+  },
+  "bond_selection": {
+    "note": "For each submitted cell, construct canonical periodic pairs (atom i, atom j, lattice image of j), identifying a reversed pair with the negated image. Required cation-O contacts have distance <= hi_min_A; allowed contacts have distance <= hi_max_A. The union of all generator and explicit selections must contain every required pair and no forbidden pair. Generator endpoints themselves are not bounded; type and around restrictions are applied to actual contacts. Explicit cohpBetween cell values are respected, and omitted cell means the same cell, not the closest image. lo_max_A is retained solely for API compatibility and is not a grading condition. The vacancy cell's stretched 2.553 A contact is optional. Unknown core selector syntax fails explicitly.",
+    "pristine": {
+      "lo_max_A": 2.0,
+      "hi_min_A": 2.25,
+      "hi_max_A": 3.2,
+      "measured": "shortest Hf/Zr-O contact 2.017 A, longest first-shell contact 2.246 A, next shell from 3.264 A, shortest O-O 2.496 A"
+    },
+    "vacancy": {
+      "lo_max_A": 1.95,
+      "hi_min_A": 2.4,
+      "hi_max_A": 3.0,
+      "measured": "shortest Hf/Zr-O contact 1.956 A, longest regular first-shell contacts 2.358 and 2.391 A, one stretched contact 2.553 A, next shell from 3.041 A, shortest O-O 2.435 A"
+    }
+  },
+  "encut_catalog": "graderlib/grader_potcar_vasp54.yaml; floor 400 eV, REQUIRED-explicit",
+  "kmesh_reference": {
+    "subdivisions": [
+      2,
+      2,
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "incar_required": {
+    "note": "Each rule is on the EFFECTIVE value. Only these settings are graded; the per-tag triage is in notes.md.",
+    "baseline": "ENCUT >= 400 explicit; ISMEAR in {-5, 0}; EDIFF <= 1e-5; GGA absent or Pe; ISPIN effectively 1; NSW effectively 0 or IBRION -1; k-mesh form",
+    "LWAVE": "effectively .TRUE.; ordinary WAVECAR output defaults to .TRUE., so omission passes and explicit .FALSE. fails",
+    "ISYM": "= -1 or 0 (default 2 fails); 0 is pymatgen's LOBSTER default and gives the identical k-set on a Gamma-centred even mesh",
+    "NBANDS": "explicit and >= the local basis count computed from the submitted lobsterin's effective basis and the POSCAR (560 / 556 for the pinned basis; VASP's default band count is below it, so absence fails)",
+    "NELECT": "effectively 736 / 728 (default = neutral ZVAL sum, so the vacancy run needs an explicit 728)"
+  },
+  "score": "1 only if both runs pass the structure match, every VASP rule and every lobsterin rule (binary all-primary-pass)",
+  "structure_match": {
+    "method": "rigid_bijective",
+    "max_disp_A": 0.001,
+    "note": "Same lattice and bijective species-preserving coordinates, allowing one periodic overall translation and atom reordering. No inversion or independent internal displacement beyond printing precision."
+  },
+  "agent_references": "agent/references/lobster/: LOBSTER 5.1.1 user guide and FAQ, PDF plus searchable text, supplied as general offline software documentation. No task-specific solution or reference lobsterin is staged.",
+  "unverified_accepted_alternatives": {
+    "bare_basis_omission": "Retained acceptance is not evidence that LOBSTER 5.1.1 actually selects the required orbitals when both manual basis lines and useRecommendedBasisFunctions are absent.",
+    "gaussian_tetrahedron": "ISMEAR=-5 remains accepted. The reference log establishes Gaussian use for the reference input only; the interaction of tetrahedron-capable VASP output and gaussianSmearingWidth has not been verified for every accepted input. No new method restriction or execution requirement is imposed; this is nonblocking."
+  },
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "pristine": [
+        2,
+        2,
+        2
+      ],
+      "vacancy": [
+        2,
+        2,
+        2
+      ]
+    },
+    "references": {
+      "pristine": {
+        "automatic_subdivisions": [
+          2,
+          2,
+          2
+        ],
+        "minimum": [
+          2,
+          2,
+          2
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "97a30eb023edc27187166669a39fe555f82243a93723e1b77c9bd55056c2e404",
+        "reference_lattice_angstrom": [
+          [
+            10.46,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.1
+          ]
+        ],
+        "reference_atom_count": 96
+      },
+      "vacancy": {
+        "automatic_subdivisions": [
+          2,
+          2,
+          2
+        ],
+        "minimum": [
+          2,
+          2,
+          2
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "be8a7bb3a42e719b69a42a4ebae839b7f4085ae2a8de5014cfdb16e9916feb05",
+        "reference_lattice_angstrom": [
+          [
+            10.46,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.1
+          ]
+        ],
+        "reference_atom_count": 95
+      }
+    }
+  }
+}

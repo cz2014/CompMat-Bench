@@ -1,0 +1,18 @@
+task_id: task_202603_026_step_hzo-oxygen-environments
+title: oxygen environments and relaxation response of a cation-disordered Hf$_{0.5}$Zr$_{0.5}$O$_2$ supercell
+task_type: step
+role: analyze
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-17
+earliest_public_date: 2026-03-17
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: []
+docs: []
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

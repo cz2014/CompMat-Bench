@@ -1,0 +1,3 @@
+{"runs": {"mono_I_relax": "answer/mono_I_relax", "mono_II_relax": "answer/mono_II_relax",
+          "mono_I_static": "answer/mono_I_static", "mono_II_static": "answer/mono_II_static",
+          "bilayer_static": "answer/bilayer_static"}}

@@ -1,0 +1,187 @@
+{
+  "subtask": "L4 analyze",
+  "kind": "analyze (classify the twelve nearest Cr-Cr neighbours in three staged TB2J outputs into the four spin/multiplicity classes, average J_iso within each class, convert TB2J's unit-vector convention to the target H = -2 sum_{i>j} J S.S with S = 3/2)",
+  "provenance": "Truths are OUR reproduced TB2J values (reviewer ruling 2026-09-05, recorded in 3_reproduction/L4/result.json under cz_ruling_2026_09_05 and consumers.L4_analyze_grader = 'ours'): block `ours.variants.<cell>.exchange.<J1..J4>.J_paper_convention_meV`, i.e. the raw TB2J J divided by S^2 = 2.25. The source paper's printed Table I is NOT the truth here (block `paper_table1`); it is 1.28-3.34x smaller and is used as the pure-guesser variant in selfcheck.py. See ../../../3_reproduction/L4/{index.md, context.md, result.json}.",
+  "convention": {
+    "tb2j_native": "E = -sum_{i != j} J^TB2J_ij e_i . e_j with unit vectors (TB2J docs/src/convention.rst)",
+    "target": "H = -2 sum_{i > j} J_ij S_i . S_j with |S| = 3/2 (the convention the prompt prints)",
+    "identity": "identical sum, sign and prefactor; only the spin length differs, so J_target = J_TB2J / S^2 = J_TB2J / 2.25",
+    "why_it_is_graded": "the conversion is the tested skill; an unconverted answer is 2.25x every truth and fails all twelve fields (selfcheck variant 'unconverted')"
+  },
+  "class_definition": {
+    "how": "For every Cr site, take its twelve nearest neighbours from the staged exchange.out pair list (a >0.5 A gap separates them from the next shell in all three cells), split them by the sign product of the two w_magmom values into 6 parallel + 6 antiparallel, then split each half by the pair displacement vector into a 4-fold and a 2-fold sub-class. Average J_iso within each class over all four Cr sites.",
+    "why_spin_is_needed": "In cells (i) and (ii) the 4-fold parallel and 4-fold antiparallel classes have identical displacement vectors, and in cell (i) all twelve neighbours are at the same distance (2.928 A). Geometry alone therefore merges classes; selfcheck.py runs both merges as designed-wrong variants.",
+    "shell_uniformity": "The within-class spread of J_iso in the staged files is <= 0.0018 meV raw, so the class mean, the median and any single representative pair agree far inside the band."
+  },
+  "reference_submission": {
+    "produced_by": "reviewer/make_reference.py -- parses ONLY agent/variant_{i,ii,iii}/exchange.out (positions + w_magmom + pair rows) and applies the classification above.",
+    "agreement_with_recorded_truths": "Ten of the twelve agree with result.json to <1e-3 meV. Variant (iii) parallel_4 (-0.8506 vs -0.8536) and parallel_2 (-1.8660 vs -1.8688) differ by 3.0e-3 and 2.8e-3 meV because result.json recorded variant (iii) from the denser 12x24x16 TB2J sweep (hpc_computations/sweep_iii/exchange_k12x24x16.out) while the STAGED file is the production 6x12x8 run; index.md's convergence table lists both and bounds the movement at 0.007 meV raw. Worst relative difference 0.36 %, against a 10 % band."
+  },
+  "primary": {
+    "rule": "PRIMARY, handbook 2(1): each of the twelve scalars must satisfy |x - truth| <= 0.10 * |truth|. Sign is part of the value -- every truth is negative (antiferromagnetic in this convention), so a positive answer fails. Boundaries inclusive (handbook 2(6)). Binary all-primary-pass: any single field outside its band scores 0.",
+    "gating": "handbook 1(3): all twelve fields must be present and numeric (non-bool, finite); otherwise score 0 before any band is tested. Extra fields are ignored.",
+    "fields": [
+      {
+        "field": "J_iii_parallel_4_meV",
+        "truth_meV": -0.8536,
+        "rel_tol": 0.1,
+        "cell": "iii",
+        "class": "parallel, 4 neighbours per Cr",
+        "multiplicity_per_Cr": 4,
+        "spins": "parallel",
+        "d_Ang": 2.987,
+        "J_tb2j_raw_meV": -1.9207,
+        "reference_submission_meV": -0.8506
+      },
+      {
+        "field": "J_iii_antiparallel_4_meV",
+        "truth_meV": -7.032,
+        "rel_tol": 0.1,
+        "cell": "iii",
+        "class": "antiparallel, 4 neighbours per Cr",
+        "multiplicity_per_Cr": 4,
+        "spins": "antiparallel",
+        "d_Ang": 2.873,
+        "J_tb2j_raw_meV": -15.822,
+        "reference_submission_meV": -7.031
+      },
+      {
+        "field": "J_iii_antiparallel_2_meV",
+        "truth_meV": -5.6269,
+        "rel_tol": 0.1,
+        "cell": "iii",
+        "class": "antiparallel, 2 neighbours per Cr",
+        "multiplicity_per_Cr": 2,
+        "spins": "antiparallel",
+        "d_Ang": 2.888,
+        "J_tb2j_raw_meV": -12.6605,
+        "reference_submission_meV": -5.6268
+      },
+      {
+        "field": "J_iii_parallel_2_meV",
+        "truth_meV": -1.8688,
+        "rel_tol": 0.1,
+        "cell": "iii",
+        "class": "parallel, 2 neighbours per Cr",
+        "multiplicity_per_Cr": 2,
+        "spins": "parallel",
+        "d_Ang": 2.965,
+        "J_tb2j_raw_meV": -4.2049,
+        "reference_submission_meV": -1.866
+      },
+      {
+        "field": "J_ii_parallel_4_meV",
+        "truth_meV": -3.3143,
+        "rel_tol": 0.1,
+        "cell": "ii",
+        "class": "parallel, 4 neighbours per Cr",
+        "multiplicity_per_Cr": 4,
+        "spins": "parallel",
+        "d_Ang": 2.928,
+        "J_tb2j_raw_meV": -7.4571,
+        "reference_submission_meV": -3.3142
+      },
+      {
+        "field": "J_ii_antiparallel_4_meV",
+        "truth_meV": -4.5616,
+        "rel_tol": 0.1,
+        "cell": "ii",
+        "class": "antiparallel, 4 neighbours per Cr",
+        "multiplicity_per_Cr": 4,
+        "spins": "antiparallel",
+        "d_Ang": 2.928,
+        "J_tb2j_raw_meV": -10.2635,
+        "reference_submission_meV": -4.5615
+      },
+      {
+        "field": "J_ii_antiparallel_2_meV",
+        "truth_meV": -5.8378,
+        "rel_tol": 0.1,
+        "cell": "ii",
+        "class": "antiparallel, 2 neighbours per Cr",
+        "multiplicity_per_Cr": 2,
+        "spins": "antiparallel",
+        "d_Ang": 2.888,
+        "J_tb2j_raw_meV": -13.1351,
+        "reference_submission_meV": -5.8378
+      },
+      {
+        "field": "J_ii_parallel_2_meV",
+        "truth_meV": -2.1686,
+        "rel_tol": 0.1,
+        "cell": "ii",
+        "class": "parallel, 2 neighbours per Cr",
+        "multiplicity_per_Cr": 2,
+        "spins": "parallel",
+        "d_Ang": 2.965,
+        "J_tb2j_raw_meV": -4.8794,
+        "reference_submission_meV": -2.1686
+      },
+      {
+        "field": "J_i_parallel_4_meV",
+        "truth_meV": -3.3739,
+        "rel_tol": 0.1,
+        "cell": "i",
+        "class": "parallel, 4 neighbours per Cr",
+        "multiplicity_per_Cr": 4,
+        "spins": "parallel",
+        "d_Ang": 2.928,
+        "J_tb2j_raw_meV": -7.5912,
+        "reference_submission_meV": -3.3739
+      },
+      {
+        "field": "J_i_antiparallel_4_meV",
+        "truth_meV": -4.656,
+        "rel_tol": 0.1,
+        "cell": "i",
+        "class": "antiparallel, 4 neighbours per Cr",
+        "multiplicity_per_Cr": 4,
+        "spins": "antiparallel",
+        "d_Ang": 2.928,
+        "J_tb2j_raw_meV": -10.4761,
+        "reference_submission_meV": -4.656
+      },
+      {
+        "field": "J_i_antiparallel_2_meV",
+        "truth_meV": -4.5273,
+        "rel_tol": 0.1,
+        "cell": "i",
+        "class": "antiparallel, 2 neighbours per Cr",
+        "multiplicity_per_Cr": 2,
+        "spins": "antiparallel",
+        "d_Ang": 2.928,
+        "J_tb2j_raw_meV": -10.1864,
+        "reference_submission_meV": -4.5273
+      },
+      {
+        "field": "J_i_parallel_2_meV",
+        "truth_meV": -3.5244,
+        "rel_tol": 0.1,
+        "cell": "i",
+        "class": "parallel, 2 neighbours per Cr",
+        "multiplicity_per_Cr": 2,
+        "spins": "parallel",
+        "d_Ang": 2.928,
+        "J_tb2j_raw_meV": -7.93,
+        "reference_submission_meV": -3.5244
+      }
+    ]
+  },
+  "secondary": {
+    "note": "Recorded in the grading report, NOT scored (handbook 1(2)).",
+    "all_negative": "Whether all twelve reported values are negative (the reproduction's G4 guard).",
+    "ordering_iii": {
+      "rule": "In cell (iii) our magnitudes order |antiparallel_4| > |antiparallel_2| > |parallel_2| > |parallel_4| (the reproduction's G3 guard). Recorded as a flag.",
+      "our_order": [
+        "J_iii_antiparallel_4_meV",
+        "J_iii_antiparallel_2_meV",
+        "J_iii_parallel_2_meV",
+        "J_iii_parallel_4_meV"
+      ]
+    },
+    "ratio_to_truth": "Per field, x / truth. A uniform 2.25 flags a missed convention conversion; a uniform 0.5 flags the i>j double-count misreading; the source's Table I sits at 0.30-0.75."
+  },
+  "score": "1 only if all twelve PRIMARY band checks pass; any failure, or a missing / non-numeric field, scores 0.",
+  "provenance_limits": "In result.json, paper_table1 exchange values come from the source Table I; associated distances come from our reproduced geometry. Recorded checks constrain particular geometry/mapping hypotheses but do not establish the cause of the remaining fidelity difference. The 12 reproduced reference exchanges and their existing bands remain unchanged; no further fidelity campaign is required.",
+  "coverage_note": "Nearby same-sign exchanges can share 10% acceptance bands; ordering is not separately graded. The -0.0008 meV selfcheck is an artificial perturbation."
+}

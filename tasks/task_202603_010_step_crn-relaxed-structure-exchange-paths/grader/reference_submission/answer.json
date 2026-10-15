@@ -1,0 +1,17 @@
+{
+  "a_A": 5.775871,
+  "b_A": 2.965491,
+  "c_A": 4.143072,
+  "x_Cr": 0.13502,
+  "x_N": 0.114603,
+  "d_parallel_4_A": 2.987059,
+  "d_antiparallel_4_A": 2.872969,
+  "d_antiparallel_2_A": 2.887935,
+  "d_parallel_2_A": 2.965491,
+  "dE_i_minus_iii_meV_per_fu": 30.450252,
+  "dE_ii_minus_iii_meV_per_fu": 23.950823,
+  "gap_i_eV": 0.558132,
+  "gap_ii_eV": 0.57308,
+  "gap_iii_eV": 0.509381,
+  "m_Cr_iii_muB": 2.85
+}

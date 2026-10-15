@@ -1,0 +1,39 @@
+SYSTEM = o95_q+2 LOBSTER projection static
+# --- electronic block, verbatim from the construction leaf's static_ours ---
+PREC   = Accurate
+ENCUT  = 600
+LREAL  = .FALSE.
+ISPIN  = 1
+ISMEAR = 0
+SIGMA  = 0.2
+EDIFF  = 1E-07
+NELM   = 250
+NELMIN = 6
+ALGO   = Normal
+LASPH  = .FALSE.
+LMAXMIX = 2
+# --- single point on a geometry that is already relaxed ---
+IBRION = -1
+NSW    = 0
+ISIF   = 2
+# --- the three tags this leaf exists for ---
+LWAVE  = .TRUE.
+# LOBSTER reads the wavefunction. Without it the projection is impossible after
+# the fact and every run has to be repeated.
+ISYM   = -1
+# The reference uses ISYM = -1. The rubric also accepts ISYM = 0;
+# both retain the same eight points for this Gamma-centred reference mesh.
+NBANDS = 640
+# must be at least the 556 local basis functions of this cell; LOBSTER discards
+# the excess with an INFO line, so extra bands cost only VASP time.
+NELECT = 728
+LCHARG = .TRUE.
+# LVHAR not set: that was the potential-alignment tag of the defect-chemistry
+#   leaf. This leaf does not align potentials.
+# LORBIT not set: LOBSTER projects from the wavefunction; PROCAR is not read.
+# ICHARG left at 2 (superposition of atoms). A five-minute static does not need
+#   a warm start, and a restart would couple eleven runs to a quota-limited store.
+# LSORBIT, MAGMOM, GGA_COMPAT, ADDGRID, METAGGA unset (VASP defaults).
+# --- parallelisation (128 ranks) ---
+KPAR  = 4
+NCORE = 8

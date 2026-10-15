@@ -1,0 +1,57 @@
+{
+  "chain": "C06",
+  "status": "verified",
+  "notes": "The supplied fixed structure is byte-identical to the archived downstream Wannier POSCAR; relaxation is excluded. All eight physical scalars use the standing 10% tolerance, as confirmed by reviewer. Reference values are unchanged.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "e45ccb3bcb3d184eff78e5594d6102ad2b92089ef50c18e38c77c1227c204238",
+  "fields": {
+    "J1_spin_meV": {
+      "truth": -0.8506166666666667,
+      "atol": 0.02,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    },
+    "J2_spin_meV": {
+      "truth": -7.0310555555555565,
+      "atol": 0.02,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    },
+    "J3_spin_meV": {
+      "truth": -5.626866666666667,
+      "atol": 0.02,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    },
+    "J4_spin_meV": {
+      "truth": -1.866,
+      "atol": 0.02,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    },
+    "X_omega1_meV": {
+      "truth": 57.09323392499853,
+      "atol": 0.1,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    },
+    "X_omega4_meV": {
+      "truth": 77.5080339249986,
+      "atol": 0.1,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    },
+    "U_omega1_meV": {
+      "truth": 107.92646666666664,
+      "atol": 0.1,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    },
+    "T_omega4_meV": {
+      "truth": 78.58960721692861,
+      "atol": 0.1,
+      "rtol": 0.1,
+      "rule": "tolerance"
+    }
+  }
+}

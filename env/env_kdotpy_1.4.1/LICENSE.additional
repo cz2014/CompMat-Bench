@@ -1,0 +1,22 @@
+Under Section 7 of GPL version 3 we require you to fulfill the following
+additional terms:
+
+    - We require the preservation of the full copyright notice and the license
+      in all original files.
+
+    - We prohibit misrepresentation of the origin of the original files. To
+      obtain the original files, please visit the Git repository at
+      <https://git.physik.uni-wuerzburg.de/kdotpy/kdotpy>
+
+    - As part of a scientific environment, we believe it is reasonable to
+      expect that you follow the rules of good scientific practice when using
+      kdotpy. In particular, we expect that you credit the original authors if
+      you benefit from this program, by citing our work, following the
+      citation instructions in the file CITATION.md bundled with kdotpy.
+
+    - If you make substantial changes to kdotpy, we strongly encourage that
+      you contribute to the original project by joining our team. If you use
+      or publish a modified version of this program, you are required to mark
+      your material in a reasonable way as different from the original
+      version.
+

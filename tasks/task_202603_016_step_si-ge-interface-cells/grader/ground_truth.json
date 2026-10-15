@@ -1,0 +1,27 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze, structure construction (the ideal (100) Si/Ge interface device: a 432-atom central cell and two 216-atom lead cells, both materials on one cubic constant, unrelaxed; plus the Si-Ge bond count)",
+  "provenance": "3_reproduction/L1/{POSCAR_central_ideal.vasp, POSCAR_lead_Si.vasp, POSCAR_lead_Ge.vasp} (commit 2435b93, status final, lattice constant from the source's data deposit; result.json bond_lengths_A.central.Ge-Si.n = 144 = twice the 72 unordered bonds, re-counted with pymatgen on 2026-09-10), matched with the shared structure primitive; reviewer approved this cell set as the L1 unit target on 2026-09-10.",
+  "structure_reference": {
+    "POSCAR_central": "reference/POSCAR_central_ideal.vasp",
+    "POSCAR_lead_Si": "reference/POSCAR_lead_Si.vasp",
+    "POSCAR_lead_Ge": "reference/POSCAR_lead_Ge.vasp"
+  },
+  "structure_match": {
+    "method": "matcher",
+    "max_disp_A": 0.1,
+    "rule": "species counts exact; cell lengths within 0.1 % and angles within 0.5 degrees; every site within 0.1 A of the reference after the best rigid translation and lattice symmetry operation (pymatgen StructureMatcher, species-aware, structure_task_authoring.md section 3). The cell is achiral and non-polar, so its mirror image and its 90-degree rotation about x (the two writings of the diamond basis) are the same structure and pass; the geometric variants (shifted junction, other thickness split, other constant, displaced atoms, vacancy) fail."
+  },
+  "primary": {
+    "n_SiGe_bonds_central": {
+      "truth": 72,
+      "rule": "exact integer (rule 2(4)): 36 Si-Ge nearest-neighbour bonds at each of the two junctions of the periodic cell (18 atoms per (100) layer, two bonds each across a layer gap), each bond counted once; the leaf record's 144 counts every bond from both ends"
+    }
+  },
+  "not_graded": {
+    "atom_order": "the index order inside each POSCAR is free; the downstream slice contract is imposed at the consumer, not here",
+    "coordinate_mode": "direct or Cartesian both parse",
+    "species_swap": "at equal lattice constants a whole-cell Si/Ge swap is a rigid translation by half the cell and matches the reference; it is not a distinct structure (L1 record, 'Finding: the periodic central cell carries no left/right label')"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

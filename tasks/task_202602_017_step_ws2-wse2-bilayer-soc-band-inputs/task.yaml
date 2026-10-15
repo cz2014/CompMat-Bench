@@ -1,0 +1,18 @@
+task_id: task_202602_017_step_ws2-wse2-bilayer-soc-band-inputs
+title: build a commensurate WS2/WSe2 heterobilayer and its three-step spin-orbit band deck
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2026-02
+source_date: 2026-02-04
+earliest_public_date: 2026-02-04
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [vasp]
+docs: [vasp]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

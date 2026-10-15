@@ -1,0 +1,18 @@
+{
+  "gamma_split_meV_sb_p1": 0.009743195263922644,
+  "peak_split_meV_sb_p1": 255.75678005593795,
+  "ef_shift_eV_sb_p1": -0.4786358084060822,
+  "net_mag_muB_sb_p1": 0.0,
+  "gamma_split_meV_i_p1": 0.061017781243677405,
+  "peak_split_meV_i_p1": 123.1939756884568,
+  "ef_shift_eV_i_p1": 0.7238526089207511,
+  "net_mag_muB_i_p1": 0.0,
+  "gamma_split_meV_sb_p2": 70.97773426415799,
+  "peak_split_meV_sb_p2": 94.71057880773692,
+  "ef_shift_eV_sb_p2": -0.4545446524248007,
+  "net_mag_muB_sb_p2": 0.06,
+  "gamma_split_meV_i_p2": 80.5424306405893,
+  "peak_split_meV_i_p2": 148.8663108177377,
+  "ef_shift_eV_i_p2": 0.7081232076380815,
+  "net_mag_muB_i_p2": 0.2
+}

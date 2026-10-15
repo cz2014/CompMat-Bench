@@ -1,0 +1,29 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (64-site oxygen environment table, nine-class occupancy, relaxation displacements of the doped and the undoped supercell, first/second cation-shell separation, relaxed undoped space group)",
+  "provenance": "3_reproduction/L1/ (reproduced 2026-09-05, commit f970360): environments.csv (guards G3/G4) and result.json metrics M1, M2, M3 and guard G1, re-derived by reviewer/make_reference_submission.py on 2026-09-10 from the four staged structures by an independent route (periodic distance matrix, minimum-image displacements, spglib) and asserted equal to the leaf's artifacts.",
+  "labels": ["4Hf", "3Hf1Zr", "2Hf2Zr", "1Hf3Zr", "4Zr", "3Hf", "2Hf1Zr", "1Hf2Zr", "3Zr"],
+  "primary": {
+    "site_environments": {
+      "truth_file": "reference_submission/answer.json",
+      "rule": "64 rows; each matched to one distinct oxygen of agent/ideal_x050.vasp within 0.25 A (the nearest O-O distance in the ideal cell is 2.51 A, so matching is unambiguous well beyond a two-decimal table, whose worst rounding error is 0.063 A); (n_Hf, n_Zr) exact (rule 2(4)). The classification is re-run by the grader on the staged ideal cell (envclass.py, 2.3 A)."
+    },
+    "class_counts": {
+      "truth": {"4Hf": 3, "3Hf1Zr": 9, "2Hf2Zr": 8, "1Hf3Zr": 9, "4Zr": 3, "3Hf": 6, "2Hf1Zr": 10, "1Hf2Zr": 10, "3Zr": 6},
+      "rule": "exact integers (rule 2(4)); result.json M1"
+    },
+    "displacement_max_doped_A": {"truth": 0.0581, "rule": "+/-10 % (rule 2(1)); result.json M2 hzo_x050.max"},
+    "displacement_rms_doped_A": {"truth": 0.0250, "rule": "+/-10 % (rule 2(1)); result.json M2 hzo_x050.rms"},
+    "displacement_max_undoped_A": {"truth": 0.0082, "rule": "+/-10 % (rule 2(1)); result.json M2 hfo2.max"},
+    "displacement_rms_undoped_A": {"truth": 0.0057, "rule": "+/-10 % (rule 2(1)); result.json M2 hfo2.rms"},
+    "longest_bond_A": {"truth": 2.2457, "abs_tol": 0.01, "rule": "absolute 0.01 A (rule 2(5) exception: a geometry read-off from a fixed structure; a relative band would be wider than the bond-length spread and stop discriminating); result.json M3 relaxed_cell.longest_included"},
+    "closest_nonbonded_cation_A": {"truth": 3.2638, "abs_tol": 0.01, "rule": "absolute 0.01 A (same exception); result.json M3 relaxed_cell.shortest_excluded"},
+    "space_group_number_undoped_relaxed": {"truth": 29, "rule": "exact int (rule 2(4)); result.json guard G1 (Pca2_1 at symprec 1e-3)"}
+  },
+  "not_graded": {
+    "per_species_displacements": "result.json M2 per-species maxima are a recorded breakdown, not requested",
+    "ideal_cell_shell_gap": "M3 on the ideal cell (2.2313 / 3.2575 A) is not requested; the relaxed cell is the graded one",
+    "label_survival": "G3 (identical labels on the relaxed coordinates) is a self-reported consistency metric and is not asked for (pure-guesser hole)"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

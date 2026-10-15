@@ -1,0 +1,13 @@
+{
+  "subtask": "L1 (structure)",
+  "kind": "structure generation (the two ordered V2CoAl Heusler cells)",
+  "provenance": "references from 3_reproduction/L1/structures/ (compute_structures.py, X=Co); cells are the unrelaxed build (a=5.95); the self-consistent ground truth is the structure, not the paper's figure",
+  "outputs": {
+    "POSCAR_L21": "reference/L2_1.vasp",
+    "POSCAR_XA":  "reference/XA.vasp"
+  },
+  "expected_counts": {"V": 8, "Co": 4, "Al": 4},
+  "structure_match": {"max_disp_A": 0.10, "method": "matcher",
+    "note": "three distinct species (V/Co/Al), no two-sublattice polarity degeneracy, so StructureMatcher with ElementComparator is safe; the L2_1-vs-XA distinction and any Co/Al or V/Co mis-assignment change the structure and fail the match (self-checked)"},
+  "score": "1 only if BOTH POSCAR_L21 and POSCAR_XA match their reference (species counts + lattice + translation-invariant species-aware site match); all checks must pass, any single failure scores 0"
+}

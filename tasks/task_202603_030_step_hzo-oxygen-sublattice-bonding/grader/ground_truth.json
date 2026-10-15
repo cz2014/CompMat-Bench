@@ -1,0 +1,211 @@
+{
+  "subtask": "L6 analyze",
+  "kind": "analyze (from eleven LOBSTER projections: occupied integrals and vacancy states of the total -COHP curves, the nine environment bonding integrals, the 4Zr partial's states, the 4Zr ICOHP sum, the ICOHP-vs-length slopes)",
+  "provenance": "3_reproduction/L6/ (reproduced 2026-09-06 on reviewer's ruling, commit afe9a8c): cohp_curves.json, icohp_table.csv, result.json metrics M1; re-derived by reviewer/make_reference_submission.py on 2026-09-10 from the staged COHPCAR/ICOHPLIST files by an independent text parser and asserted against the leaf's artifacts.",
+  "cells": [
+    "pristine",
+    "4Hf_q0",
+    "3Hf1Zr_q0",
+    "2Hf2Zr_q0",
+    "1Hf3Zr_q0",
+    "4Zr_q0",
+    "3Hf_q+2",
+    "1Hf2Zr_q+2",
+    "2Hf1Zr_q+2",
+    "3Zr_q+2",
+    "4Zr_q+2"
+  ],
+  "environments": [
+    "4Hf",
+    "3Hf1Zr",
+    "2Hf2Zr",
+    "1Hf3Zr",
+    "4Zr",
+    "3Hf",
+    "2Hf1Zr",
+    "1Hf2Zr",
+    "3Zr"
+  ],
+  "primary": {
+    "occupied_integral": {
+      "truth_file": "reference_submission/answer.json",
+      "rel": 0.03,
+      "rule": "+/-3 % (rule 2(5) exception: a deterministic integral of a staged curve; the neutral-vacancy cells sit 15 % below the defect-free value and the charged cells within 0.2 % of it, so 10 % would blur the neutral/charged contrast the item exists for)"
+    },
+    "states": {
+      "truth_file": "reference_submission/answer.json",
+      "position_abs_tol": 0.1,
+      "depth_rel": 0.1,
+      "rule": "presence/absence exact (identification); position within 0.10 eV (two grid steps); depth +/-10 % (rule 2(1)); the match may be to any state of the window listed in state_candidates (those within the 10 % depth band of the deepest), not only to the deepest. Truth: the five neutral cells carry an occupied state at -0.75 to -0.85 eV (depth -0.027 to -0.030) and their unoccupied window's deepest state is the conduction-band antibonding minimum at +3.35 to +3.55 eV (depth about -0.5); the five charged cells carry no occupied state and an unoccupied state at +2.45 to +2.65 eV (depth -0.030 to -0.033); the defect-free cell carries neither."
+    },
+    "partial_bonding_integral": {
+      "truth_file": "reference_submission/answer.json",
+      "rel": 0.02,
+      "rule": "+/-2 % (rule 2(5) exception: neighbouring environments differ by 3 to 6 %, so 10 % would accept a swapped or mis-assigned partial); the reference B falls with Zr count within each sublattice and every O3 exceeds every O4; the individual bands permit small adjacent reversals, and strict ordering is not separately checked"
+    },
+    "partial_4Zr_states_eV": {
+      "truth": [
+        -2.2028,
+        -1.3517
+      ],
+      "rule": "count exact (2), each position within 0.10 eV; the -2.20 eV state (depth -0.0027) exists only in the 4Zr partial and is the paper's qualitative claim, accepted by reviewer on 2026-09-06 (G4 clause 2); the -0.001 floor pinned in the prompt separates it from the 1e-5-level noise dips of other partials"
+    },
+    "icohp_sum_4Zr_eV": {
+      "truth": -13.6142,
+      "rel": 0.01,
+      "rule": "+/-1 % (rule 2(5) exception: a deterministic sum of four staged numbers with no legitimate spread; 10 % would be 1.4 eV, more than any single bond's variation). The sum is a consistency check, not a site-identification test: 24 of the 32 four-coordinated oxygens of the defect-free cell have sums within 1 % of the 4Zr value (the nearest, O90, 0.04 % away; the neighbouring 4Hf representative 1.4 % away fails). Identification of the 4Zr site rests on B[4Zr] at 2 % (neighbouring environments 3.5 to 3.8 % away); result.json guard G5 / icohp_table.csv"
+    },
+    "icohp_slope_eV_per_A": {
+      "truth": {
+        "Hf": 11.0677,
+        "Zr": 11.5506
+      },
+      "rel": 0.02,
+      "rule": "+/-2 % (rule 2(5) exception: a deterministic ordinary least-squares fit over 112 staged rows per species; the two slopes differ by 4.4 %, so 10 % could not test the species split the item asks for). Over ALL Hf-O and ALL Zr-O interactions of the defect-free cell (result.json M1 excludes the four 4Zr bonds and gives 11.068 / 11.583, inside the band); a joint fit over both species (11.23) fails on Zr (2.8 % off), the reversed regression (length on ICOHP, inverted: 11.34 / 11.81) fails on both"
+    }
+  },
+  "declared_pins": {
+    "sign": "-COHP throughout, bonding positive (the files store the opposite sign; the figures use this one)",
+    "grid": "the files' own grid, no resampling or smoothing",
+    "total_and_partial": "plain mean over all metal-oxygen interactions of the cell; the partial is the mean over the representative oxygen's interactions",
+    "occupied_integral": "from the lower edge of the file's energy range to the Fermi level",
+    "state": "a local minimum on the grid with the curve below -0.001 (necessity: noise-level negative dips of 1e-5 exist in several curves; the 4Zr -2.20 eV state has depth -0.0027)",
+    "windows": "[-4, 0] eV occupied, (0, +4] eV unoccupied (decision D7)"
+  },
+  "not_graded": {
+    "comparisons_with_the_reference_curves": "the rigid Fermi-placement offset and the G2/G7 diagnostics are reproduction-internal",
+    "M2_charges": "the Loewdin charges (CHARGE.lobster) are not staged and not asked",
+    "vacancy_cell_partials": "partials are defined on the defect-free cell only; the vacancy cells enter through their totals, so no atom-index mapping between cells is required"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)",
+  "state_candidates": {
+    "occupied_state": {
+      "pristine": [],
+      "4Hf_q0": [
+        [
+          -0.801,
+          -0.0303
+        ]
+      ],
+      "3Hf1Zr_q0": [
+        [
+          -0.8511,
+          -0.0295
+        ]
+      ],
+      "2Hf2Zr_q0": [
+        [
+          -0.7509,
+          -0.0285
+        ]
+      ],
+      "1Hf3Zr_q0": [
+        [
+          -0.801,
+          -0.027
+        ]
+      ],
+      "4Zr_q0": [
+        [
+          -0.7509,
+          -0.0266
+        ]
+      ],
+      "3Hf_q+2": [],
+      "1Hf2Zr_q+2": [],
+      "2Hf1Zr_q+2": [],
+      "3Zr_q+2": [],
+      "4Zr_q+2": []
+    },
+    "unoccupied_state": {
+      "pristine": [],
+      "4Hf_q0": [
+        [
+          2.8536,
+          -0.4691
+        ],
+        [
+          3.3542,
+          -0.4964
+        ]
+      ],
+      "3Hf1Zr_q0": [
+        [
+          2.9036,
+          -0.4917
+        ],
+        [
+          3.4543,
+          -0.4976
+        ]
+      ],
+      "2Hf2Zr_q0": [
+        [
+          2.9036,
+          -0.4959
+        ],
+        [
+          3.5544,
+          -0.5081
+        ]
+      ],
+      "1Hf3Zr_q0": [
+        [
+          2.9537,
+          -0.4831
+        ],
+        [
+          3.4543,
+          -0.5161
+        ]
+      ],
+      "4Zr_q0": [
+        [
+          3.0038,
+          -0.4903
+        ],
+        [
+          3.5544,
+          -0.515
+        ]
+      ],
+      "3Hf_q+2": [
+        [
+          2.6533,
+          -0.0332
+        ]
+      ],
+      "1Hf2Zr_q+2": [
+        [
+          2.5532,
+          -0.0325
+        ]
+      ],
+      "2Hf1Zr_q+2": [
+        [
+          2.6033,
+          -0.033
+        ]
+      ],
+      "3Zr_q+2": [
+        [
+          2.4531,
+          -0.0329
+        ]
+      ],
+      "4Zr_q+2": [
+        [
+          2.4531,
+          -0.0302
+        ]
+      ]
+    },
+    "rule": "per cell and window: every grid-minimum state (below the -0.001 floor) whose depth lies within the 10 % depth band of the deepest one; a submitted [position, depth] passes if it matches any of them (position abs 0.10 eV, depth +/-10 %). The five neutral cells carry two conduction-band dips in (0, +4] eV 0.5 eV apart whose depths differ by 1 to 5 %, so the accepted candidate set deliberately includes both distinct minima within their individual tolerances. This does not make them mathematically equal."
+  },
+  "interpretation": {
+    "finite_window": "Occupied integrals run from the first file point to E_F, so compare cumulative-column endpoint differences, not the E_F cumulative value alone. Pristine/4Hf_q0 finite-window values about 3.14688/2.57638 versus full cumulative 3.80415/3.80208 show the role of below-window baselines; no equivalent all-occupied bond-strength loss is implied.",
+    "ordering": "Reference partial B values are ordered, but individual tolerance bands allow small reversals; no independent strict-order check.",
+    "precision": "Complete three-significant-figure answers pass. Uniform two-decimal rounding fails for shallow depths near -0.027/-0.0266; no minimum digit-count rule.",
+    "state_candidates": "Listed candidates are distinct minima accepted within their individual position and depth tolerances, not mathematically identical states."
+  }
+}

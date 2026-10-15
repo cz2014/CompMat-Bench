@@ -1,0 +1,34 @@
+SYSTEM = hf2zr2 12-atom primitive orthorhombic cell, dfpt
+
+# --- electronic (12-atom primitive cell); the source's own dielectric deck ---
+PREC   = Accurate      # source INCAR_dfpt; carried into the relax for consistency
+LREAL  = .FALSE.       # source INCAR_dfpt (LREAL = F in every dielectric OUTCAR). The
+                       #   source's INCAR_georelax used LREAL = Auto, which buys nothing
+                       #   on 12 atoms and would not match the DFPT stage that follows
+ENCUT  = 600           # eV; source, the same cutoff as the supercells
+ISPIN  = 1             # source INCAR_georelax
+ISMEAR = 0             # source
+SIGMA  = 0.05          # eV; source INCAR_dfpt (tighter than the relax stage)
+EDIFF  = 1E-06         # source INCAR_dfpt
+NELM   = 250           # source INCAR_georelax
+NELMIN = 6             # source INCAR_georelax
+ALGO   = Normal        # source INCAR_dfpt (its relax deck used Conjugate)
+LASPH  = .TRUE.        # source INCAR_dfpt
+LMAXMIX = 2
+ISYM   = 0             # source INCAR_dfpt and INCAR_georelax
+
+# --- DFPT: electronic (ion-clamped) and ionic dielectric tensors ---
+IBRION = 8             # source INCAR_dfpt: density-functional perturbation theory
+LEPSILON = .TRUE.      # source INCAR_dfpt: macroscopic static dielectric tensor
+LPEAD  = .TRUE.        # source INCAR_dfpt: finite-difference derivative of the cell-
+                       #   periodic part of the orbitals, the numerically stabler route
+NSW    = 1             # pitfall: at NSW = 0 VASP silently IGNORES IBRION = 8 and finishes
+                       #   rc = 0 as a plain static, with no linear response and no warning.
+                       #   The source's own runs show NSW = 1
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+# NCORE / NPAR deliberately UNSET: any band grouping aborts DFPT before linear
+#   response ("NPAR = number of nodes"). KPAR is safe and is set below
+
+# --- parallelisation (32 ranks; NCORE unset, see above) ---
+KPAR   = 4             # 108 irreducible k-points / 4 pools = 27 each, 8 ranks per pool

@@ -1,0 +1,48 @@
+&control
+    calculation      = 'vc-relax'
+    prefix           = 'mnte_prim'
+    outdir           = './out'
+    pseudo_dir       = '/scratch/user/codes_data/qe/pseudo'
+    verbosity        = 'high'
+    etot_conv_thr    = 1.0d-5
+    forc_conv_thr    = 1.0d-4
+/
+&system
+    ibrav            = 4
+    A                = 4.148
+    C                = 6.71
+    nat              = 4
+    ntyp             = 3
+    ecutwfc          = 60
+    ecutrho          = 480
+    occupations      = 'smearing'
+    smearing         = 'gaussian'
+    degauss          = 0.01
+    nspin            = 2
+    starting_magnetization(1) =  0.6
+    starting_magnetization(2) = -0.6
+    starting_magnetization(3) =  0.0
+/
+&electrons
+    conv_thr         = 1.0d-9
+    electron_maxstep = 200
+/
+&ions
+/
+&cell
+    press_conv_thr   = 0.5
+/
+ATOMIC_SPECIES
+  Mn1    54.93804  Mn.pbe-spn-kjpaw_psl.0.3.1.UPF
+  Mn2    54.93804  Mn.pbe-spn-kjpaw_psl.0.3.1.UPF
+  Te    127.60000  Te.pbe-n-kjpaw_psl.1.0.0.UPF
+HUBBARD (ortho-atomic)
+U Mn1-3d 3.0
+U Mn2-3d 3.0
+ATOMIC_POSITIONS crystal
+  Mn1      0.000000000000     0.000000000000     0.000000000000
+  Mn2      0.000000000000     0.000000000000     0.500000000000
+  Te       0.333333333300     0.666666666700     0.250000000000
+  Te       0.666666666700     0.333333333300     0.750000000000
+K_POINTS automatic
+  6 6 3 0 0 0

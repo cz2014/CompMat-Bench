@@ -1,0 +1,1366 @@
+{
+  "subtask": "L6 gen_input",
+  "kind": "gen_input (VASP input set + 14 strained-monolayer structures)",
+  "provenance": "rubric and structure references from 3_reproduction/L6/ (the WS2/WSe2 biaxial-strain SOC sweep, reproduced 2026-06-22); see ../../../3_reproduction/L6/index.md. Static rubric triaged from the as-run static INCARs (hpc_computations/<tag>/INCAR.gz, all 14 byte-identical); relax rubric triaged from the exact Step-A INCAR spec in 3_reproduction/L6/task.txt (the relax runs were not archived: the HPC cluster purgeable scratch, only the SOC statics were retrieved -- decision D3, Jiang L2 precedent).",
+  "layers": [
+    "WS2",
+    "WSe2"
+  ],
+  "tags": [
+    "m15",
+    "m10",
+    "m05",
+    "p00",
+    "p05",
+    "p10",
+    "p15"
+  ],
+  "run_types": [
+    "relax",
+    "static"
+  ],
+  "run_labels": [
+    "WS2_eps_m15_relax",
+    "WS2_eps_m15_static",
+    "WS2_eps_m10_relax",
+    "WS2_eps_m10_static",
+    "WS2_eps_m05_relax",
+    "WS2_eps_m05_static",
+    "WS2_eps_p00_relax",
+    "WS2_eps_p00_static",
+    "WS2_eps_p05_relax",
+    "WS2_eps_p05_static",
+    "WS2_eps_p10_relax",
+    "WS2_eps_p10_static",
+    "WS2_eps_p15_relax",
+    "WS2_eps_p15_static",
+    "WSe2_eps_m15_relax",
+    "WSe2_eps_m15_static",
+    "WSe2_eps_m10_relax",
+    "WSe2_eps_m10_static",
+    "WSe2_eps_m05_relax",
+    "WSe2_eps_m05_static",
+    "WSe2_eps_p00_relax",
+    "WSe2_eps_p00_static",
+    "WSe2_eps_p05_relax",
+    "WSe2_eps_p05_static",
+    "WSe2_eps_p10_relax",
+    "WSe2_eps_p10_static",
+    "WSe2_eps_p15_relax",
+    "WSe2_eps_p15_static"
+  ],
+  "layer_species": {
+    "WS2": {
+      "W": 1,
+      "S": 2
+    },
+    "WSe2": {
+      "W": 1,
+      "Se": 2
+    }
+  },
+  "structure_reference_dir": "reference",
+  "reference_provenance": "reference/POSCAR_<layer>_eps_<tag>.vasp symlinks our as-shipped strained-monolayer POSCAR of that layer and strain (3_reproduction/L6/references/). BOTH the _relax and the _static label of a tag are graded against the same reference (the static POSCAR carries the built strained geometry: the relaxed CONTCAR is not available when the inputs are written).",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "matcher",
+    "note": "1H TMD monolayer has no polar sublattice-swap ambiguity (the two chalcogens share the in-plane site and species), so the default StructureMatcher is safe. The strain skill is enforced by the independent lattice check inside match_structure (rel=1e-3, i.e. 0.1% on each cell length): a wrong-sign or wrong-magnitude strain shifts the in-plane length by >=0.5% (the sweep step) and fails cleanly; verified in selfcheck_variants.py."
+  },
+  "min_vacuum_A": 15.0,
+  "kmesh_reference": {
+    "subdivisions": [
+      18,
+      18,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "incar_required_static": {
+    "note": "Each rule applies to the effective value: the tag if explicitly set, else the VASP default. Only the settings listed here are graded; the per-tag reasoning is in notes.md.",
+    "LSORBIT_true": "LSORBIT=.TRUE. (spin-orbit coupling on; the band spin-splitting at K is the graded output; no usable default, REQUIRED-explicit)",
+    "static": "NSW effectively 0 or IBRION=-1 (no ionic motion; default NSW 0)",
+    "ENCUT_floor": "ENCUT >= the largest ENMAX over species present (280 eV for WS2, 223 eV for WSe2; catalog-based benchmark grading floor)",
+    "ISMEAR_set": "ISMEAR in {-5, 0} (semiconductor; default 1)",
+    "EDIFF_floor": "EDIFF <= 1e-5 eV (ours 1e-6; default 1e-4)",
+    "functional": "PBE: GGA absent or GGA=Pe",
+    "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+    "poscar_species": "W1 + S2 (WS2) or W1 + Se2 (WSe2)",
+    "poscar_vacuum": "vacuum along z >= 15 A (sanity; the built cells carry 20 A)"
+  },
+  "incar_required_relax": {
+    "note": "From the Step-A spec in task.txt (decision D3).",
+    "relax_fixed_cell": "ISIF effectively in {0,1,2} (fixed cell; default 2), IBRION in {1,2,3}, force-based EDIFFG<0 with |EDIFFG|<=0.05 eV/A",
+    "NSW_ge_1": "NSW >= 1 explicit (an ionic relaxation must take steps; default 0 fails)",
+    "ENCUT_floor": "ENCUT >= the largest ENMAX over species present (same floor as static)",
+    "ISMEAR_set": "ISMEAR in {-5, 0}",
+    "EDIFF_floor": "EDIFF <= 1e-5 eV (task.txt Step A: 1E-5)",
+    "functional": "PBE: GGA absent or GGA=Pe",
+    "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+    "poscar_species": "same as static",
+    "poscar_vacuum": "same as static"
+  },
+  "not_required_recorded": {
+    "ISYM": "Not graded for this nonmagnetic zero-field SOC task. VASP recommends checking sensitivity to symmetry, not universally disabling it; default 2 and explicit -1/0 remain accepted. The actual K point is checked independently.",
+    "LVHAR": "NOT required. The downstream graded convention (L6_analyze) references the K band edges to the LOCAL W 5p semicore level read from the eigenvalue spectrum, not to a LOCPOT/vacuum plateau; LVHAR only writes the Hartree potential to LOCPOT, which the graded analysis does not consume. Our as-run statics set LVHAR=.TRUE. because the reproduction also kept an alternative vacuum-referenced cross-check, but it is not physics-essential to the graded quantity.",
+    "IVDW": "NOT listed. An isolated monolayer has no interlayer van der Waals bond; the as-run INCARs carry no IVDW (default 0). REQUIRING a vdW correction here would be wrong.",
+    "ISPIN": "NOT required. The monolayers are non-magnetic and the run is noncollinear (LSORBIT=.TRUE.), so ISPIN does not change the eigenvalues; ISPIN=1 is a memory choice (task.txt sets it to avoid the 2x spinor-doubling waste), not result-affecting. Recorded, not graded.",
+    "KPAR_NCORE_ALGO_NELM_PREC_LREAL_LWAVE_LCHARG": "Outside the present bounded rubric. Their as-run values alone do not establish necessity; ungraded does not imply that every possible value preserves the result."
+  },
+  "score": "1 only if all 28 runs pass their structure match AND their run-type REQUIRED INCAR/KPOINTS rubric (all checks must pass; any single failure scores 0)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "WS2_eps_m15_relax": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_m15_static": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_m10_relax": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_m10_static": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_m05_relax": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_m05_static": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p00_relax": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p00_static": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p05_relax": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p05_static": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p10_relax": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p10_static": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p15_relax": [
+        8,
+        8,
+        1
+      ],
+      "WS2_eps_p15_static": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_m15_relax": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_m15_static": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_m10_relax": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_m10_static": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_m05_relax": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_m05_static": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_p00_relax": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_p00_static": [
+        8,
+        8,
+        1
+      ],
+      "WSe2_eps_p05_relax": [
+        7,
+        7,
+        1
+      ],
+      "WSe2_eps_p05_static": [
+        7,
+        7,
+        1
+      ],
+      "WSe2_eps_p10_relax": [
+        7,
+        7,
+        1
+      ],
+      "WSe2_eps_p10_static": [
+        7,
+        7,
+        1
+      ],
+      "WSe2_eps_p15_relax": [
+        7,
+        7,
+        1
+      ],
+      "WSe2_eps_p15_static": [
+        7,
+        7,
+        1
+      ]
+    },
+    "references": {
+      "WS2_eps_m15_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "84efd5a1a2553d50e640314aed592865ba2c47c38ab22d4aa12942948f795b14",
+        "reference_lattice_angstrom": [
+          [
+            3.1224499999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.5612249999999999,
+            2.7041210220467202,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_m15_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "84efd5a1a2553d50e640314aed592865ba2c47c38ab22d4aa12942948f795b14",
+        "reference_lattice_angstrom": [
+          [
+            3.1224499999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.5612249999999999,
+            2.7041210220467202,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_m10_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "6311f19b6404f3bc7b6a5250b812f4061fc838e1d2fe58fa5f4704fe7076a390",
+        "reference_lattice_angstrom": [
+          [
+            3.1383,
+            0.0,
+            0.0
+          ],
+          [
+            -1.56915,
+            2.7178475246967038,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_m10_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "6311f19b6404f3bc7b6a5250b812f4061fc838e1d2fe58fa5f4704fe7076a390",
+        "reference_lattice_angstrom": [
+          [
+            3.1383,
+            0.0,
+            0.0
+          ],
+          [
+            -1.56915,
+            2.7178475246967038,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_m05_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "66116986368e594a6891d74d44b6efff2bb7ab3efa0023e91d3a31772adafda2",
+        "reference_lattice_angstrom": [
+          [
+            3.15415,
+            0.0,
+            0.0
+          ],
+          [
+            -1.577075,
+            2.731574027346687,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_m05_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "66116986368e594a6891d74d44b6efff2bb7ab3efa0023e91d3a31772adafda2",
+        "reference_lattice_angstrom": [
+          [
+            3.15415,
+            0.0,
+            0.0
+          ],
+          [
+            -1.577075,
+            2.731574027346687,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p00_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "b47e286d65d0a16657c4c0ee21ad9d3b206e8d9012deeeba4eecfac96b2b27eb",
+        "reference_lattice_angstrom": [
+          [
+            3.17,
+            0.0,
+            0.0
+          ],
+          [
+            -1.585,
+            2.7453005299966704,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p00_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "b47e286d65d0a16657c4c0ee21ad9d3b206e8d9012deeeba4eecfac96b2b27eb",
+        "reference_lattice_angstrom": [
+          [
+            3.17,
+            0.0,
+            0.0
+          ],
+          [
+            -1.585,
+            2.7453005299966704,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p05_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "1a96986c2b64ac92531ab8f839f75138c764c5efe6d5cacaf4b56ff3ec6d20c9",
+        "reference_lattice_angstrom": [
+          [
+            3.1858499999999994,
+            0.0,
+            0.0
+          ],
+          [
+            -1.5929249999999997,
+            2.759027032646653,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p05_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "1a96986c2b64ac92531ab8f839f75138c764c5efe6d5cacaf4b56ff3ec6d20c9",
+        "reference_lattice_angstrom": [
+          [
+            3.1858499999999994,
+            0.0,
+            0.0
+          ],
+          [
+            -1.5929249999999997,
+            2.759027032646653,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p10_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "ba57f1b3fd2b871e4d50e18a6bf99a87ea2fc18de566a45b2c2e16a5abce649a",
+        "reference_lattice_angstrom": [
+          [
+            3.2016999999999998,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6008499999999999,
+            2.772753535296637,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p10_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "ba57f1b3fd2b871e4d50e18a6bf99a87ea2fc18de566a45b2c2e16a5abce649a",
+        "reference_lattice_angstrom": [
+          [
+            3.2016999999999998,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6008499999999999,
+            2.772753535296637,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p15_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "958bf190d926ab5fdb3f3bb8bcd627902c65aaec667aa168c6d09535be207665",
+        "reference_lattice_angstrom": [
+          [
+            3.2175499999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6087749999999998,
+            2.78648003794662,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WS2_eps_p15_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "958bf190d926ab5fdb3f3bb8bcd627902c65aaec667aa168c6d09535be207665",
+        "reference_lattice_angstrom": [
+          [
+            3.2175499999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6087749999999998,
+            2.78648003794662,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.14
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_m15_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "3c001ee15ee89c43657e7052eee2ce4732aec62cbe2948daae758401ded3a7cd",
+        "reference_lattice_angstrom": [
+          [
+            3.2504999999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6252499999999999,
+            2.8150155750013175,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_m15_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "3c001ee15ee89c43657e7052eee2ce4732aec62cbe2948daae758401ded3a7cd",
+        "reference_lattice_angstrom": [
+          [
+            3.2504999999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6252499999999999,
+            2.8150155750013175,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_m10_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "602a1665e18898cef1bbfe2dbf84ed69160104fc36cdec4d61b7f68381ee87a0",
+        "reference_lattice_angstrom": [
+          [
+            3.267,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6335,
+            2.8293049941637607,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_m10_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "602a1665e18898cef1bbfe2dbf84ed69160104fc36cdec4d61b7f68381ee87a0",
+        "reference_lattice_angstrom": [
+          [
+            3.267,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6335,
+            2.8293049941637607,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_m05_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "21e7fd29af2cd37c9264ae42aee18a2641337b7001cfad50b9e1f9a1e87b9310",
+        "reference_lattice_angstrom": [
+          [
+            3.2834999999999996,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6417499999999998,
+            2.843594413326204,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_m05_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "21e7fd29af2cd37c9264ae42aee18a2641337b7001cfad50b9e1f9a1e87b9310",
+        "reference_lattice_angstrom": [
+          [
+            3.2834999999999996,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6417499999999998,
+            2.843594413326204,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p00_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "7643064f0e430b60c1b49f10dbf92e1cfc4293b1b5b7149edeba07b745375a17",
+        "reference_lattice_angstrom": [
+          [
+            3.3,
+            0.0,
+            0.0
+          ],
+          [
+            -1.65,
+            2.857883832488647,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p00_static": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          1
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "7643064f0e430b60c1b49f10dbf92e1cfc4293b1b5b7149edeba07b745375a17",
+        "reference_lattice_angstrom": [
+          [
+            3.3,
+            0.0,
+            0.0
+          ],
+          [
+            -1.65,
+            2.857883832488647,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p05_relax": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "08762b6f55fc9cda642bea5706782dbdc9aaa09f9a0c3ecfaad4bf4ce9dbae4b",
+        "reference_lattice_angstrom": [
+          [
+            3.3164999999999996,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6582499999999998,
+            2.8721732516510903,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p05_static": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "08762b6f55fc9cda642bea5706782dbdc9aaa09f9a0c3ecfaad4bf4ce9dbae4b",
+        "reference_lattice_angstrom": [
+          [
+            3.3164999999999996,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6582499999999998,
+            2.8721732516510903,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p10_relax": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "18758c72785f56149b9cd61915622b1853264c8a36f524be259ec6f8453709ef",
+        "reference_lattice_angstrom": [
+          [
+            3.3329999999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6664999999999999,
+            2.8864626708135335,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p10_static": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "18758c72785f56149b9cd61915622b1853264c8a36f524be259ec6f8453709ef",
+        "reference_lattice_angstrom": [
+          [
+            3.3329999999999997,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6664999999999999,
+            2.8864626708135335,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p15_relax": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "3593d2de657b9db5c372e3ac6e403477e3347c4cd8f67998f7e8f72c8cc32a2d",
+        "reference_lattice_angstrom": [
+          [
+            3.3494999999999995,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6747499999999997,
+            2.9007520899759767,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      },
+      "WSe2_eps_p15_static": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "3593d2de657b9db5c372e3ac6e403477e3347c4cd8f67998f7e8f72c8cc32a2d",
+        "reference_lattice_angstrom": [
+          [
+            3.3494999999999995,
+            0.0,
+            0.0
+          ],
+          [
+            -1.6747499999999997,
+            2.9007520899759767,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            23.34
+          ]
+        ],
+        "reference_atom_count": 3
+      }
+    }
+  }
+}

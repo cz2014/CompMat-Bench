@@ -1,0 +1,29 @@
+{
+  "subtask": "L6 analyze",
+  "kind": "analyze (specularity of phonon reflection at the Si/Ge interface from scattering-matrix reflection blocks: degenerate-group specular fraction, its per-frequency mean and spread, window averages)",
+  "provenance": "3_reproduction/L6/result.json key primary_metrics (commit af1723c, reviewer human audit 2026-09-06; case B of L3 is the accepted input), re-derived on the staged file by reviewer/make_reference_submission.py on 2026-09-10 with the geometric specular pairing (no stored partner map, reviewer ruling 2026-09-10); every graded value equals the record to the last digit (relative difference 0). Tolerances: result.json key relative_grading_tolerance (0.1).",
+  "primary": {
+    "mean_p_Si_3_5THz": {
+      "truth": 0.6479801817817824,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); trapezoid window average over 3-5 THz of the dimension-weighted mean group specularity, Si incidence"
+    },
+    "mean_sigma_p_Si_3_5THz": {
+      "truth": 0.35357170918682,
+      "rule": "+/-10 percent relative; window average of the dimension-weighted population standard deviation of the group specularity, Si incidence. A distribution width, graded two-sided; not an agreement-error metric, so rule 2(3) does not apply"
+    },
+    "mean_p_Ge_5_8THz": {
+      "truth": 0.8567674317859315,
+      "rule": "+/-10 percent relative; same as mean_p_Si_3_5THz over 5-8 THz, Ge incidence"
+    },
+    "mean_sigma_p_Ge_5_8THz": {
+      "truth": 0.17148687312535396,
+      "rule": "+/-10 percent relative; same as mean_sigma_p_Si_3_5THz over 5-8 THz, Ge incidence"
+    }
+  },
+  "not_graded": {
+    "per_frequency_curves": "the per-frequency mean and spread enter only through the four window averages",
+    "low_frequency_limit": "Si incidence below 2 THz has group specularity 1 (the reflected intensity stays in the specular subspace); not requested",
+    "excluded_groups": "the staged windows contain no group without a specular partner and no zero-reflection group; the exclusion rules are stated for completeness"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

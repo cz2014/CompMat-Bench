@@ -1,0 +1,18 @@
+task_id: task_202602_007_step_gete-interband-jdos
+title: Interband JDOS of a Zeeman-split GeTe valence-band model at three doping levels
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-02
+source_date: 2026-02-04
+earliest_public_date: 2025-08-26
+promoted: 2026-09-03
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [wannier90]
+docs: [wannier90]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

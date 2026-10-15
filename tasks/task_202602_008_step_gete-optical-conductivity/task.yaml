@@ -1,0 +1,18 @@
+task_id: task_202602_008_step_gete-optical-conductivity
+title: Low-frequency interband optical conductivity of a Zeeman-split GeTe valence-band model
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-02
+source_date: 2026-02-04
+earliest_public_date: 2025-08-26
+promoted: 2026-09-03
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [wannier90]
+docs: [wannier90]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

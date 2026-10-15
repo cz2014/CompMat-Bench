@@ -1,0 +1,175 @@
+{
+  "subtask": "L6 analyze",
+  "kind": "analyze (linear spin-wave magnon spectrum of |++--> CrN from the staged four-bond Heisenberg model: nine k points x four energies, plus the zone-boundary splitting at X)",
+  "provenance": "truth from 3_reproduction/L6/result.json (spectrum.high_symmetry_points, metrics.zone_boundary_gap_law) and 3_reproduction/L6/offpath_points.dat. The reference submission is recomputed by reviewer/make_reference.py, which drives the same solver (L6/auditor/lswt_crn.py) from the STAGED agent files alone (agent/cell/POSCAR, agent/cell/magnetic_state.json, agent/exchange_table.csv) and agrees with the record to 8.2e-06 meV. See ../../../3_reproduction/L6/index.md and context.md.",
+  "convention": "H = -2 sum_{i>j} J_ij S_i.S_j with |S| = 3/2, J < 0 antiferromagnetic -- printed in the prompt, so a convention slip is a graded error, not a robustness allowance. Every convention error is a clean multiplicative factor on the whole spectrum (0.50, 0.67, 1.50, 2.25; see 3_reproduction/L6/context.md section 3) and is far outside the per-point band.",
+  "order_robustness": "The nine k points are graded in the prompt's order (the prompt prints the table, so the order is prescribed and load-bearing). WITHIN one k point the four energies are sorted ascending before comparison, so a submission that lists the right four energies in a different order still grades on physics rather than on formatting. Sorting cannot rescue a wrong multiset.",
+  "primary": {
+    "energies_meV": {
+      "k_labels": [
+        "Gamma",
+        "X",
+        "S",
+        "Y",
+        "Z",
+        "U",
+        "T",
+        "R",
+        "P"
+      ],
+      "k_rlu": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.5,
+          0.0,
+          0.0
+        ],
+        [
+          0.5,
+          0.5,
+          0.0
+        ],
+        [
+          0.0,
+          0.5,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.5
+        ],
+        [
+          0.5,
+          0.0,
+          0.5
+        ],
+        [
+          0.0,
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.5,
+          0.5
+        ],
+        [
+          0.5,
+          0.25,
+          0.25
+        ]
+      ],
+      "truth": [
+        [
+          0.0,
+          0.0,
+          64.0436,
+          64.0436
+        ],
+        [
+          46.8633,
+          46.8633,
+          52.9905,
+          52.9905
+        ],
+        [
+          65.4924,
+          65.4924,
+          65.4924,
+          65.4924
+        ],
+        [
+          61.9513,
+          61.9513,
+          61.9513,
+          61.9513
+        ],
+        [
+          74.6834,
+          74.6834,
+          74.6834,
+          74.6834
+        ],
+        [
+          77.646,
+          77.646,
+          77.646,
+          77.646
+        ],
+        [
+          61.951303,
+          61.951303,
+          61.951303,
+          61.951303
+        ],
+        [
+          65.4924,
+          65.4924,
+          65.4924,
+          65.4924
+        ],
+        [
+          63.568884,
+          63.568884,
+          66.632484,
+          66.632484
+        ]
+      ],
+      "rel_tol": 0.1,
+      "abs_floor_meV": 7.7646,
+      "rule": "PRIMARY, handbook 2(2) curve/map per-point: the 36 energies are one curve. tol_i = max(0.10*|truth_i|, floor) with floor = 0.10 * max|truth| = 0.10 * 77.646 = 7.7646 meV. Every point must be inside its band. The two Goldstone zeros at Gamma are graded by the floor alone (handbook 2(2) zero-point case).",
+      "floor_note": "The floor is 10 percent of the spectrum's own maximum (the energy at U), which is the curve's characteristic scale. It is deliberately larger than the 6.13 meV splitting at X: the per-point rule alone cannot see that splitting, which is exactly why splitting_X_meV is graded separately below.",
+      "coverage_note": "Five of the nine points (Gamma, X, S, Y, Z) are vertices of the path the source plots; U, T, R and P are off that path and are reproduction-internal (3_reproduction/L6/offpath_points.dat). A model that recalls the published figure can approximate the first five and cannot supply the last four."
+    },
+    "splitting_X_meV": {
+      "truth": 6.1272,
+      "rel_tol": 0.1,
+      "band": [
+        5.51448,
+        6.73992
+      ],
+      "rule": "PRIMARY, handbook 2(1) scalar: |x - 6.1272| <= 0.10 * 6.1272. Boundaries inclusive (handbook 2(6)).",
+      "why_primary": "The sharp check. The zone-boundary splitting at X is 16 S |J_(bond_B)| = 24 |J_(bond_B)| meV: it isolates one bond of the four, it is invisible to the per-point floor above, and it is the one number that separates a correct four-sublattice Bogoliubov solve from an answer that has the right overall scale. A 10 percent change in any of the other three bonds leaves it unchanged to twelve digits (result.json metrics.zone_boundary_gap_law.one_at_a_time)."
+    }
+  },
+  "gating": {
+    "rule": "handbook 1(1),1(3): energies_meV must be a list of exactly 9 entries, each a list of exactly 4 finite numbers; splitting_X_meV must be a finite number. Anything else scores 0 before the primary checks run. Extra keys are ignored.",
+    "n_k_points": 9,
+    "n_branches": 4
+  },
+  "secondary": {
+    "note": "Primary checks apply the energy tolerance and grade the separately reported X splitting against its reference. They do not enforce exact Goldstone behavior, degeneracy, or consistency of that scalar with the submitted X row; those remain diagnostics.",
+    "fourfold_degeneracy": {
+      "k_labels": [
+        "S",
+        "Y",
+        "Z"
+      ],
+      "diag_tol_meV": 0.01,
+      "our_values_meV": {
+        "S": 2.84e-14,
+        "Y": 4.26e-14,
+        "Z": 7.11e-14
+      },
+      "rule": "SECONDARY: at S, Y and Z all four energies coincide (splitting < 0.01 meV). Symmetry-forced for any exchange set on this order, so it tests the model's symmetry and not its parameters."
+    },
+    "gamma_zero_pair": {
+      "diag_tol_meV": 0.5,
+      "our_values_meV": [
+        1.54e-06,
+        2.04e-06
+      ],
+      "rule": "SECONDARY: the two lowest energies at Gamma are the Goldstone modes of an isotropic Heisenberg model and vanish. Recorded as a flag; already inside the primary floor, and gameable to zero."
+    },
+    "splitting_consistency": {
+      "diag_tol_meV": 0.01,
+      "rule": "SECONDARY: whether the submitted splitting_X_meV equals the span of the submitted X row. A self-consistency flag only; both quantities are graded against our truth independently."
+    }
+  },
+  "score": "1 only if BOTH primary checks pass: every one of the 36 energies inside its per-point band, and splitting_X_meV inside +/-10 percent of 6.1272 meV. Either failure scores 0 (binary all-primary-pass, handbook 1(1))."
+}

@@ -1,0 +1,9 @@
+{
+  "CBO_meV": 847.0,
+  "VBO_meV": 623.1,
+  "direct_gap_at_K_eV": 0.7343,
+  "min_host_f": 0.983,
+  "alignment": "type-II",
+  "cbm_layer": "WS2",
+  "vbm_layer": "WSe2"
+}

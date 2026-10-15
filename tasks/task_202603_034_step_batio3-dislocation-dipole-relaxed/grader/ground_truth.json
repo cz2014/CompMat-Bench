@@ -1,0 +1,90 @@
+{
+  "subtask": "L3 analyze",
+  "kind": "analyze (structural characterization of a relaxed dislocation dipole: row census, cores and tip chemistry, region spacings, closest core-shell contact, polar axis)",
+  "provenance": "Our own analysis of the staged deposited x-poled field-free cell (3_reproduction/L8/structures/cell_a.lmp, the rewritten deposit; decision record 2026-09-05 condition (3): the L3 analyze unit stages a deposited cell and our analysis of it is the ground truth), computed by reviewer/make_reference_submission.py on 2026-09-06 with the L8 leaf's reader and census (local_dipoles.py). Cross-checks: the census and tip labels equal 3_reproduction/L3 review section 6 and L8 geometry.json; the shortest Ti-core/O-shell contact 1.589 A equals the L3 structure audit (section 5, 'xpoled 1.589 A'). The core midpoint and its dependent separation/contact distance were corrected using the original file coordinates; this is post-processing of the same staged cell, not a new reproduction.",
+  "primary": {
+    "n_rows_y": {
+      "truth": 80,
+      "rule": "exact integer (rule 2(4))"
+    },
+    "n_rows_region_A": {
+      "truth": 40,
+      "rule": "exact integer"
+    },
+    "core_BaO_xy_A": {
+      "truth": [
+        77.197,
+        80.83
+      ],
+      "tol_A": 4.0,
+      "rule": "each coordinate within 4.0 A (identification band, handbook 2(5) exception)"
+    },
+    "core_TiO2_xy_A": {
+      "truth": [
+        77.431,
+        236.439
+      ],
+      "tol_A": 4.0,
+      "rule": "as core_BaO_xy_A"
+    },
+    "core_separation_over_Ly": {
+      "truth": 0.4877,
+      "rule": "+/-10 percent relative (rule 2(1)); the leaf record's row-midpoint core rule gives 0.4970, inside"
+    },
+    "ba_spacing_x_region_A_A": {
+      "truth": 4.1146,
+      "tol_A": 0.02,
+      "rule": "absolute 0.02 A (documented exception: the two regions differ by 2.5 percent, so the 10 percent band could not tell them apart; the quantity is Lx/39 exactly under periodic rows)"
+    },
+    "ba_spacing_x_region_B_A": {
+      "truth": 4.0117,
+      "tol_A": 0.02,
+      "rule": "absolute 0.02 A (as above; Lx/40)"
+    },
+    "min_Ti_core_O_shell_A": {
+      "truth": 1.5887,
+      "rule": "+/-5 percent relative (documented exception to the 10 percent rule: the value is deterministic on the staged file, and the nearest wrong reading, the Ti-core/O-core minimum 1.7463 A, is 9.9 percent away; the ideal Ti-O bond 2.0 A is far outside)"
+    },
+    "min_contact_nearest_core": {
+      "truth": "TiO2",
+      "rule": "exact string after the same global naming mapping as both core coordinates"
+    },
+    "min_contact_distance_to_core_A": {
+      "truth": 5.471,
+      "tol_A": 3.0,
+      "rule": "absolute 3.0 A (the leaf record's core rule puts the same Ti 7.05 A from the core; documented exception, an identification band)"
+    },
+    "Ti_shell_displacement_mean_A": {
+      "truth": [
+        -0.0501,
+        0.0007,
+        0.002
+      ],
+      "rule": "x within +/-10 percent relative and the sign exact; y and z within 0.01 A absolute (zero-target floor)"
+    },
+    "polarization_direction": {
+      "truth": "+x",
+      "rule": "exact string"
+    }
+  },
+  "score": "1 only if every primary check passes under identity or one coherent global BaO/TiO2 permutation (binary all-primary-pass)",
+  "reference_builder": {
+    "scope": "Repository-only provenance tool; not executable from a standalone review kit. grader.py and selfcheck.py do not import it.",
+    "dependencies": [
+      "3_reproduction/L8/auditor/local_dipoles.py",
+      "numpy",
+      "scipy",
+      "staged inputs and reproduction result records"
+    ],
+    "core_definition": "Periodic Cartesian midpoint of actual Ba gap endpoints in the outermost region-A row; output in original data-file coordinates. Dependent geometry recomputed."
+  },
+  "core_naming_equivalence": {
+    "accepted": "identity or one global BaO/TiO2 permutation",
+    "fields": [
+      "core_BaO_xy_A",
+      "core_TiO2_xy_A",
+      "min_contact_nearest_core"
+    ],
+    "rationale": "The prompt allows naming the surviving termination or the inferred removed-material termination. All name-dependent fields must use one convention consistently. Canonical numerical truth and every numerical tolerance are unchanged."
+  }
+}

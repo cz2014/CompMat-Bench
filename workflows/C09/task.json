@@ -1,0 +1,21 @@
+{
+  "id": "C09",
+  "task_type": "step",
+  "title": "Curie temperature and compression response in CuInP2S6",
+  "source_month": "2026-04",
+  "conditions": {
+    "LG": "full_guidance",
+    "LA": "reduced_guidance"
+  },
+  "submission": "answer.json",
+  "graded_fields": [
+    "Tc_unstrained_K",
+    "slope_K_per_percent_compression"
+  ],
+  "reference_status": "approved_empirical",
+  "content_ready": true,
+  "runtime_ready": true,
+  "runtime_profile": "long-chain-single-node-v1",
+  "runtime_delivery": "shared system instructions",
+  "environment_spec": "environment/deployment.json"
+}

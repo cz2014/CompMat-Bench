@@ -1,0 +1,143 @@
+{
+  "subtask": "L3 gen_input",
+  "kind": "gen_input (VASP relax+static input sets + generated tube)",
+  "provenance": "rubric and reference from 3_reproduction/L3/ (run 20260601_li_L3_opus_think); as-run relax INCAR/KPOINTS at hpc_computations/n08_relax",
+  "run_labels": [
+    "relax",
+    "static"
+  ],
+  "structure_reference": "reference/POSCAR_SWBNNT_08_08",
+  "structure_match": {
+    "max_disp_A": 0.2,
+    "method": "fallback",
+    "note": "the seed's two atoms pin the rotation about the axis, the B/N polarity, AND the honeycomb handedness (a mirror build puts a B where the seed N sits); the build must match our orientation. fallback is polarity-safe. The two runs submit the same as-built tube (the prompt says so; the agent cannot produce the relaxed geometry). The relaxed tube ~ as-built within 0.1 A, so an as-relaxed POSCAR also passes.",
+    "applies_to": "both runs (relax and static submit the same as-built POSCAR)"
+  },
+  "incar_required": {
+    "current_rules": "See grader.py, reviewer notes and graderlib for effective-value rules. Fixed-cell relaxations accept ISIF 0/1/2 and IBRION 1/2/3 with positive NSW, free internal coordinates and the existing force threshold. Static EDIFF <=1e-5 eV; relaxation EDIFF <=5e-5 eV per atom. Both stages are charge-updating self-consistent PBE; initialization files may be supplied or, for static CHGCAR, produced by an earlier valid relaxation with LCHARG enabled. Finite graded numbers and valid integers are required. Gaussian and Fermi-Dirac are accepted; the 1-D mesh excludes tetrahedron. Static output may be ionic+Hartree or total including XC. Extra Hubbard checks are not applied. Existing mesh, structure and dipole rules remain."
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      1,
+      20,
+      1
+    ],
+    "vacuum_axes": [
+      0,
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "score": "1 only if both runs pass structure match AND their REQUIRED INCAR/KPOINTS rubric (all checks must pass; any single failure scores 0)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax": [
+        1,
+        10,
+        1
+      ],
+      "static": [
+        1,
+        10,
+        1
+      ]
+    },
+    "references": {
+      "relax": {
+        "automatic_subdivisions": [
+          1,
+          10,
+          1
+        ],
+        "minimum": [
+          1,
+          10,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          0,
+          2
+        ],
+        "reference_structure_sha256": "badb4acceb74c696fd54eabec143c8b680db5f143a3fced2e05906cc97f8e8a7",
+        "reference_lattice_angstrom": [
+          [
+            30.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            2.5114736709748713,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "static": {
+        "automatic_subdivisions": [
+          1,
+          10,
+          1
+        ],
+        "minimum": [
+          1,
+          10,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          0,
+          2
+        ],
+        "reference_structure_sha256": "badb4acceb74c696fd54eabec143c8b680db5f143a3fced2e05906cc97f8e8a7",
+        "reference_lattice_angstrom": [
+          [
+            30.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            2.5114736709748713,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 32
+      }
+    }
+  }
+}

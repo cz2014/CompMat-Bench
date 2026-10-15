@@ -1,0 +1,79 @@
+{
+  "subtask": "L2 analyze",
+  "kind": "analyze (nonperturbative dielectric function of natural-abundance BAs at 300 K from an N = 256 fixed-count isotope ensemble on the staged harmonic force constants; feature spacings, signs, orderings, ensemble convergence and strength moments)",
+  "provenance": "3_reproduction/L2/result.json (guards G1, G2, G3, G6, G7 and metrics M1, M2; block statistics runs/nat_blocks/block_stats_iso.json, 39 disjoint blocks of 256 configurations; commit 1ccd851 and later). Tolerances: the block-derived set proposed in result.json and accepted by reviewer on 2026-09-10. The staged file agent/ifc_harmonic_512.npz is L1's deliverable unchanged (sha256 fd63e55687a26d8b26bad1462f1d3eebd27d364371d8dc7d29cd104f0215407e). Reference submission: complete independent N=256 ensemble runs/reference_corrected_n256 (seed 924071835), full 0.01 cm^-1 grid, both spectra and per-configuration moduli retained; every reference field re-extracted from that same calculation. Corrected 39-block RSE statistics in runs/nat_blocks/corrected_rse_stats.json are 0.02 cm^-1 diagnostics, not the full task reference.",
+  "production_N10000": {
+    "omega_TO_vc_cm1": 696.6751,
+    "eps2_major_peak_cm1": 693.43,
+    "eps2_bump_cm1": 713.39,
+    "G1_spacing_cm1": 19.96,
+    "eps1_bump_cm1": 711.48,
+    "eps1_dip_cm1": 717.25,
+    "G2_spacing_cm1": 5.77,
+    "min_eps1_disordered": 2.1063,
+    "min_eps1_baseline": -90.0407,
+    "M1_cm1": 22.9123,
+    "M2": 0.9223,
+    "our_TO_11B_cm1": 691.1701,
+    "our_TO_10B_cm1": 720.5293
+  },
+  "primary": {
+    "omega_TO_vc_cm1": {
+      "truth": 696.6751,
+      "tol_cm1": 0.1,
+      "rule": "within 0.1 cm^-1 of ours (deterministic on the staged file: the optically active zone-centre mode of the uniform-mass supercell; a sanity check on the mass and unit chain, not a ruled guard)"
+    },
+    "G1_eps2_spacing": {
+      "truth": 19.96,
+      "tol_cm1": 2.0,
+      "rule": "eps2_max_above_710_cm1 - eps2_max_below_710_cm1 within 19.96 +/- 2.0 (39 blocks 20.13 +/- 0.30, range 19.49-20.76, margin >= 1.20 cm^-1 = four block standard deviations; the alternative reading that takes the pure-limit splitting 29.4 cm^-1 still fails)"
+    },
+    "G6_eps2_isotope_ordering": {
+      "truth": {
+        "major_peak_cm1": 693.43,
+        "bump_cm1": 713.39,
+        "anchor_pure_11B_TO_cm1": 691.1701,
+        "anchor_pure_10B_TO_cm1": 720.5293
+      },
+      "tol_cm1": 10.0,
+      "rule": "the dominant feature (the larger of the two eps'' values) is the one below 710 and lies within 10 cm^-1 of our pure-11B TO 691.1701, and the other lies within 10 cm^-1 of our pure-10B TO 720.5293 (ordering exact in 39 of 39 blocks; worst block margin 2.42 cm^-1 on the bump, eight block standard deviations)"
+    },
+    "G2_eps1_spacing": {
+      "truth": 5.77,
+      "tol_cm1": 2.5,
+      "rule": "eps1_min_above_max_cm1 - eps1_max_700_740_cm1 within 5.77 +/- 2.5 (39 blocks 5.65 +/- 0.41, range 5.01-6.48; the independent N = 256 validation ensemble reads 4.71, below the block range, so the +/- 2.0 cut from the blocks was widened to 2.5 at authoring (edge 3.27, 5.8 block sigma below the block mean); the alternative pairing of the main resonance's peak and valley (2.5 cm^-1) still fails. The dip is a shallow shoulder, the widest-spread feature in the leaf)"
+    },
+    "G3_sign_of_min_eps1": {
+      "truth": {
+        "disordered": 2.1063,
+        "baseline": -90.0407
+      },
+      "rule": "min_eps1_disordered_680_740 > 0 and min_eps1_baseline_680_740 < 0 (sign only: under a positive common strength scaling, min eps' is affine because eps_inf stays fixed; magnitudes are not matched; positive in 39 of 39 blocks, block minimum 1.7455, fourteen block standard deviations above zero)"
+    },
+    "G7_ensemble_convergence": {
+      "truth": 2.95086414891374,
+      "band_percent": [
+        1.63,
+        6.52
+      ],
+      "rule": "rse_max_xx_percent within the unchanged [1.63, 6.52] percent band. Definition: sample standard error of abs(eps_xx) divided by mean(abs(eps_xx)), maximum over 680\u2013740 cm^-1. Corrected 39 disjoint N=256 blocks on the legacy 0.02 grid: mean 2.950864%, sample SD 0.115483%, range 2.754058\u20133.173963%; pooled N=9984 gives 0.457919%. These are stopping-grid diagnostics. The full 0.01-grid reference gives 2.829815%. The accepted bounds are retained, not rescaled from the corrected mean; the historical N=64 estimate passes and N=1024 estimate fails."
+    },
+    "M1_strength_centroid_split": {
+      "truth": 22.9123,
+      "tol_cm1": 0.3,
+      "rule": "strength_centroid_split_cm1 within 22.9123 +/- 0.3 (39 blocks 22.912 +/- 0.016, range 22.867-22.942)"
+    },
+    "M2_off_vc_strength_fraction": {
+      "truth": 0.9223,
+      "tol": 0.01,
+      "rule": "off_vc_strength_fraction within 0.9223 +/- 0.01 (39 blocks 0.9223 +/- 0.0009, range 0.920-0.924)"
+    }
+  },
+  "not_graded": {
+    "eps2_max_below_710_value, eps2_max_above_710_value": "recorded; used only to decide which of the two features is the dominant one for G6",
+    "absolute_feature_frequencies": "our frequencies run about 6-7 cm^-1 below the paper's (the virtual-crystal offset, L2 result.json); only spacings and positions relative to our own TO frequencies are graded",
+    "paper_precision_criterion": "the paper's 0.32 % standard error at 10 000 configurations is recorded, never graded",
+    "Tamura_isotope_linewidth": "never added to gamma (reviewer ruling 2026-09-05); an agent that added a golden-rule isotope width would broaden the baseline and shift the features"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

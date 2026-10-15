@@ -1,0 +1,45 @@
+{
+  "subtask": "L7 analyze",
+  "kind": "analyze (length-dependent effective conductivity and interior temperature-drop fraction of Si and Ge slabs from steady-state phonon Monte Carlo run outputs)",
+  "provenance": "kappa_eff: 3_reproduction/L7/data/kappa_length.csv mean_W_mK at 100 and 2000 nm, the four approved metrics of L7/auditor/human_audit.json (commit af1723c, reviewer human audit 2026-09-07), sha256 c4173f25bc95b140c0edddb78ebbea964549a6c9208e89fcc1109d77a4146f36; re-derived from the staged files by reviewer/make_reference_submission.py (relative difference in reference_diagnostics.json). interior_drop_fraction: computed from the same staged profiles by the definition in the prompt (central-half least-squares line, five-run mean); the run-to-run standard deviation is in reference_diagnostics.json.",
+  "primary": {
+    "kappa_eff_Si_100nm_W_per_mK": {
+      "truth": 62.82509311443192,
+      "rule": "+/-10 percent relative (rule 2(1)); q L / (T_hot - T_cold), five-run mean; the accepted L7 metric kappa_Si_100nm_W_mK"
+    },
+    "interior_drop_fraction_Si_100nm": {
+      "truth": 0.47693725920893826,
+      "rule": "+/-10 percent relative (rule 2(1)); drop of the central-half least-squares line across the slab over T_hot - T_cold, five-run mean"
+    },
+    "kappa_eff_Si_2000nm_W_per_mK": {
+      "truth": 226.26439990664295,
+      "rule": "+/-10 percent relative (rule 2(1)); q L / (T_hot - T_cold), five-run mean; the accepted L7 metric kappa_Si_2000nm_W_mK"
+    },
+    "interior_drop_fraction_Si_2000nm": {
+      "truth": 0.8363592592915381,
+      "rule": "+/-10 percent relative (rule 2(1)); drop of the central-half least-squares line across the slab over T_hot - T_cold, five-run mean"
+    },
+    "kappa_eff_Ge_100nm_W_per_mK": {
+      "truth": 43.03231442773508,
+      "rule": "+/-10 percent relative (rule 2(1)); q L / (T_hot - T_cold), five-run mean; the accepted L7 metric kappa_Ge_100nm_W_mK"
+    },
+    "interior_drop_fraction_Ge_100nm": {
+      "truth": 0.5580642721532569,
+      "rule": "+/-10 percent relative (rule 2(1)); drop of the central-half least-squares line across the slab over T_hot - T_cold, five-run mean"
+    },
+    "kappa_eff_Ge_2000nm_W_per_mK": {
+      "truth": 118.93359900977737,
+      "rule": "+/-10 percent relative (rule 2(1)); q L / (T_hot - T_cold), five-run mean; the accepted L7 metric kappa_Ge_2000nm_W_mK"
+    },
+    "interior_drop_fraction_Ge_2000nm": {
+      "truth": 0.8768644900050617,
+      "rule": "+/-10 percent relative (rule 2(1)); drop of the central-half least-squares line across the slab over T_hot - T_cold, five-run mean"
+    }
+  },
+  "not_graded": {
+    "per_run_values": "only the five-run means are graded",
+    "other_lengths": "the sweep's 50, 200, 500, 1000 and 5000 nm points are not staged",
+    "bulk_limit": "not requested; the record's bulk value is the L2 RTA conductivity, not a slab result"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

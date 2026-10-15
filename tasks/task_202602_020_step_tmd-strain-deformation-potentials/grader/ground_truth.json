@@ -1,0 +1,61 @@
+{
+  "subtask": "L6 analyze",
+  "kind": "analyze (deformation-potential fit + moire diagonal strain mapping from 14 staged SOC statics; no DFT run, no structure build)",
+  "provenance": "values from 3_reproduction/L6/result.json and auditor/extract_modulation.py (semicore-referenced K-edge sweep + diagonal strain mapping of L1's field). Ground truth is OUR reproduction on the staged runs + staged strain field; the paper's ~200/~20 meV is the fidelity check, not the graded number (self-consistent ground truth).",
+  "staged_input": "3_reproduction/L6/hpc_computations/<tag>/vasprun.xml.gz (14 SOC statics) + 3_reproduction/L1/auditor/moire_fields.csv (the consumed L1 diagonal strain field)",
+  "convention_note": "The six lowest K-point eigenvalues define the adopted semicore reference for this task. The source paper does not specify this reference. It is not a proof of an exact separation from other electrostatic terms. The registry-binned profile is a reproduction proxy, not an exact real-space diagonal cut. Signs and all eight primary numerical targets remain as computed under this convention.",
+  "scalars": {
+    "dp_WS2_conduction_meV_per_pct": {
+      "truth": -115.3,
+      "rule": "within 10% of the true value (band -126.8 to -103.8); sign included (negative)"
+    },
+    "dp_WSe2_valence_meV_per_pct": {
+      "truth": 25.0,
+      "rule": "within 10% of the true value (band 22.5 to 27.5); sign included (positive)"
+    },
+    "amp_conduction_meV": {
+      "truth": 220.5,
+      "rule": "within 10% of the true value (band 198.5 to 242.6)"
+    },
+    "amp_valence_meV": {
+      "truth": 41.4,
+      "rule": "within 10% of the true value (band 37.3 to 45.5)"
+    },
+    "split_RXh_RMh_meV": {
+      "truth": 17.8,
+      "rule": "within 10% of the true value (band 16.0 to 19.6). Reference-solver sensitivity sweep (locale radius 0.08-0.12, path radius 0.10-0.14, 7-12 samples/segment) spans 17.8-19.1, inside the 10% band -- no widening needed."
+    }
+  },
+  "conduction_locale_curve": {
+    "rule": "The 3-point conduction locale profile (Vc at R^h_h, R^X_h, R^M_h) is graded as one curve, matched point-by-point; tol_i = max(0.10*|truth_i|, floor), floor = 0.10*max|truth| = 8.93 meV. Signs are PHYSICAL and graded (values are compared signed): R^h_h is the positive max, R^X_h and R^M_h are the two negative minima. This also enforces both minima negative (feeds the split's two-competitive-minima signature).",
+    "order": [
+      "Vc_Rhh_meV",
+      "Vc_RXh_meV",
+      "Vc_RMh_meV"
+    ],
+    "truth_meV": [
+      87.4,
+      -89.3,
+      -71.5
+    ],
+    "floor_meV": 8.93
+  },
+  "secondary": {
+    "ratio_cond_over_val": {
+      "value": 5.3,
+      "note": "recorded diagnostic (amp_conduction / amp_valence), NOT scored"
+    }
+  },
+  "score": "1 only if all six primary checks pass (all checks must pass; any single failure scores 0): (a) the four scalars dp_WS2_conduction, dp_WSe2_valence, amp_conduction, amp_valence, (b) the 3-point conduction locale curve, (c) the R^X_h/R^M_h split.",
+  "self_check_2026-07-03": {
+    "direction1_reference_solver_as_submission": "score 1 (reference_solver.py reads only agent/ staged files, reproduces result.json exactly: -115.3, 25.0, 220.5, 41.4, [87.4,-89.3,-71.5], 17.8)",
+    "designed_wrong_must_fail": [
+      "vacuum-referenced values (conduction amp ~335, slopes/locale scaled) -> amp_conduction + curve + split fail",
+      "slopes sign-flipped (+115.3, -25.0) -> dp_WS2_conduction + dp_WSe2_valence fail",
+      "amplitudes swapped between layers (amp_c=41.4, amp_v=220.5) -> amp_conduction + amp_valence fail",
+      "locale curve with max at R^X_h instead of R^h_h -> conduction_locale_curve fails",
+      "split 3x too large (53.4) -> split_RXh_RMh_meV fails",
+      "missing required field -> GradeError -> 0"
+    ]
+  }
+}

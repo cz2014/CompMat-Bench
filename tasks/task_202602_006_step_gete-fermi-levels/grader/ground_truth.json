@@ -1,0 +1,11 @@
+{
+  "E_DP_eV": 10.859994,
+  "E_DP_abs_tol_eV": 0.05,
+  "EF_minus_EDP_p1.1e21_eV": -0.065725,
+  "EF_minus_EDP_p5.3e20_eV": 0.037603,
+  "EF_minus_EDP_p1.8e19_eV": 0.262907,
+  "EF_abs_floor_eV": 0.005,
+  "cell_volume_A3": 53.8057,
+  "cell_volume_rel_tol": 0.02,
+  "provenance": "3_reproduction/L3/result.json (canonical run5, correct-frame h_x // [11-2]); tolerances documented in notes.md"
+}

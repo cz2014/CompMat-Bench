@@ -1,0 +1,52 @@
+{
+  "chain": "C03",
+  "status": "verified",
+  "notes": "Full-band expanded search retains every archived root/fallback choice and both curve peaks. Independent unsquared multistart recovers the same peaks; local direct-residual checks confirm all 640 selected poles. These bounded numerical checks do not prove global absence. See audit_c03_full_band.py and c03_full_band; reference values and rules are unchanged.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "0ca1542caee830c1bb9397f1cf9341cdc883e352b525097c7afb47e3dad29d29",
+  "fields": {
+    "omega_TO_vc_cm1": {
+      "truth": 696.6755936784625,
+      "atol": 0.2,
+      "rtol": 0,
+      "rule": "tolerance"
+    },
+    "disorder_strength_split_cm1": {
+      "truth": 22.943281771555462,
+      "atol": 0.2,
+      "rtol": 0.03,
+      "rule": "tolerance"
+    },
+    "reported_peak_ratio": {
+      "truth": 50.30056678056155,
+      "atol": 0.1,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "disordered_curve_peak_beta_over_k0": {
+      "truth": 5.769478099939271,
+      "atol": 0.05,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "virtual_crystal_curve_peak_beta_over_k0": {
+      "truth": 290.2080184549827,
+      "atol": 0.05,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "disordered_xi_p_max_beta_gt50": {
+      "truth": 0.3701719756365428,
+      "atol": 0.01,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    },
+    "virtual_crystal_xi_p_max_beta_gt50": {
+      "truth": 1.0,
+      "atol": 0.01,
+      "rtol": 0.05,
+      "rule": "tolerance"
+    }
+  },
+  "derivation": "C03_transmission_rederivation.json"
+}

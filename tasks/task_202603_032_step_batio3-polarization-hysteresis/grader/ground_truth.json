@@ -1,0 +1,34 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (polarization loop from 55 relaxed core-shell structures; coercive field, remanent polarization, switching brackets)",
+  "provenance": "3_reproduction/L1/hysteresis_aniso.csv (Pz column) and result.json key loop_aniso (Ec_mean, Pr_mean, Ec_brackets; commit c4cf590), re-expressed by reviewer/make_reference_submission.py on 2026-09-06: every per-step Pz recomputed from the staged structures equals the csv to 1e-4, Ec and Pr to 1e-4. The `aniso` protocol is the ground truth (reviewer ruling 2026-09-05; the task grades E = 0 remanence 0.2019 C/m^2, whereas Table I labels 0.41 C/m^2 saturation polarization. The accepted loop reaches max |Pz| about 0.4182 C/m^2, which alone does not prove identical definitions or complete protocol fidelity. Ec 2.2175 versus the paper's 9.0 MV/cm remains a recorded discrepancy, never a target).",
+  "primary": {
+    "Pz_C_m2": {
+      "truth_file": "reference_submission/answer.json",
+      "n_points": 55,
+      "rule": "curve rule 2(2): every point within max(10 percent of |truth_i|, 10 percent of max|truth|) = at least 0.0418 C/m^2; the points just before switching (0.1073 and -0.0884) are covered by the floor"
+    },
+    "Ec_MV_per_cm": {
+      "truth": 2.2175,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); band [1.996, 2.439]. The grid-clamped interpolation of the authors' notebook gives 2.4774 (outside); the core-only convention gives 2.2039 (inside, see notes.md)"
+    },
+    "Pr_C_m2": {
+      "truth": 0.2019,
+      "rule": "+/-10 percent relative; band [0.1817, 0.2221]. Core-only gives 0.1218 (outside); the field-free relaxed cell's polarization 0.1811 (outside); |Pz| at the smallest-|E| steps gives 0.2115 (inside the numerical band; not permission to replace required interpolation, see notes.md)"
+    },
+    "switching_fields_descending_MV_per_cm": {
+      "truth": [-2.0, -2.75],
+      "rule": "exact grid values (identification, rule 2(4)); abs 1e-6"
+    },
+    "switching_fields_ascending_MV_per_cm": {
+      "truth": [2.0, 2.75],
+      "rule": "exact grid values; abs 1e-6"
+    }
+  },
+  "not_graded": {
+    "Px_Py": "not requested or graded; switching states need not have zero transverse polarization. Independent state 44: (Px, Py, Pz) approximately (0.07086, 0.03570, -0.08838) C/m^2",
+    "core_only_sensitivity": "hysteresis_aniso.csv Pz_coreonly, a recorded sensitivity, never graded",
+    "zero_field_cell": "the field-free relaxed cell (result.json zerofield_ref) is not staged; its polarization 0.1811 is not the loop Pr"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

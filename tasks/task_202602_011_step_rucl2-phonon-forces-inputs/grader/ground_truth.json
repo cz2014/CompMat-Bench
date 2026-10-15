@@ -1,0 +1,122 @@
+{
+  "subtask": "L9 gen_input",
+  "kind": "gen_input (VASP force-calculation deck + undisplaced 4x4x1 supercell POSCAR)",
+  "provenance": "rubric and structure reference from 3_reproduction/L9/ (finite-displacement phonon reproduction, 2026-07-10); see ../../../3_reproduction/L9/index.md and result.json",
+  "run_labels": [
+    "supercell_forces"
+  ],
+  "graded_object": "the shared single-point force deck (INCAR/KPOINTS) applied to every displaced supercell, plus the UNDISPLACED 4x4x1 supercell POSCAR. The displacement generation is route-dependent (phonopy version/settings) and is NOT graded; the electronic deck and the base supercell ARE route-invariant. See notes.md for the displacement-uniqueness resolution.",
+  "structure_reference_dir": "reference",
+  "structure_reference": "reference/supercell_undisplaced/POSCAR symlinks the as-run undisplaced 4x4x1 supercell (3_reproduction/L9/hpc_computations/dfpt_dry/POSCAR, the SPOSCAR phonopy built from the relaxed unit cell). The submitted POSCAR is matched against it.",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "matcher",
+    "note": "monolayer, non-polar, single mirror-symmetric layer; Ru/Cl binary with distinct counts (16 vs 32), no sublattice-swap or layer-order ambiguity, so the StructureMatcher path is safe. Verified in selfcheck.py: passes the reference and a pymatgen-built 4x4x1 supercell, fails wrong-lattice / wrong-supercell-size / wrong-basis variants."
+  },
+  "encut_catalog": "graderlib/grader_potcar_vasp54.yaml (Ru_pv 230.429, Cl 280.000 eV). ENCUT floor = 1.0 * max(ENMAX) = 280 eV.",
+  "kmesh_reference": {
+    "subdivisions": [
+      3,
+      3,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "declared_pins": {
+    "note": "printed in the prompt because physics + staged files + catalog cannot determine them; graded as consistency with the printed value (see notes.md 'Declared pins' + necessity tests).",
+    "hubbard_U_eV": {
+      "value": 2.0,
+      "band": 0.2,
+      "shell": "Ru 4d (l=2), Dudarev U_eff=LDAUU-LDAUJ; no effective Cl correction"
+    },
+    "magnetic_treatment": "collinear ferromagnetic (ISPIN=2, FM seed), spin-orbit coupling off (no LSORBIT)"
+  },
+  "incar_required": {
+    "note": "Only these effective settings are graded. LMAXMIX is ungraded for this standalone force deck; 4 remains the reproduction choice. No fixed-density handoff or startup files are inferred.",
+    "static": "no ionic motion: NSW effectively 0 (default 0) or IBRION=-1",
+    "ENCUT_floor": "ENCUT >= max ENMAX over Ru_pv,Cl = 280 eV (pseudopotential floor); REQUIRED-explicit, an absent ENCUT fails",
+    "EDIFF_floor": "EDIFF <=1e-5 eV grading ceiling; as-run value 1e-7 eV. This floor is not an independently measured force-convergence bound.",
+    "ISMEAR_set": "ISMEAR in {-5, 0} (gapped FM insulator; -5 admissible since the 3x3x1 mesh samples 2 axes)",
+    "ISPIN2": "ISPIN effectively 2 (collinear spin-polarized; default 1 fails) -- consistency with the pinned collinear-FM treatment",
+    "MAGMOM_FM": "If explicit, NIONS finite scalar moments after repetition expansion. Entries with |m|>=0.5 must exist and share one sign. Omission retains the default FM seed. No seed-convergence guarantee or runtime magnetic-density check.",
+    "LSORBIT_off": "LSORBIT effectively .FALSE. (default; a noncollinear SOC deck LSORBIT=.TRUE. fails) -- consistency with the pinned SOC-off treatment",
+    "LASPH_true": "LASPH=.TRUE. (open Ru-4d shell + DFT+U aspherical gradient terms; default .FALSE.)",
+    "LDAU_block": "LDAU true; LDAUTYPE effectively 2. LDAUL/LDAUU/LDAUJ arrays follow POSCAR species order; omitted J defaults to zero. Ru l=2 and U-J=2.0+/-0.2 eV. Cl l=-1 or effective U within 0.2 eV of zero.",
+    "functional": "PBE: GGA absent or GGA=Pe",
+    "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+    "LNONCOLLINEAR_off": "LNONCOLLINEAR effectively false, including omission; required by the collinear treatment."
+  },
+  "poscar_species": {
+    "Ru": 16,
+    "Cl": 32
+  },
+  "score": "1 only if the single supercell_forces run passes the structure match AND every INCAR/KPOINTS REQUIRED check (binary all-primary-pass; any single failure scores 0)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "supercell_forces": [
+        1,
+        1,
+        1
+      ]
+    },
+    "references": {
+      "supercell_forces": {
+        "automatic_subdivisions": [
+          1,
+          1,
+          1
+        ],
+        "minimum": [
+          1,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "c53373f33a83dedb7d8120263836c7f7b34292bc2dbe648bc58aa60ee19c2220",
+        "reference_lattice_angstrom": [
+          [
+            14.038,
+            0.0,
+            8e-16
+          ],
+          [
+            -7.0189999999999975,
+            12.15726461832595,
+            8e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 48
+      }
+    }
+  }
+}

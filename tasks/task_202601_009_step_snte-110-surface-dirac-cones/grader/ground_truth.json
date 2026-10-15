@@ -1,0 +1,8 @@
+{
+  "_doc": "Our forty-plane slab reproduction; source anchor: the two surface Dirac features near Xbar in Figure 2a,b. The finite-thickness local gap minima define the features.",
+  "n_dirac_cones_near_Xbar": 2,
+  "_rules": {
+    "n_dirac_cones_near_Xbar": "exact integer count; copies on both faces at the same momentum count once"
+  },
+  "provenance": "evidence/reproduction_result.json"
+}

@@ -1,0 +1,349 @@
+{
+  "subtask": "L3 gen_input",
+  "kind": "gen_input (VASP LDA+U input sets for the antiferromagnetic CrN structural variants: one full cell relaxation + three statics, two of the four cells built by the agent)",
+  "provenance": "rubric, structure references and reference_submission decks from 3_reproduction/L3/ (hpc_computations/relax_iii and static_{i,ii,iii} as-run INCAR/KPOINTS/POSCAR; auditor/POSCAR_relaxed_variant_{i,ii,iii}.vasp). See ../../../3_reproduction/L3/index.md and context.md.",
+  "run_labels": [
+    "relax",
+    "static_iii",
+    "static_ii",
+    "static_i"
+  ],
+  "static_labels": [
+    "static_iii",
+    "static_ii",
+    "static_i"
+  ],
+  "relax_label": "relax",
+  "encut_catalog": {
+    "file": "graderlib/grader_potcar_vasp54.yaml",
+    "library_key": "species_lda",
+    "note": "The LDA (Ceperley-Alder, potpaw_LDA.54) sub-catalog of the master species table. This is the first LDA task, so the master carries the LDA entries under `species_lda` alongside the PBE `species` block; the agent-facing agent/potcar_catalog.yaml is the per-task subset of it (Cr_pv 265.753, N 400.000). tasks/grader_vasp_inputs.py needs no change: encut_vs_catalog(catalog=...) already accepts an explicit species dict."
+  },
+  "encut": {
+    "max_enmax_eV": 400.0,
+    "max_enmax_note": "max(ENMAX over the species present) = max(Cr_pv 265.753, N 400.000) = 400.0 eV.",
+    "static_factor": 1.0,
+    "static_floor_eV": 400.0,
+    "static_floor_note": "Standing handbook 5.2 floor: ENCUT >= 1.0 * max ENMAX, catalog-based benchmark grading floor (decision record 2026-06-17). REQUIRED-explicit: an absent ENCUT fails (reviewer ruling 2026-09-02).",
+    "relax_factor": 1.3,
+    "relax_floor_eV": 520.0,
+    "relax_note": "Cell relaxation (ISIF=3) floor: 1.3 * max ENMAX = 520 eV, the MP/atomate2 Pulay-stress convention named in handbook 5.2b ('ENCUT under cell relaxation (ISIF >= 3)'). This is the first cell-relaxation task in the benchmark, so the 1.3x branch is exercised here for the first time; our as-run relax deck used ENCUT = 520 eV."
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      6,
+      12,
+      8
+    ],
+    "vacuum_axes": [],
+    "centering": "any",
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "ldau": {
+    "type": 2,
+    "cr_l": 2,
+    "u_eff_eV": 4.1,
+    "u_eff_band_eV": [
+      4.0,
+      4.2
+    ],
+    "n_u_eff_max_eV": 0.01,
+    "note": "Declared pin 1 (notes.md): LDA+U, Dudarev single effective parameter U_eff = 4.1 eV on the Cr 3d shell. Graded on the EFFECTIVE Hubbard parameter U_eff = LDAUU - LDAUJ for the Cr species type (VASP's Dudarev form uses U-J), so a deck that writes LDAUU=5.1 with LDAUJ=1.0 passes; LDAU must be .TRUE. (default .FALSE.); LDAUTYPE effectively 2 (VASP default 2, so an omitted LDAUTYPE passes; LDAUTYPE=1 Liechtenstein fails); LDAUL[Cr]=2 (d shell; default 2 per species). Nitrogen must carry no Hubbard term: LDAUL[N] < 0, or |U_eff[N]| <= 0.01 eV. The species index is read from the submitted POSCAR's species order, not assumed."
+  },
+  "magmom": {
+    "cr_min_abs_muB": 0.5,
+    "gap_tol_A": 0.02,
+    "note": "Declared pins 2 and 3 (notes.md): the |++--> order (up, up, down, down along the stacking axis, which is the first lattice vector) AND, in the distorted cell, the assignment that the two Cr planes with the LARGER spacing are the parallel pair. Graded from the submitted POSCAR itself: the four Cr sites are sorted by fractional coordinate along axis 0, the four cyclic nearest-neighbour Cr plane spacings are computed in Angstrom, and the rule is (a) ISPIN=2, (b) a collinear MAGMOM with one entry per atom, (c) each Cr |m| >= 0.5 muB with exactly two up and two down, (d) exactly two of the four cyclic Cr pairs are same-spin (this is |++--> ; a |+-+-> or ferromagnetic decoration fails), and (e) the smallest same-spin plane spacing is >= the largest opposite-spin plane spacing minus 0.02 A. Global sign is free (a time-reversal twin). On static_ii, static_i and an undistorted relax start all four spacings are equal, so (e) is satisfied by both pairings, exactly as the pin intends; on static_iii the spacings differ by 0.23 A, so (e) admits only the wide-gap pairing. A relax start the agent chooses to pre-distort is held to the same consistency, which is the physically correct reading of the pin. N moments are not graded."
+  },
+  "incar_common": {
+    "note": "Graded on all four labels, on the effective value (explicit if set, else the VASP default; handbook 5.2(1)). VASP defaults cited in notes.md triage table.",
+    "ISPIN": "ISPIN = 2 (collinear spin-polarized; VASP default 1, so REQUIRED-explicit)",
+    "MAGMOM_pattern": "see magmom",
+    "LDAU_block": "see ldau",
+    "LASPH": "LASPH = .TRUE.; retained task-level user decision, B-21 deferred. Native LDA+U alone does not establish universal necessity.",
+    "LMAXMIX": "LMAXMIX >= 4; retained task-level user decision, B-32 deferred; no undeclared fixed-charge handoff is assumed.",
+    "ISMEAR": "ISMEAR in {-5, 0} (gapped antiferromagnet; VASP default 1, so REQUIRED-explicit; -5 additionally needs >= 2 subdivisions on >= 2 axes, which the 6x12x8-class mesh satisfies)",
+    "ENCUT": "see encut (floor 520 eV on relax, 400 eV on the statics)",
+    "functional": "LDA: GGA absent (the functional comes from the LDA POTCAR) or GGA = CA. GGA = PE (PBE) on an LDA POTCAR fails.",
+    "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints."
+  },
+  "incar_static_only": {
+    "static": "NSW effectively 0 (VASP default 0, so omitting passes) or IBRION = -1 -- the cell and ions are held fixed",
+    "EDIFF": "EDIFF <= 1e-5 eV (MPStaticSet value; VASP default 1e-4, so REQUIRED-explicit)"
+  },
+  "incar_relax_only": {
+    "relax_cell": "ISIF = 3 (ions + cell shape + volume: the source's 'fully optimized' state; VASP default 2, so REQUIRED-explicit; ISIF 4/6/7 each freeze one of the three and fail), IBRION in {1, 2, 3}, NSW >= 1 (an ionic-step budget: with the default NSW = 0 nothing relaxes), EDIFFG < 0 with |EDIFFG| <= 0.05 eV/A (force criterion; VASP default is the positive energy criterion EDIFF*10, so REQUIRED-explicit)",
+    "EDIFF_note": "EDIFF is NOT graded on the relax label: the defensible expert range spans MP's per-atom convention (EDIFF_PER_ATOM = 5e-5 -> 4e-4 eV for this 8-atom cell) to our 1e-6, and no bound short of a trivial one survives handbook 5.2a question 2. Graded on the statics only."
+  },
+  "incar_not_graded": {
+    "note": "Recorded so the triage is auditable; none of these is scored.",
+    "ISYM": "our decks use ISYM = 0, but the L3 confirmatory run (3_reproduction/L3/index.md, 'The ISYM confirmatory run') repeated the variant-(iii) static with ISYM = 2 and found the total energy, the gap and the moments unchanged to below threshold: ISYM is inert for this system, so it is not graded (handbook 5.2a confirmatory-run rule)",
+    "others": "PREC, LREAL, ALGO, NELM, NBANDS, LORBIT, LDAUPRINT, ISTART, ICHARG, LWAVE, LCHARG, KPAR, NCORE -- numerics, output toggles and parallel layout; outside the bounded rubric; no claim that arbitrary settings preserve the physical result",
+    "SIGMA": "secondary diagnostic (our relax used 0.05); not scored"
+  },
+  "structure_match": {
+    "max_disp_A": 0.02,
+    "method": "matcher",
+    "reference_dir": "reference",
+    "labels": {
+      "static_iii": "reference/static_iii/POSCAR -> 3_reproduction/L3/auditor/POSCAR_relaxed_variant_iii.vasp (the cell staged to the agent as relaxed_cell/POSCAR: a transcription check)",
+      "static_ii": "reference/static_ii/POSCAR -> 3_reproduction/L3/auditor/POSCAR_relaxed_variant_ii.vasp (the relaxed lattice with the internal displacements removed, x_Cr = x_N = 1/8)",
+      "static_i": "reference/static_i/POSCAR -> 3_reproduction/L3/auditor/POSCAR_relaxed_variant_i.vasp (cubic rock salt at the same volume: (a,b,c) = (sqrt2 c0, c0/sqrt2, c0), c0 = V^(1/3) = 4.140113 A)"
+    },
+    "threshold_note": "DOCUMENTED EXCEPTION to the 0.1 A default (structure standard 3(5) / handbook 2(5)): the graded internal displacement of variant (iii) relative to variant (ii) is only 0.058 A (Cr) and 0.060 A (N), so at 0.1 A an unmodified copy of the staged relaxed cell would pass as static_ii. 0.02 A is 3x below the smallest graded displacement and ~100x above POSCAR write precision. Applied to all three statics for consistency.",
+    "method_note": "method='matcher' (StructureMatcher). Justified by the self-check, not by a fixed rule: the three cells are nearly isotropic (5.8 x 3.0 x 4.1 A), so StructureMatcher's mean-per-atom-length normalization is well behaved, and every designed-wrong geometry variant fails under it. 'matcher' is also the correct choice HERE because it absorbs the lattice's improper operations: a mirrored transcription of the same crystal is the same physical cell, and whether its magnetic decoration is right or wrong is decided separately by the MAGMOM rule, which reads the submitted POSCAR's own plane spacings. A sublattice swap cannot slip through: Cr and N are different elements and ElementComparator keeps them apart."
+  },
+  "relax_start": {
+    "note": "The relax POSCAR is a STARTING point, not a result, so it is graded loosely: species and counts, an eight-atom orthorhombic cell with the stacking axis first, lattice lengths within 5% of the staged seed, and internal coordinates within 0.03 (fractional along a) of the ideal rock-salt setting. Our as-run relax start (a = 5.7759 A, x_Cr = 0.13502, x_N = 0.11460) and the staged agent/seed_cell/POSCAR both pass.",
+    "expected_counts": {
+      "Cr": 4,
+      "N": 4
+    },
+    "seed_abc_A": [
+      5.939696961967,
+      2.9698484809835,
+      4.2
+    ],
+    "lattice_rel_tol": 0.05,
+    "angle_tol_deg": 1.0,
+    "axis_order": "a > c > b",
+    "ideal_frac_coords": {
+      "Cr": [
+        [
+          0.125,
+          0.25,
+          0.25
+        ],
+        [
+          0.375,
+          0.75,
+          0.75
+        ],
+        [
+          0.625,
+          0.25,
+          0.25
+        ],
+        [
+          0.875,
+          0.75,
+          0.75
+        ]
+      ],
+      "N": [
+        [
+          0.125,
+          0.25,
+          0.75
+        ],
+        [
+          0.375,
+          0.75,
+          0.25
+        ],
+        [
+          0.625,
+          0.25,
+          0.75
+        ],
+        [
+          0.875,
+          0.75,
+          0.25
+        ]
+      ]
+    },
+    "max_frac_dev": 0.03,
+    "internal_check": "The ideal template above is instantiated in the SUBMITTED lattice and compared to the submitted cell with the translation-invariant fallback scan (no symmetry ops needed; the origin is free on a start cell), with max_disp = 0.03 * a_submitted Angstrom (0.178 A on the seed cell). This accepts an undistorted start and a lightly pre-distorted one, and rejects a start that is not rock-salt-like."
+  },
+  "score": "1 only if all four runs pass. Per run: the applicable INCAR/KPOINTS REQUIRED rubric (incar_common on all four; incar_static_only on the three statics; incar_relax_only on relax) AND the structure check (structure_match against our reference for the three statics; relax_start for relax). Any single failure scores 0 (handbook 1, binary all-primary-pass).",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax": [
+        4,
+        8,
+        5
+      ],
+      "static_iii": [
+        4,
+        8,
+        6
+      ],
+      "static_ii": [
+        4,
+        8,
+        6
+      ],
+      "static_i": [
+        4,
+        8,
+        6
+      ]
+    },
+    "references": {
+      "relax": {
+        "automatic_subdivisions": [
+          4,
+          8,
+          5
+        ],
+        "minimum": [
+          4,
+          8,
+          5
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "48a0cbe2f2e3d8b15d744f46de48e18f560f0ae133cc9781659d0149e12b2c6c",
+        "reference_lattice_angstrom": [
+          [
+            5.939696961967,
+            0.0,
+            4e-16
+          ],
+          [
+            -2e-16,
+            2.9698484809834995,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            4.2
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "static_iii": {
+        "automatic_subdivisions": [
+          4,
+          8,
+          6
+        ],
+        "minimum": [
+          4,
+          8,
+          6
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "b2b0425ccf978c503899c80c1cec0e51682b7e977a2e6a6ec3e792ed462d8039",
+        "reference_lattice_angstrom": [
+          [
+            5.775870670250322,
+            0.0,
+            4e-16
+          ],
+          [
+            -2e-16,
+            2.9654911337603655,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            4.1430715438434085
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "static_ii": {
+        "automatic_subdivisions": [
+          4,
+          8,
+          6
+        ],
+        "minimum": [
+          4,
+          8,
+          6
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "e69addef969b6f19fe0e0a8cc949540805e52b1401371988111cd72b7f48c3b7",
+        "reference_lattice_angstrom": [
+          [
+            5.775870670250322,
+            0.0,
+            4e-16
+          ],
+          [
+            -2e-16,
+            2.9654911337603655,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            4.1430715438434085
+          ]
+        ],
+        "reference_atom_count": 8
+      },
+      "static_i": {
+        "automatic_subdivisions": [
+          4,
+          8,
+          6
+        ],
+        "minimum": [
+          4,
+          8,
+          6
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "c977bbb32f38a0b77715e6e75e0a39891297073c3a6528c0fcdce61892d931d0",
+        "reference_lattice_angstrom": [
+          [
+            5.855003677324987,
+            0.0,
+            4e-16
+          ],
+          [
+            -2e-16,
+            2.927501838662493,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            4.1401128041086706
+          ]
+        ],
+        "reference_atom_count": 8
+      }
+    }
+  }
+}

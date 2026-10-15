@@ -1,0 +1,18 @@
+{
+  "_doc": "L5 analyze ground truth = our self-consistent reproduction (3_reproduction/L5/result.json, provenance sdh_fft.py, independently confirmed by 3_reproduction/L5/auditor/guards.py), never the paper's printed numbers.",
+  "Vg_sym_V": -0.123,
+  "n_sym_1e11cm2": 1.8007,
+  "peaks_Vg_0.0V_1e11cm2": [1.34, 1.626],
+  "peaks_Vg_-0.2V_1e11cm2": [0.643, 0.804],
+  "peaks_Vg_-0.8V_1e11cm2": [0.393],
+  "_rules": {
+    "Vg_sym_V": "+/-10% relative tolerance (handbook 2(1)); band [-0.1353, -0.1107] V; sweep scatter of defensible variants is +/-0.005 V",
+    "n_sym_1e11cm2": "+/-10% relative tolerance (handbook 2(1)); band [1.6206, 1.9808]",
+    "peaks_Vg_*_1e11cm2 lengths": "exact integer count: 2, 2, 1 (documented 2(5) extension: the handbook has no list-length rule; integer-count logic of 2(4) applied to a list length, see notes.md)",
+    "peaks_Vg_*_1e11cm2 values": "+/-10% relative per component, sorted ascending (handbook 2(1) vector rule)"
+  },
+  "_secondary_recorded_not_scored": {
+    "gate_slope_1e11cm2_per_V": 8.9735,
+    "gate_intercept_1e11cm2": 2.9044
+  }
+}

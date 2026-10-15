@@ -1,0 +1,35 @@
+&control
+    calculation      = 'scf'
+    prefix           = 'gete'
+    outdir           = './out'
+    pseudo_dir       = '/home/user/pp/sg15'
+    verbosity        = 'high'
+/
+&system
+    ibrav            = 0
+    nat              = 2
+    ntyp             = 2
+    ecutwfc          = 100
+    ecutrho          = 400
+    noncolin         = .true.
+    lspinorb         = .true.
+    occupations      = 'fixed'
+    nbnd             = 36
+/
+&electrons
+    conv_thr         = 1.0d-10
+    electron_maxstep = 200
+    mixing_beta      = 0.4
+/
+ATOMIC_SPECIES
+  Ge     72.630  Ge_ONCV_PBE_FR-1.0.upf
+  Te    127.600  Te_ONCV_PBE_FR-1.1.upf
+CELL_PARAMETERS angstrom
+        3.649727317320       0.000000000000       2.285920549627
+        1.265542240880       3.423289693751       2.285920549627
+        0.000000000000       0.000000000000       4.306500000000
+ATOMIC_POSITIONS crystal
+  Ge        0.000000000000       0.000000000000       0.000000000000
+  Te        0.526000000000       0.526000000000       0.526000000000
+K_POINTS automatic
+  7 7 7 0 0 0

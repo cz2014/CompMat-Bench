@@ -1,0 +1,45 @@
+{
+  "chain": "C07",
+  "status": "verified",
+  "notes": "Existing 9-cubed reference and sign-only weak-pair rule retained; independent Sol run with 12/16-cubed meshes passed all five checks.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "a0b85c092343abcf872b70dede31a969779bbbf46fa559b1fba18be086001b46",
+  "fields": {
+    "L2_1_J_V_Co_meV": {
+      "truth": 8.513412500000001,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "XA_J_V1_Co_meV": {
+      "truth": -0.6308812500000001,
+      "rule": "sign",
+      "rtol": 0
+    },
+    "XA_J_V2_Co_meV": {
+      "truth": 4.9770666666666665,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "L2_1_dominant_NN_pairs": {
+      "truth": [
+        "Co-V"
+      ],
+      "rule": "pairs",
+      "allowed": [
+        "V",
+        "Co"
+      ]
+    },
+    "XA_dominant_NN_pairs": {
+      "truth": [
+        "Co-V2"
+      ],
+      "rule": "pairs",
+      "allowed": [
+        "V1",
+        "V2",
+        "Co"
+      ]
+    }
+  }
+}

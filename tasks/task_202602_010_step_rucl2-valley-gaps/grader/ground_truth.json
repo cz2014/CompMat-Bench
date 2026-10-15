@@ -1,0 +1,51 @@
+{
+  "subtask": "L8 analyze",
+  "kind": "analyze (valley gaps + splitting + cell moment from the staged DFT+U+SOC band run and SCF output)",
+  "provenance": "values from 3_reproduction/L8/result.json (canonical M||-c state, a=3.5095 A); gaps re-extracted here from hpc_computations/bands_mneg/vasprun.xml (auditor/extract_gaps.py), moment from hpc_computations/scf_mneg (OUTCAR/OSZICAR final magnetization -0.0000845, 0.0000659, -3.9657).",
+  "fields": {
+    "gap_K_eV": 0.312,
+    "gap_Kprime_eV": 0.5533,
+    "valley_splitting_eV": 0.2413,
+    "cell_moment_magnitude_muB": 3.9657
+  },
+  "tolerances": {
+    "rule": "each field is a physical scalar graded at +/-10% relative (the benchmark's standard scalar band; see notes.md); sign is part of the value, but see the convention notes.",
+    "gap_K_eV": {
+      "truth": 0.312,
+      "band": [
+        0.2808,
+        0.3432
+      ],
+      "note": "direct gap at the pinned K=(1/3,1/3,0) in the staged M||-c band run; the smaller valley"
+    },
+    "gap_Kprime_eV": {
+      "truth": 0.5533,
+      "band": [
+        0.49797,
+        0.60863
+      ],
+      "note": "direct gap at the pinned K'=(2/3,-1/3,0); the larger valley"
+    },
+    "valley_splitting_eV": {
+      "truth": 0.2413,
+      "band": [
+        0.21717,
+        0.26543
+      ],
+      "note": "Positive magnitude |gap_Kprime-gap_K| compared independently to its reference. The grader does not compute a difference from submitted gaps or enforce their arithmetic consistency."
+    },
+    "cell_moment_magnitude_muB": {
+      "truth": 3.9657,
+      "band": [
+        3.56913,
+        4.36227
+      ],
+      "note": "magnitude of the total cell magnetization (converged 3.97 uB, high-spin d6). Graded as a MAGNITUDE because the +c/-c sign is the time-reversal convention (the paper pins neither M sign nor cell orientation); the staged state is M||-c (z-component -3.9657)"
+    }
+  },
+  "convention_safety": {
+    "K_Kprime_labeling": "The absolute K vs K' assignment (which valley is smaller) is a time-reversal / cell-orientation convention. It is made unambiguous here by (1) pinning the fractional points K=(1/3,1/3,0) and K'=(2/3,-1/3,0) in the prompt, and (2) staging exactly the M||-c band run, in which the gap at K is the smaller one (0.312 < 0.5533). An agent extracting the gap at each pinned point from the staged data gets gap_K=0.312, gap_Kprime=0.5533 deterministically -- no a-priori knowledge of which valley is smaller is required or graded. (Had the M||+c twin been staged the two would swap; we stage M||-c, the canonical paper-labeled state.)",
+    "ordering_is_enforced": "gap_K < gap_Kprime is implied by the two disjoint 10% bands ([0.281,0.343] vs [0.498,0.609]); no separate 'smaller valley' field is graded."
+  },
+  "score": "1 only if all four fields are present, numeric, and within their +/-10% bands (any missing/non-numeric field or any out-of-band value scores 0)"
+}

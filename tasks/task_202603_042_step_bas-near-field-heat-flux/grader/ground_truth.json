@@ -1,0 +1,154 @@
+{
+  "subtask": "L9 analyze",
+  "kind": "analyze (near-field radiative heat flux across a 10 nm vacuum gap between isotope-engineered BAs half-spaces: three composition series of hot/cold pairs plus the eps_inf baseline; total-flux positions, ratios and orderings)",
+  "provenance": "3_reproduction/L9/result.json (guards G6-G12 with the reviewer-ruled tolerances of 2026-09-06, commit b629dbe) and 3_reproduction/L9/runs/flux_series.json (the production readings). The staged file agent/eps_bas_isotope_series.npz is the purpose-trimmed copy of runs/eps_extended.npz restricted to the fourteen Fig. 7 compositions (3_reproduction/L9/auditor/make_staged.py, sha256 68be1bb70eee3470647d3ba0d80b55658beb19bb9b88a2ca84ad9fae82d6b6c0). Tolerance rule: each band covers the full 39-replica (N = 256) block range plus margin and is set by the alternative reading it must reject; block noise is at most 0.246 percent anywhere.",
+  "compositions_n10": [
+    0,
+    5,
+    8,
+    10,
+    13,
+    26,
+    51,
+    102,
+    154,
+    205,
+    230,
+    243,
+    251,
+    256
+  ],
+  "production": {
+    "Q_symmetric_W_m2": [
+      94642.4953131621,
+      89364.81809780758,
+      85703.01057203334,
+      83137.85974229296,
+      79302.98700055218,
+      63694.76340011044,
+      45822.088900662086,
+      38584.569539504744,
+      39426.019,
+      44126.817,
+      50638.853,
+      59440.521,
+      74066.905,
+      95343.74028365908
+    ],
+    "Q_cold_pure11B_W_m2": [
+      94642.4953131621,
+      88716.14036185529,
+      84682.52369062924,
+      81822.32598491755,
+      77464.419689158,
+      60645.54991543392,
+      42221.33051097809,
+      30960.808724068578,
+      30409.974690677438,
+      29786.637812658126,
+      29534.34610116694,
+      29440.534986861563,
+      29411.984442023433,
+      29382.308160664317
+    ],
+    "Q_cold_natural_W_m2": [
+      43329.59906311221,
+      44789.679977278116,
+      45575.421864815435,
+      46052.07091345085,
+      46691.44139308838,
+      48265.78542300043,
+      45822.088900662086,
+      35794.688,
+      33348.243,
+      32685.492,
+      31986.94,
+      31499.212,
+      31276.995,
+      31186.951
+    ],
+    "Q_baseline_W_m2": 29638.943225590545,
+    "note": "W m^-2 over 1-6000 cm^-1 with the 4 pi^2 prefactor; the values marked to three decimals are read from flux_series.json table rows. Absolute values are NOT graded (see not_graded)."
+  },
+  "primary": {
+    "format": {
+      "rule": "the three Q lists have exactly 14 entries each, all finite and positive; the echoed n10_min_Q_symmetric names an n10 whose submitted Q_symmetric ties the minimum of that list within 1e-6 relative and n10_max_Q_cold_natural names an n10 whose submitted Q_cold_natural ties the maximum of that list within 1e-6 relative (the task states no tie-break convention, so every tied extremum is accepted; handbook 2(8))"
+    },
+    "pair_consistency": {
+      "rule": "Q_symmetric[n10 = 0] equals Q_cold_pure11B[n10 = 0] and Q_symmetric[n10 = 51] equals Q_cold_natural[n10 = 51], each within 1e-6 relative (the same hot/cold pair appears in two series; deterministic for any consistent code)"
+    },
+    "G6_U_shape_interior": {
+      "truth": {
+        "argmin_n10": 102,
+        "x": 0.3984375,
+        "Q_min": 38584.569539504744,
+        "Q_at_n10_0": 94642.4953131621,
+        "Q_at_n10_256": 95343.74028365908
+      },
+      "rule": "the argmin of the submitted Q_symmetric over the 14 compositions has 0.15 <= x <= 0.85 (x = n10/256), and Q_symmetric at n10 = 0 and at n10 = 256 both exceed the minimum (a position on a discrete composition grid, graded as an interval of grid points; n10 = 102 in 39 of 39 replicas, nearest rival 154 sits 2.18 percent above, 26 sigma)"
+    },
+    "G7_U_depth": {
+      "truth": 0.407687576408805,
+      "band": [
+        0.35,
+        0.6
+      ],
+      "rule": "min(Q_symmetric) / Q_symmetric[n10 = 0] within [0.35, 0.60] (39 blocks 0.40771 +/- 0.00028, range 0.40705-0.40818; the upper edge rejects a flat curve and still holds the paper's 0.565; the hot-side gamma = 0.29 alternative reading gives 0.339 and is deliberately outside)"
+    },
+    "G8_pure_limit_peaks": {
+      "truth": {
+        "peak_11B_cm1": 693.8,
+        "peak_10B_cm1": 723.27,
+        "our_TO_11B_cm1": 691.1701,
+        "our_TO_10B_cm1": 720.5293
+      },
+      "tol_cm1": 10.0,
+      "rule": "peak_nu_symmetric_pure11B_cm1 within 10.0 cm^-1 of our pure-11B TO frequency 691.1701 and peak_nu_symmetric_pure10B_cm1 within 10.0 cm^-1 of our pure-10B TO frequency 720.5293, and the first strictly below the second (no block spread: both pairs are pure; the splitting is 29.36 cm^-1, so a swapped mass array cannot pass). The band is centred on our TO frequencies, not on the flux peaks (693.80 / 723.27 sit 2.6-2.7 cm^-1 above them), so the one-sided slack is 7.3 cm^-1"
+    },
+    "G9_peak_height_ratio": {
+      "truth": 22.586688856368564,
+      "band": [
+        10.0,
+        60.0
+      ],
+      "rule": "peak_q_ratio_pure11B_over_natural within [10, 60] (39 blocks 22.53 +/- 0.49, range 21.30-23.60; rejects a code that reused one spectrum, ratio near 1)"
+    },
+    "G10_cold11_monotone": {
+      "truth": {
+        "n_violations": 0,
+        "least_negative_step_percent": -0.092
+      },
+      "rule": "Q_cold_pure11B, read in ascending n10, is non-increasing, allowing at most one increase and that one smaller than 0.5 percent of the value it rises from (0 violations in 39 of 39 replicas; block scatter at the two flattest points 0.002 percent; the last three steps fall by only 0.10 / 0.10 / 0.32 percent, so independent per-point noise of 1 percent would manufacture rises, while a different quadrature moves all points together)"
+    },
+    "G11_coldnat_interior_maximum": {
+      "truth": {
+        "argmax_n10": 26,
+        "x": 0.1015625,
+        "Q_at_argmax": 48265.78542300043,
+        "Q_at_n10_51": 45822.088900662086,
+        "Q_at_n10_0": 43329.59906311221
+      },
+      "interval_n10": [
+        5,
+        26
+      ],
+      "rule": "the argmax of the submitted Q_cold_natural over the 14 compositions has n10 in the closed interval [5, 26], and Q_cold_natural at that argmax is strictly above Q_cold_natural[n10 = 51] and above Q_cold_natural[n10 = 0] (a position on a discrete composition grid, graded as an interval of grid points; n10 = 26 in 39 of 39 replicas; margins over 13 / 51 / 0 are 24 / 29 / 51 sigma; the upper edge is physics: n10 = 51 IS nat/nat, the reading the guard rejects)"
+    },
+    "G12_dip_below_baseline": {
+      "truth": {
+        "min_ratio": 0.3050159497773446,
+        "at_nu_cm1": 691.95
+      },
+      "rule": "0 <= min_q_ratio_hot10B_cold11B_over_baseline < 0.85. The ratio is nonnegative for the stated passive media and baseline. G12 checks suppression below the baseline, not its unique mechanism. Omitting the multiple-reflection denominator can also produce a dip; the retained full wrong-method answer is rejected by G9. The frequency of the dip is not required or scored."
+    }
+  },
+  "not_graded": {
+    "absolute_Q_values": "Absolute Q values are not reference-matched; the three submitted series provide the ratios, orderings, and positions that are scored. Only an overall flux-normalization prefactor cancels. Oscillator strength enters through epsilon and the Fresnel response nonlinearly and need not cancel. Internal reference totals, including Q_baseline = 29638.94 W m^-2, are retained for provenance.",
+    "min_q_ratio_at_nu_cm1": "Internal reference only (691.95 cm^-1); submission is not required, and any extra submitted value is ignored.",
+    "hot_side_gamma_alternative": "gamma = 0.29 cm^-1 on both sides gives G7 0.339, G9 32.17, G12 0.182; layer-3 diagnostic, bands not widened, the prompt pins the hot-side spectrum",
+    "frequency_range": "Q over 1-3000 cm^-1 differs from 1-6000 by up to 2.8 percent; the prompt pins the whole staged grid",
+    "M3_participation_ratio": "dropped (reviewer 2026-09-10)",
+    "Q_baseline_W_m2": "Internal reference total only; not required or scored. G12 uses a spectral-flux ratio, not this integrated total. Any extra submitted value is ignored."
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

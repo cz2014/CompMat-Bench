@@ -1,0 +1,27 @@
+{
+  "subtask": "L3 analyze",
+  "kind": "analyze (total magnetic moment per formula unit and magnetic order from ABACUS outputs)",
+  "provenance": "values from 3_reproduction/L3/result.json (magnetism block) and auditor/outputs/OUT.V2CoAl_L21/{mulliken.txt,running_scf.log}; job 18722313, the HPC cluster; self-consistent ground truth (our converged ABACUS run, not the paper)",
+  "primary": {
+    "total_moment_uB_per_fu": 3.695,
+    "order": "ferromagnetic",
+    "note": "total = 14.7805 uB/cell (running_scf.log 'total magnetism (Bohr mag/cell)') / 4 f.u. = 3.695; FM = V and Co moments parallel (both positive in mulliken.txt). These are the partition-robust quantities (plan decision 5)."
+  },
+  "tolerances": {
+    "total_moment_uB_per_fu": {
+      "rule": "relative",
+      "rel": 0.1
+    },
+    "order": {
+      "rule": "exact_label",
+      "expected": "ferromagnetic"
+    }
+  },
+  "secondary_not_scored": {
+    "note": "the per-site Mulliken split is convention-soft (plan decision 5; result.json G3): our run and the paper differ ~10-12% on the V/Co split while the total agrees to <2%. Recorded for diagnostics, NOT scored.",
+    "m_V_uB": 1.362,
+    "m_Co_uB": 0.997,
+    "m_Al_uB": -0.027
+  },
+  "score": "1 only if total_moment_uB_per_fu within +/-10% of 3.695 AND order == 'ferromagnetic' (all checks must pass; any single failure scores 0)"
+}

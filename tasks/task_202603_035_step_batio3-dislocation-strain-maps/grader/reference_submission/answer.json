@@ -1,0 +1,22 @@
+{
+  "core_BaO_xy_A": [
+    79.73,
+    81.079
+  ],
+  "core_TiO2_xy_A": [
+    79.893,
+    235.659
+  ],
+  "eps_xx_mean_A_pct": 4.1442,
+  "eps_xx_mean_B_pct": 1.6944,
+  "eps_yy_mean_A_pct": -1.5409,
+  "eps_yy_mean_B_pct": -0.5767,
+  "eps_xx_max_pct": 14.654,
+  "eps_yy_min_pct": -8.1026,
+  "eps_xx_max_near_BaO_pct": 14.654,
+  "eps_xx_max_near_TiO2_pct": 11.9469,
+  "eps_yy_min_near_BaO_pct": -5.2194,
+  "eps_yy_min_near_TiO2_pct": -8.1026,
+  "n_eps_xx_above_10pct": 7,
+  "n_eps_yy_below_minus3p5pct": 23
+}

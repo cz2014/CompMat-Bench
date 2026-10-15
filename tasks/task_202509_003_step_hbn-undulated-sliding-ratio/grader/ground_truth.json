@@ -1,0 +1,136 @@
+{
+  "subtask": "L2 analyze",
+  "kind": "analyze (structure construction + geometric profile; no DFT)",
+  "provenance": "profile from 3_reproduction/L2/nu_ac_vs_y.csv and result.json (geometric, paper SM-3 perimeter difference); structure reference POSCAR_R_ac_sin_h9.vasp",
+  "sign_convention": "nu_ac(y) = (s_top(y) - s_bot(y)) / c_ac, upper layer minus lower layer, the two arc lengths measured from each layer's point on the registered edge y=0 to its point on the mid-surface normal at y. Positive over the whole period. Stated in the prompt; the profile below is graded with this sign.",
+  "structure_reference": "reference/POSCAR_R_ac_sin_h9.vasp",
+  "structure_match": {
+    "max_disp_A": 0.2,
+    "method": "fallback",
+    "note": "translation-only, polarity-safe: the undulated bilayer also absorbs a B/N swap under StructureMatcher; fallback fails swap/mirror/wrong-amplitude. 0.20 A allows the agent's arc-length placement to differ slightly from ours while still pinning the construction."
+  },
+  "scalars": {
+    "nu_ac_y0": {
+      "truth": 0.0,
+      "rule": "zero target, graded with an absolute band (a relative tolerance is meaningless at zero); the phase discriminator",
+      "abs_tol": 0.0732
+    },
+    "nu_ac_max": {
+      "truth": 0.732,
+      "rule": "within 10% relative tolerance, inclusive band 0.6588 to 0.8052"
+    },
+    "y_at_max_over_L": {
+      "truth": 0.5,
+      "rule": "absolute",
+      "abs_tol": 0.05
+    }
+  },
+  "profile": [
+    {
+      "y_over_L": 0.0,
+      "nu_ac": 0.0
+    },
+    {
+      "y_over_L": 0.03846154,
+      "nu_ac": 0.00907
+    },
+    {
+      "y_over_L": 0.07692308,
+      "nu_ac": 0.03643
+    },
+    {
+      "y_over_L": 0.11538462,
+      "nu_ac": 0.08229
+    },
+    {
+      "y_over_L": 0.15384615,
+      "nu_ac": 0.14628
+    },
+    {
+      "y_over_L": 0.19230769,
+      "nu_ac": 0.22644
+    },
+    {
+      "y_over_L": 0.23076923,
+      "nu_ac": 0.31814
+    },
+    {
+      "y_over_L": 0.26923077,
+      "nu_ac": 0.4141
+    },
+    {
+      "y_over_L": 0.30769231,
+      "nu_ac": 0.5058
+    },
+    {
+      "y_over_L": 0.34615385,
+      "nu_ac": 0.58596
+    },
+    {
+      "y_over_L": 0.38461538,
+      "nu_ac": 0.64995
+    },
+    {
+      "y_over_L": 0.42307692,
+      "nu_ac": 0.69581
+    },
+    {
+      "y_over_L": 0.46153846,
+      "nu_ac": 0.72317
+    },
+    {
+      "y_over_L": 0.5,
+      "nu_ac": 0.73224
+    },
+    {
+      "y_over_L": 0.53846154,
+      "nu_ac": 0.72317
+    },
+    {
+      "y_over_L": 0.57692308,
+      "nu_ac": 0.69581
+    },
+    {
+      "y_over_L": 0.61538462,
+      "nu_ac": 0.64995
+    },
+    {
+      "y_over_L": 0.65384615,
+      "nu_ac": 0.58596
+    },
+    {
+      "y_over_L": 0.69230769,
+      "nu_ac": 0.5058
+    },
+    {
+      "y_over_L": 0.73076923,
+      "nu_ac": 0.4141
+    },
+    {
+      "y_over_L": 0.76923077,
+      "nu_ac": 0.31814
+    },
+    {
+      "y_over_L": 0.80769231,
+      "nu_ac": 0.22644
+    },
+    {
+      "y_over_L": 0.84615385,
+      "nu_ac": 0.14628
+    },
+    {
+      "y_over_L": 0.88461538,
+      "nu_ac": 0.08229
+    },
+    {
+      "y_over_L": 0.92307692,
+      "nu_ac": 0.03643
+    },
+    {
+      "y_over_L": 0.96153846,
+      "nu_ac": 0.00907
+    }
+  ],
+  "profile_rule": "per-point tolerance tol_i = max(0.10*|truth_i|, floor), floor=0.10*max|profile|=0.10*0.73224=0.073224; matched by y_over_L within 0.01. The registered-edge scalar retains its separate 0.0732 band.",
+  "score": "1 only if structure, all scalar and profile checks, edge consistency, maximum domination and coincident-sample consistency pass; required data must be valid and each periodic-coordinate group must admit a common value within reporting and arithmetic roundoff. Any failure scores 0."
+}

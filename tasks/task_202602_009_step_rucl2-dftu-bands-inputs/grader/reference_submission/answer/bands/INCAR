@@ -1,0 +1,44 @@
+SYSTEM = 2H-RuCl2 monolayer  DFT+U (Dudarev, U=2 eV on Ru-4d) + SOC, FM out-of-plane
+
+# --- electronic ---
+PREC = Accurate       # driver choice: dense FFT grid for LASPH+DFT+U aspherical terms (not plan-pinned)
+ENCUT = 500           # eV; plan-pinned (Sec. III)
+EDIFF = 1E-7          # eV; plan-pinned SCF tolerance (Sec. III)
+NELM = 200
+ISMEAR = 0            # Gaussian, gapped magnetic insulator
+SIGMA = 0.05
+LREAL = .FALSE.       # 3-atom cell: reciprocal-space projection
+LASPH = .TRUE.        # REQUIRED: open d-shell + DFT+U aspherical gradient corrections
+
+# --- symmetry ---
+ISYM = -1             # driver choice: symmetry off for the noncollinear magnetic run
+
+# --- noncollinear magnetism + SOC ---
+LSORBIT = .TRUE.      # recovered, load-bearing: SOC gives the K/K' valley Zeeman split
+GGA_COMPAT = .FALSE.  # VASP-wiki recommendation for noncollinear runs
+SAXIS = 0 0 1         # spin quantization along c (out-of-plane magnetization)
+MAGMOM = 0 0 -2  0 0 0  0 0 0    # noncollinear seed: Ru 0 0 -2 muB || c, each Cl 0
+
+# --- DFT+U (Dudarev, single effective U) ---
+LDAU = .TRUE.
+LDAUTYPE = 2
+LDAUL = 2 -1          # Ru: d (l=2); Cl: none (-1)
+LDAUU = 2.0 0.0
+LDAUJ = 0.0 0.0
+LDAUPRINT = 1
+LMAXMIX = 4           # REQUIRED for DFT+U on d and carried into the ICHARG=11 NSCF
+
+# --- bands ---
+NBANDS = 48           # 28 valence e (Ru_pv 14 + 2xCl 7); noncollinear spinors -> 28 occupied,
+                      # 48 gives 20 empty spinor bands, well above the +2 eV Fig. 7(a) window
+
+# --- parallelization ---
+KPAR = 4              # 32 ranks / 4 = 8 ranks per k-group; SOC cell wants small KPAR
+
+# --- NSCF band line from the fixed SCF charge density ---
+ICHARG = 11           # read CHGCAR, non-self-consistent
+IBRION = -1
+NSW = 0
+LORBIT = 11           # site/l-projected character
+LCHARG = .FALSE.
+LWAVE = .FALSE.

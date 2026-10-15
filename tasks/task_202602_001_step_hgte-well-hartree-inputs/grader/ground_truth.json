@@ -1,0 +1,133 @@
+{
+  "description": "Rubric anchors for L2 gen_input: kdotpy self-consistent Hartree sweep of the gated 45 nm HgTe quantum well. Values from 3_reproduction/L2/result.json and drivers/ (as-run), the source paper (main text p. 3043-3044, SI eq. S1 / Tables S1-S2), and L5's upstream n_sym. Tolerance provenance per rule in notes.md.",
+  "run_labels": [
+    "nsym",
+    "m2",
+    "p2"
+  ],
+  "rules": {
+    "mode": {
+      "required": "2d",
+      "provenance": "kdotpy program mode for a layered (1D-confined) stack with in-plane dispersion; as-run drivers/run_chain2.sh"
+    },
+    "orbitals": {
+      "required": 8,
+      "provenance": "paper p. 3043: eight-orbital Kane model; as-run token 8o"
+    },
+    "substrate": {
+      "required_material": "CdTe",
+      "provenance": "paper p. 3043: pseudomorphically strained to (001) CdTe; strain sets the 3D-TI phase"
+    },
+    "stack": {
+      "materials": [
+        "HgCdTe",
+        "HgTe",
+        "HgCdTe"
+      ],
+      "thickness_nm": [
+        55.0,
+        45.0,
+        55.0
+      ],
+      "thickness_tol_nm": 0.25,
+      "barrier_x": 0.7,
+      "barrier_x_band": [
+        0.68,
+        0.72
+      ],
+      "provenance": "well 45 nm + top barrier 55 nm: SI Table S2 (45 nm row); barrier composition Hg0.3Cd0.7Te: main text p. 3043; bottom barrier = 55 nm is the declared reproduction pin (plan judgment call 5). Thickness tol = one z-grid cell (zres 0.25 nm); x band +/-0.02 around the stated 70%."
+    },
+    "zres": {
+      "required": "a zres (alias lres) token with a positive value, and layer thicknesses commensurate with it unless the config string sets lattice_zres_strict=false",
+      "value_graded": false,
+      "strict_config_key": "lattice_zres_strict",
+      "commensurability_tol_rel": 0.00099,
+      "provenance": "runnability, not a physics value. kdotpy has no z-resolution default in 1D/2D: physparams.py:349-351 exits when the token is absent, and the 0.25 nm default at physparams.py:352-353 applies only to kdim >= 3 (bulk); a non-positive value exits at physparams.py:354-356. layerstack.py:238-245 rounds every layer to ceil(d/zres - 1e-10) cells and aborts when any layer moves by more than 0.99e-3 x zres, unless lattice_zres_strict is off (default true, config.py:160), in which case it warns and snaps the thicknesses. The VALUE is not graded: no validation ladder in the record bounds it (the record laddered the k-grid and neig, not zres)."
+    },
+    "kane_energy_meV": {
+      "target": 20800.0,
+      "band": [
+        20384.0,
+        21216.0
+      ],
+      "kdotpy_default": 18800.0,
+      "hbarm0_meV_nm2": 38.099816,
+      "accepted_forms": "Numerical renormalize-EP or P targets, and numerical F/gamma1/gamma2/gamma3/kappa targets on the built-in HgTe base. Equivalent EP uses the unchanged band. No arbitrary manually compensated tuples or user expressions.",
+      "provenance": "paper p. 3043 (E_P = 20.8 eV; printed 'meV' is a typo, task_notes.md); band +/-2 pct is a documented tolerance exception: the kdotpy default 18800 sits inside the universal +/-10 pct band"
+    },
+    "alloy_not_renormalized": {
+      "required": "no renormalize-* matparam entry on HgCdTe",
+      "provenance": "reproduction plan judgment call (4), trial-confirmed: HgCdTe:renormalize_EP corrupts the alloy spectrum (spurious states, CNP estimation fails); required-off check on the effective Hamiltonian"
+    },
+    "barrier_Ev_meV": {
+      "target": -434.0,
+      "band": [
+        -455.7,
+        -412.3
+      ],
+      "kdotpy_default_at_x0p70": -390.72,
+      "evaluated_at_x": "Numeric Ev override, or numeric Evoff if Ev is absent; otherwise native default at the submitted composition.",
+      "provenance": "paper p. 3043 (E_VBO = -620 meV between HgTe and CdTe) scaled to the alloy barrier; as-run HgCdTe:Ev=-620*x = -434 at x=0.70. Band +/-5 pct is a documented tolerance exception (the kdotpy default -390.7 sits exactly on the universal 10 pct edge); it admits both the linear (-434) and gap-proportional (-425) expert scalings while excluding the unadjusted default."
+    },
+    "barrier_eps": {
+      "target": 13.6,
+      "band": [
+        12.24,
+        14.96
+      ],
+      "kdotpy_default_linearmix_x0p70": 13.38,
+      "provenance": "paper p. 3043 (eps_(Hg,Cd)Te = 13.6); universal +/-10 pct band; the kdotpy linearmix default 13.38 passes (1.6 pct off, within every graded sensitivity), so an omitted override is accepted per the effective-value rule"
+    },
+    "well_eps": {
+      "target": 20.8,
+      "band": [
+        18.72,
+        22.88
+      ],
+      "kdotpy_default": 20.8,
+      "provenance": "paper p. 3043 (eps_HgTe = 20.8); equals the kdotpy default, so omission passes; the check only rejects an explicitly wrong override"
+    },
+    "nonaxial": {
+      "required": "axial approximation off (noax/noaxial/nonaxial); kdotpy has no default (ax-or-noax is a mandatory CLI choice)",
+      "provenance": "paper p. 3043 (terms with non-axial symmetry included) + p. 3044/SI Fig. S1 (anisotropic VB hole pockets, occupied at the m2 density); stated as a physical requirement in the prompt"
+    },
+    "kgrid": {
+      "kmax_min_nm-1": 0.9,
+      "phi_span_min_deg": 89.5,
+      "min_angles": 3,
+      "provenance": "paper p. 3044: |k| <= 1 nm^-1 sufficient (kmax floor = 1.0 minus the universal 10 pct) and quarter-circle sampling; >= 3 angles because the hole pockets lie along the [11] diagonals (SI Fig. S1), so quadrant-endpoint-only sampling misses them; the prompt states both requirements. Cartesian kx+ky grids accepted: each axis must reach 0.9 with >= 3 points. Center coverage is a basic validity condition of the requested occupied-state integral; no additional radial mesh-density bound.",
+      "domain": "Polar radial interval starts at zero and has positive extent; Cartesian bounds contain the origin on both axes with the existing point counts."
+    },
+    "efield_bottom": {
+      "target_meV_per_nm": 1.198,
+      "band": [
+        1.0782,
+        1.3178
+      ],
+      "top_slot": "free (unset)",
+      "provenance": "derived-value skill check: SI eq. S1 with OUR upstream n_sym = 1.8007e11 cm^-2 and eps = 13.6 gives U'(z_bottom) = 1.198 meV/nm (result.json boundary_condition_from_L5); +/-10 pct universal band, sign-strict; the top field must remain free (guard G1/G2 physics)"
+    },
+    "cardens_e_per_nm2": {
+      "nsym": 0.0018007,
+      "m2": -0.002,
+      "p2": 0.002,
+      "rel_tol": 0.1,
+      "provenance": "run set from result.json run_set (prompt states the densities in cm^-2; kdotpy takes e/nm^2, conversion x1e-14); +/-10 pct, sign-strict, single-valued per run"
+    },
+    "selfcon": {
+      "required": "self-consistent loop enabled",
+      "max_accuracy_meV": 0.1,
+      "kdotpy_default_accuracy_meV": 0.01,
+      "provenance": "Prompt target 0.1 meV or better. Existing residuals 0.064 and 0.0063 meV change dU by 1.3522 meV. This supports the chosen scale, not a maximum universally safe threshold. Default 0.01 passes."
+    },
+    "numeric_material_literals": {
+      "required": "finite numeric literal RHS for material assignments; signs, decimals and e/E notation allowed; no expressions, constants or variables",
+      "provenance": "Explicit submission-format decision, B-L2G-01; no submitted code evaluation."
+    },
+    "numeric_argument_literals": {
+      "required": "Explicit numeric literals in recognized numerical option positions; no products in numeric grids or unreadable selfcon numerical values. Native range separators are retained.",
+      "provenance": "User-approved numeric submission format, bounded by the existing argument parser."
+    }
+  },
+  "model_scope": "Ev-only reference alignment retains built-in Ec. Ec is not independently scored. A literal Evoff must restore Ec to represent this full model; equal Ev alone does not prove equivalent Hamiltonians."
+}

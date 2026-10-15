@@ -1,0 +1,14 @@
+[project]
+name = "c09-cips-reproduction"
+version = "0.1.0"
+requires-python = ">=3.11,<3.12"
+dependencies = ["ase==3.26.0", "numpy==2.2.6", "scipy==1.15.3", "matplotlib==3.10.3"]
+
+[project.optional-dependencies]
+anvil = [
+    "deepmd-kit[cpu]==3.1.1; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "protobuf==5.29.5; sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
+
+[tool.uv]
+package = false

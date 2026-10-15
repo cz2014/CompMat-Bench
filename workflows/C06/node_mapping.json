@@ -1,0 +1,51 @@
+{
+  "chain": "C06",
+  "source_task_nodes": [
+    "L4_gen_input",
+    "L4_analyze",
+    "L6_analyze"
+  ],
+  "removed_computation": "Full ionic and cell relaxation",
+  "supporting_source_text_only": [
+    "L3_gen_input",
+    "L3_analyze"
+  ],
+  "stages": [
+    {
+      "id": "ground_state_wannier",
+      "source_nodes": [
+        "L4_gen_input"
+      ],
+      "input": "Fixed POSCAR and individual POTCARs",
+      "output": "Fresh spin-resolved Wannier Hamiltonians, centres and ordered ground state"
+    },
+    {
+      "id": "exchange",
+      "source_nodes": [
+        "L4_gen_input",
+        "L4_analyze"
+      ],
+      "input": "Fresh Wannier outputs",
+      "output": "TB2J interactions and four classified spin-model exchanges"
+    },
+    {
+      "id": "spin_waves",
+      "source_nodes": [
+        "L6_analyze"
+      ],
+      "input": "Fresh exchange values and supplied geometry",
+      "output": "Requested magnon energies"
+    }
+  ],
+  "geometry_source": "[internal path removed]",
+  "geometry_sha256": "b13e98eac43471c7a1475a19066df3638b032c07b0ede22c9440cd4a247e982a",
+  "downstream_poscar": "[internal path removed]",
+  "downstream_poscar_sha256": "b13e98eac43471c7a1475a19066df3638b032c07b0ede22c9440cd4a247e982a",
+  "magnetic_signs_in_Cr_file_order": [
+    1,
+    -1,
+    -1,
+    1
+  ],
+  "global_spin_reversal_equivalent": true
+}

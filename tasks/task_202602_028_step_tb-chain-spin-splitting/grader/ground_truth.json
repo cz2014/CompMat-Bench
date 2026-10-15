@@ -1,0 +1,36 @@
+{
+  "source": "3_reproduction/L11/ (light leaf; single-orbital Slater-Koster tight-binding chain, built and diagonalized in numpy). result.json holds the guard values; the four Gamma up-spin eigenvalues are not in result.json and were computed reviewer-side from the leaf script L11/sktb_altermagnet.py (documented in notes.md).",
+  "eig_gamma_up_eV": {
+    "truth": [-4.875701741961645, -4.752799709726748, -2.4759212342969334, -0.5955773140146717],
+    "rule": "per-component within 10% relative (each eigenvalue graded separately, sign included)",
+    "provenance": "reviewer-side eigvalsh of the up-spin Gamma block from the leaf script; matched to ~1e-10 by an independent from-scratch implementation"
+  },
+  "gamma_split_base_eV": {
+    "truth": 0.0,
+    "abs_tol": 1e-06,
+    "rule": "absolute band around a symmetry-forced zero (leaf value 8.9e-16 eV)",
+    "provenance": "result.json guards.G1_gamma_degeneracy.value_eV"
+  },
+  "path_max_split_base_eV": {
+    "truth": 0.10306991278284094,
+    "rule": "within 10% relative",
+    "provenance": "result.json guards.G3_u_driven_equal_width.off_gamma_split_eV"
+  },
+  "gamma_split_modA_eV": {
+    "truth": 0.18157943361516793,
+    "rule": "within 10% relative",
+    "provenance": "result.json guards.G2_mirror_broken_lifts.value_eV (magnetic-site-2 to triangle-2 coupling scaled by 1.5)"
+  },
+  "gamma_split_modB_eV": {
+    "truth": 0.0,
+    "abs_tol": 1e-06,
+    "rule": "absolute band around a symmetry-forced zero (leaf value 1.8e-15 eV)",
+    "provenance": "result.json guards.G4_beta_immunity.value_eV (triangle-1 onsite -4.0, triangle-2 onsite -4.5)"
+  },
+  "path_max_split_modC_eV": {
+    "truth": 0.0,
+    "abs_tol": 1e-06,
+    "rule": "absolute band around a symmetry-forced zero (leaf value 6.2e-15 eV)",
+    "provenance": "result.json guards.G3_u_driven_equal_width.u_zero_max_split_eV (triangle-triangle coupling set to zero)"
+  }
+}

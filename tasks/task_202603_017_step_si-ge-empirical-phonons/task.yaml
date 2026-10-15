@@ -1,0 +1,18 @@
+task_id: task_202603_017_step_si-ge-empirical-phonons
+title: "bulk phonon properties of Si and Ge from an empirical potential: harmonic frequencies and lattice thermal conductivity"
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-03
+source_date: 2026-03-31
+earliest_public_date: 2026-03-31
+promoted: 2026-09-13
+env_bundles: []
+requires: [lammps==2025.7.22.4.0, phono3py==4.4.0]
+third_party_docs: []
+codes: [lammps]
+docs: [lammps]
+image: phonons-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

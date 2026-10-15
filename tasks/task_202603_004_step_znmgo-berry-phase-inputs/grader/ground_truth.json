@@ -1,0 +1,397 @@
+{
+  "subtask": "L3 gen_input",
+  "kind": "gen_input (six chained QE pw.x decks: fixed-cell scf + Berry-phase nscf along c for three structures of the wurtzite -> layered-hexagonal lambda path of Zn(1-x)Mg(x)O)",
+  "provenance": "3_reproduction/L3/hpc_computations/{x050_lam0000,x050_lam0500,x000_lam0250}/{scf.in,berry_g3.in} (as-run, commit e844cc3) and the path structures 3_reproduction/L3/path/ (auditor/gen_structures.py). REQUIRED triage in notes.md.",
+  "labels": {
+    "x050_lam0000": {
+      "scf": "x050_lam0000_scf",
+      "berry": "x050_lam0000_berry",
+      "reference": "x050_lam0000.json",
+      "counts": {
+        "Mg": 8,
+        "Zn": 8,
+        "O": 16
+      },
+      "kmesh_scf": [
+        3,
+        3,
+        2
+      ],
+      "kmesh_berry_inplane": [
+        3,
+        3
+      ]
+    },
+    "x050_lam0500": {
+      "scf": "x050_lam0500_scf",
+      "berry": "x050_lam0500_berry",
+      "reference": "x050_lam0500.json",
+      "counts": {
+        "Mg": 8,
+        "Zn": 8,
+        "O": 16
+      },
+      "kmesh_scf": [
+        3,
+        3,
+        2
+      ],
+      "kmesh_berry_inplane": [
+        3,
+        3
+      ]
+    },
+    "x000_lam0250": {
+      "scf": "x000_lam0250_scf",
+      "berry": "x000_lam0250_berry",
+      "reference": "x000_lam0250.json",
+      "counts": {
+        "Zn": 2,
+        "O": 2
+      },
+      "kmesh_scf": [
+        6,
+        6,
+        4
+      ],
+      "kmesh_berry_inplane": [
+        6,
+        6
+      ]
+    }
+  },
+  "reference_dir": "reference",
+  "structure_match": {
+    "method": "rigid_bijective",
+    "max_disp_A": 0.02,
+    "note": "the lambda steps of the path move each oxygen by 0.079 A (x = 0, step 0.125) and 0.30 A (x = 0.5, step 0.25); 0.02 A separates neighbouring lambda points and the reference from the relaxed cell; the lattice must match the clamped cell to 1e-3 relative (grader_structure.lattice_matches); periodic origin translations and element-preserving bijections are allowed, but polarity reversal is not. Cartesian lattice-vector directions are checked within frame_angle_tol_deg.",
+    "frame_angle_tol_deg": 0.5
+  },
+  "upf_identity": {
+    "Zn": [
+      "zn_pbesol_v1.uspp.F.UPF"
+    ],
+    "Mg": [
+      "mg_pbesol_v1.4.uspp.F.UPF"
+    ],
+    "O": [
+      "o_pbesol_v1.2.uspp.F.UPF"
+    ]
+  },
+  "z_valence": {
+    "Zn": 20,
+    "Mg": 10,
+    "O": 6
+  },
+  "ecutwfc_floor_Ry": 40.0,
+  "ecutrho_floor_Ry": 200.0,
+  "conv_thr_max_Ry": 1e-06,
+  "gdir": 3,
+  "required": {
+    "scf": [
+      "calculation = scf",
+      "ecutwfc >= 40 Ry",
+      "ecutrho >= 200 Ry",
+      "conv_thr <= 1e-6 Ry",
+      "occupations in {fixed, smearing}",
+      "UPF identity (GBRV PBEsol, by element)",
+      "species counts",
+      "structure = our path structure (0.02 A, clamped cell)",
+      "automatic or equivalent explicit full grid: each subdivision >= the frozen automatic-default minimum",
+      "effective disk_io saves density for its Berry consumer"
+    ],
+    "berry": [
+      "calculation = nscf",
+      "lberry = .true.",
+      "gdir = 3",
+      "nppstr explicitly present",
+      "occupations = fixed",
+      "ecutwfc >= 40 Ry",
+      "ecutrho >= 200 Ry",
+      "UPF identity",
+      "species counts",
+      "structure = our path structure (0.02 A)",
+      "automatic or validated explicit Berry grid: in-plane subdivisions >= the frozen automatic-default minimum",
+      "chain: prefix identical to the structure's scf deck"
+    ]
+  },
+  "score": "1 only if every one of the six runs passes every REQUIRED check and every chain check (binary all-primary-pass)",
+  "common_validity": "Parsed required fields must belong to their QE namelist and satisfy the stated rubric bounds, except nppstr is explicit-presence-only. Explicit nat/ntyp are positive integers matching cards; automatic grid subdivisions are positive integers and shifts are 0/1.",
+  "sampling": "Automatic grids or explicit crystal/tpiba lists with a complete uniform transverse product at the frozen in-plane minima. Explicit lists require equal positive weights and nosym=true, but not noinv. Longitudinal point count, ordering and endpoints are not scored; nppstr has an independent explicit-presence-only rule.",
+  "occupations_default": "fixed (QE 7.4.1 Modules/read_namelists.f90 system_defaults)",
+  "density_handoff": "Only designated density-producing relax/scf decks: effective disk_io must save density (default/low/nowf etc.; none/minimal rejected). No runtime files, CWD or environment variables are inferred or graded.",
+  "nppstr_evidence": "ZnO pilot evaluated 6/8/10 with polarization spread 0.0004068 C/m2. There is no scored numeric lower bound; no claim that 4 was tested or all alloy paths converged.",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each scored axis subdivision >= automatic default, without subtraction or relative margin. Berry density minima apply only to the transverse axes. No longitudinal string count or ordering condition is scored; nppstr explicit presence is checked separately.",
+    "minimum_by_label": {
+      "x050_lam0000_scf": [
+        4,
+        4,
+        2
+      ],
+      "x050_lam0000_berry": [
+        4,
+        4,
+        1
+      ],
+      "x050_lam0500_scf": [
+        4,
+        4,
+        2
+      ],
+      "x050_lam0500_berry": [
+        4,
+        4,
+        1
+      ],
+      "x000_lam0250_scf": [
+        8,
+        8,
+        5
+      ],
+      "x000_lam0250_berry": [
+        8,
+        8,
+        1
+      ]
+    },
+    "references": {
+      "x050_lam0000_scf": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          2
+        ],
+        "minimum": [
+          4,
+          4,
+          2
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "6b5b8a1137949f9cf7833b830823a6f6c82d0212b7202c3d45c1cb871311d470",
+        "reference_lattice_angstrom": [
+          [
+            6.496252477,
+            -0.027045664,
+            1e-09
+          ],
+          [
+            -3.271547466,
+            5.666488151,
+            -0.0
+          ],
+          [
+            5e-09,
+            2e-09,
+            10.320109835
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "x050_lam0000_berry": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          2
+        ],
+        "minimum": [
+          4,
+          4,
+          1
+        ],
+        "density_axes": [
+          0,
+          1
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "435cd314981c66777ae495a8fdf674a332c3538831d1aeb2cf5a61cd03a3277e",
+        "reference_lattice_angstrom": [
+          [
+            6.496252477,
+            -0.027045664,
+            1e-09
+          ],
+          [
+            -3.271547466,
+            5.666488151,
+            -0.0
+          ],
+          [
+            5e-09,
+            2e-09,
+            10.320109835
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "x050_lam0500_scf": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          2
+        ],
+        "minimum": [
+          4,
+          4,
+          2
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "7148ecbb27019b5ec8d5a046ddc5e729865323e2fee66a3bf1625f3358cae181",
+        "reference_lattice_angstrom": [
+          [
+            6.496252477,
+            -0.027045664,
+            1e-09
+          ],
+          [
+            -3.271547466,
+            5.666488151,
+            -0.0
+          ],
+          [
+            5e-09,
+            2e-09,
+            10.320109835
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "x050_lam0500_berry": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          2
+        ],
+        "minimum": [
+          4,
+          4,
+          1
+        ],
+        "density_axes": [
+          0,
+          1
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "e43083a4a638f137611f6624cfde04e29418f6d7775956754a25be517e040c97",
+        "reference_lattice_angstrom": [
+          [
+            6.496252477,
+            -0.027045664,
+            1e-09
+          ],
+          [
+            -3.271547466,
+            5.666488151,
+            -0.0
+          ],
+          [
+            5e-09,
+            2e-09,
+            10.320109835
+          ]
+        ],
+        "reference_atom_count": 32
+      },
+      "x000_lam0250_scf": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          5
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "c4b3ef2ae6df4888f57e21920ec4ddd41cf7f250aa5c94ff8c52b91b8ebf8484",
+        "reference_lattice_angstrom": [
+          [
+            3.234108758,
+            1e-09,
+            0.0
+          ],
+          [
+            -1.617053879,
+            2.80082027,
+            0.0
+          ],
+          [
+            -0.0,
+            -0.0,
+            5.217694956
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "x000_lam0250_berry": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "38a5b14f387227fadb06bf5dc1bf0b6f07c6b2b7e4735a54ec759389e3350d86",
+        "reference_lattice_angstrom": [
+          [
+            3.234108758,
+            1e-09,
+            0.0
+          ],
+          [
+            -1.617053879,
+            2.80082027,
+            0.0
+          ],
+          [
+            -0.0,
+            -0.0,
+            5.217694956
+          ]
+        ],
+        "reference_atom_count": 4
+      }
+    }
+  },
+  "reference_submission_note": "Grading reference decks use the automatic-kmesh-v1 lower bound. Some K_POINTS cards were updated for acceptance; original reproduction inputs and computed outputs remain unchanged. These revised decks are not claimed to be executed reproduction runs.",
+  "runtime_directory_policy": "Output directories, working-directory placement and directory equivalence are not scored. Required submitted files and logical file identities remain part of the input task. User decision 2026-09-17.",
+  "nppstr_policy": "Explicit presence only, with any supplied value accepted. No numeric lower bound or convergence certification; user decision 2026-09-17. Transverse mesh density, equal positive explicit weights and the existing explicit nosym setting remain independently scored."
+}

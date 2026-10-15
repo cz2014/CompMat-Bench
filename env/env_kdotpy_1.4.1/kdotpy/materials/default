@@ -1,0 +1,184 @@
+# kdotpy material definitions
+
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - #
+## HgTe, mercury telluride
+[HgTe]
+compound    = HgTe
+composition = 1, 1     
+P           = sqrt(18800. * hbarm0)
+Ev          = 0.0
+Ec          = -303.0 + 0.495 * T ** 2 / (11.0 + T)  # Eg of HgCdTe for x = 0
+gamma1      = 4.1
+gamma2      = 0.5
+gamma3      = 1.3
+F           = 0.0
+kappa       = -0.4
+ge          = 2.0
+q           = 0.0
+a           = 0.6462
+strain_C1   = -3.83e3
+strain_Dd   = 0e3
+strain_Du   = 2.25e3
+strain_Duprime = sqrt(0.75) * 2.08e3
+exch_yNalpha   = 0.0
+exch_yNbeta    = 0.0
+diel_epsilon   = 20.8
+delta_so    = 1.08e3
+piezo_e14   = 0.035 * 1e18 * e_el  # from [Fortran]
+bia_c       = -7.4
+bia_b8p     = -106.46
+bia_b8m     = -13.77
+bia_b7      = -100.0
+elasticity_c11 = 53.6  # from [Miller], [PJ]
+elasticity_c12 = 36.6  # from [Miller], [PJ]
+elasticity_c44 = 21.2  # from [Miller], [PJ]
+
+# On piezo_e14:
+# [Fortran] A. Pfeuffer-Jeschke, E. G. Novik et al.
+# See also:
+# [Adachi] S. Adachi, "Properties of Semiconductor Alloys: Group-IV, III-V
+# and II-VI Semiconductors" (book). This Ref. lists 0.029 C / m^2 for HgTe and
+# 0.0335 C / m^2 for CdTe
+
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - #
+## CdTe, cadmium telluride
+[CdTe]
+compound    = CdTe
+composition = 1, 1   
+P           = sqrt(18800. * hbarm0)
+Eg          = 1606.0 - 0.325 * T ** 2 / (78.7 + T)  # Eg of HgCdTe for x = 1
+Eg0         = -303.0 + 0.495 * T ** 2 / (11.0 + T)  # Eg of HgCdTe for x = 0
+Evoff       = -570. * (Eg - Eg0) / (1606 - -303)
+Ev          = Evoff
+Ec          = Evoff + Eg
+gamma1      = 1.47
+gamma2      = -0.28
+gamma3      = 0.03
+F           = -0.09
+kappa       = -1.31
+ge          = 2.0
+q           = 0.0
+a           = 0.6482
+strain_C1   = -4.06e3
+strain_Dd   = -0.7e3
+strain_Du   = 1.755e3
+strain_Duprime = sqrt(0.75) * 3.2e3
+exch_yNalpha   = 0.0
+exch_yNbeta    = 0.0
+diel_epsilon   = 10.2
+delta_so    = 0.91e3
+piezo_e14   = 0.035 * 1e18 * e_el
+bia_c       = -2.34
+bia_b8p     = -224.1
+bia_b8m     = -6.347
+bia_b7      = -204.7
+elasticity_c11 = 53.6  # from [Maheswaranathan], [PJ]
+elasticity_c12 = 37.0  # from [Maheswaranathan], [PJ]
+elasticity_c44 = 19.9  # from [Maheswaranathan], [PJ]
+
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - #
+## HgCdTe (Hg_{1-x} Cd_x Te), mercury cadmium telluride
+[HgCdTe]
+compound    = HgCdTe
+linearmix   = HgTe,CdTe,x 
+composition = 1 - x, x, 1  # is also set automatically by linearmix 
+P           = sqrt(18800. * hbarm0)
+Eg          = -303 * (1 - x) + 1606 * x - 132. * x * (1 - x) + \
+              (0.495 * (1 - x) - 0.325 * x - 0.393 * x * (1 - x)) * T ** 2 / (11.0 * (1 - x) + 78.7 * x + T)  # identical to Ref. [HgCdTe2]
+Eg0         = -303.0 + 0.495 * T ** 2 / (11.0 + T)
+Evoff       = -570. * (Eg - Eg0) / (1606 - -303)
+Ev          = Evoff
+Ec          = Evoff + Eg
+gamma1      = poly( 4.1, -2.8801,  0.3159, -0.0658, x)
+gamma2      = poly( 0.5, -0.7175, -0.0790,  0.0165, x) 
+gamma3      = poly( 1.3, -1.3325,  0.0790, -0.0165, x)
+kappa       = poly(-0.4, -0.8475, -0.0790,  0.0165, x)
+a           = 0.6462 + 0.0009 * x + 0.0017 * x**2 - 0.0006 * x**3
+
+# The special parameter 'linearmix' defines all further material parameters (not
+# specified explicitly here) by linear interpolation between HgTe and CdTe.
+
+# More avanced dependencies of gap value Eg and band offset Evoff:
+# See:
+# [HgCdTe1] Laurenti et al., J. Appl. Phys. 67, 6454 (1990)
+# [HgCdTe2] Becker, Latussek, Pfeuffer-Jeschke, Landwehr, and Molenkamp, Phys. Rev. B 62, 10353 (2000)
+
+# Nonlinear interpolation of gamma1, gamma2, gamma3, kappa:
+# These are approximations to the results from the Pfeuffer-Jeschke program
+# [Fortran], with deviations smaller than 0.0003; these errors are negligible in
+# practice.
+# Details may be found in his thesis [PJ]. However, it is not explained why the
+# band parameters F, G, and H2 are linearly interpolated, while H1 is
+# inverse-linearly interpolated (i.e., H1^-1 is linearly interpolated).
+
+# Lattice constant a is adapted from [Berding] and [Ames]. Note that these Refs.
+# contain a typo (factor of ten).
+
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - #
+## HgMnTe (Hg_{1-x} Mn_x Te),
+[HgMnTe]
+compound    = HgMnTe
+copy        = HgTe
+composition = 1 - x, x, 1
+Ec          = -303.0 + (4726. * 1339. / 1909.) * x
+Ev          = 0.0 + (4726. * -570. / 1909.) * x
+exch_yNalpha = 0.4e3 * x  # y * 400 meV; questionable value
+exch_yNbeta  = -0.6e3 * x  # y * -600 meV; questionable value
+exch_g      = 2
+exch_TK0    = 2.6
+a           = 0.6462 - 0.0114 * x  # [Furdyna]
+
+# The special parameter 'copy' copies all further material parameters (not
+# specified explicitly here) from HgTe.
+
+## Gap ansatz:
+## (1) linear approximation to matHgCdTe(2 * y); a rather crude approximation
+# Ec = -303.0 + 2678. * x
+# Ev = 0.0 - 1140. * x
+## (2) Cubic fit from data sheet and assumption of 'proportional scaling' of Ec
+## and Ev as function of the gap, namely:
+# Eg = -303 + 6229 * x - 34600 * x**2 + 122000 * x**3
+# Ec = -303 + (1339/1909) * (6229 * x - 34600 * x**2 + 122000 * x**3)
+# Ev =    0 -  (570/1909) * (6229 * x - 34600 * x**2 + 122000 * x**3)
+## (3) Linear fit from data sheet and assumption of 'proportional scaling' of Ec
+## and Ev as function of the gap, namely:
+# Eg = -303 + 4726 * x
+# Ec = -303 + (1339/1909) * 4726 * x
+# Ev =    0 -  (570/1909) * 4726 * x
+#
+# These values for HgMnTe are accurate in the low-doping regime only
+
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - #
+## CdZnTe (Cd_{1-x} Zn_x Te), cadmium zinc telluride (substrate)
+[CdZnTe]
+compound    = CdZnTe
+copy        = CdTe
+composition = 1 - x, x, 1
+a           = 0.6482 - 0.0378 * x  # similar to [Berding]
+# very crudely approximated
+# only the lattice constant is reliable
+# band parameters are taken from CdTe, but there is no justification
+
+# - # - # - # - # - # - # - # - # - # - # - # - # - # - # - # - #
+## Va, vacuum (use default parameters)
+## Large k = 0 band edges for valence and conduction bands
+## The (bulk) Hamiltonian is diagonal, with dispersions
+## E(k=0) +/- (hbar k)^2/2m  [set by F = 0 and gamma1 = 1]
+[Va]
+compound    = Va
+Ev          = -1e6
+Ec          = 1e6
+
+
+# References:
+# [Fortran] A. Pfeuffer-Jeschke, E. G. Novik et al., Fortran program "bsqw"
+# [Adachi]  S. Adachi, "Properties of Semiconductor Alloys: Group-IV, III-V and II-VI Semiconductors" (book).
+# [HgCdTe1] Laurenti et al., J. Appl. Phys. 67, 6454 (1990)
+# [HgCdTe2] Becker, Latussek, Pfeuffer-Jeschke, Landwehr, and Molenkamp, Phys. Rev. B 62, 10353 (2000)
+# [PJ]      A. Pfeuffer-Jeschke, PhD thesis, University of Würzburg (1999)
+# [Berding] Berding et al., J. El. Mater. 29, 676 (2000)
+# [Ames]    C. Ames, PhD thesis, University of Würzburg (2015)
+# [Furdyna] J. K. Furdyna, J. Appl. Phys. 84, R29 (1988)
+# [Maheswaranathan] P. Maheswaranathan, R. J. Sladek, and U. Debska, Phys. Rev. B 31, 5212 (1985)
+# [Miller]  A. J. Miller, G. A. Saunders, Y. K. Yoğurtçu, and A. E. Abey, Philos. Mag. A 43, 1447 (1981)
+

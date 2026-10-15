@@ -1,0 +1,41 @@
+# R-type WS2/WSe2 moire relaxation: SW (Jiang) intralayer + KC (Naik) interlayer.
+# Types: 1=W(WS2) 2=S_outer 3=S_inner | 4=W(WSe2) 5=Se_inner 6=Se_outer
+units           metal
+dimension       3
+box tilt        large
+atom_style      atomic
+boundary        p p p
+read_data       answer/relax/moire.dat
+
+# --- potentials: 2 SW (one per layer) + 4 KC/z (cross-layer pairs) + lj placeholder
+pair_style hybrid/overlay sw sw &
+  kolmogorov/crespi/z 14.0 kolmogorov/crespi/z 14.0 &
+  kolmogorov/crespi/z 14.0 kolmogorov/crespi/z 14.0 lj/cut 10.0
+
+# intralayer SW
+pair_coeff * * sw 1 tmd.sw W S S NULL NULL NULL
+pair_coeff * * sw 2 tmd.sw NULL NULL NULL W Se Se
+
+# interlayer KC/z between interface-facing atoms (inner chalcogens = t3, t5)
+pair_coeff 1 5 kolmogorov/crespi/z 1 WSe2.KC W NULL NULL NULL Se NULL
+pair_coeff 3 4 kolmogorov/crespi/z 2 WS2.KC  NULL NULL S W NULL NULL
+pair_coeff 3 5 kolmogorov/crespi/z 3 SSe.KC  NULL NULL S NULL Se NULL
+pair_coeff 1 4 kolmogorov/crespi/z 4 WS2.KC  W NULL NULL W NULL NULL
+pair_coeff * * lj/cut 0.0 3.0
+
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+
+thermo          50
+thermo_style    custom step pe fmax fnorm press
+dump            1 all custom 5000 dump.relax id type x y z
+
+# --- relaxation: fire to get close, cg to polish toward max-force < 1e-8 eV/A
+min_style       fire
+minimize        0.0 1.0e-8 2000000 20000000
+min_style       cg
+minimize        0.0 1.0e-9 2000000 20000000
+
+write_data      lammps.dat_min
+write_dump      all custom dump.final id type x y z modify sort id format "%d %d %.10g %.10g %.10g"
+print           "RELAX_DONE pe=$(pe) fmax=$(fmax)"

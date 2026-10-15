@@ -1,0 +1,16 @@
+{
+  "status": "accepted_in_unified_runtime",
+  "partition": "highmem",
+  "resource_injection": "Use shared system runtime instructions; never append to scientific prompts.",
+  "uv_setup_command": "uv sync --offline --frozen --extra anvil --project /opt/science/c09/project",
+  "uv_setup_requirements": "Prepared Linux wheel cache and Python 3.11; run before attempt clock starts. Not executed by this builder.",
+  "native_bundle_source": "/scratch/user/c09_cips/env/deepmd",
+  "native_bundle_target": "/opt/science/native/c09-deepmd",
+  "sealed_boundary": "Stage only environment files. Do not bind the reproduction root, auditor code or outputs into agent containers.",
+  "pending": [],
+  "submissions": 0,
+  "model_calls": 0,
+  "force_calls": 0,
+  "runtime_base": "/scratch/user/compmat-long-chain-runtime-20261014/runtime-v9",
+  "acceptance_evidence": "../../runtime/acceptance.json"
+}

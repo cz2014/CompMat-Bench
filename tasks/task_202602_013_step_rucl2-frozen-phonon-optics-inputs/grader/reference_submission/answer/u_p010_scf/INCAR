@@ -1,0 +1,43 @@
+SYSTEM = 2H-RuCl2 monolayer  optics step (a) SCF (SOC, M||-c)  A'1-displaced u=0.000 A (coarse probe)
+# Two-step optics workflow step (a). Electronic/magnetic/+U tags carried VERBATIM
+# from the L8 SOC scf deck (Sec. III / L8); the SCF tail is step-specific.
+
+# --- electronic (carried verbatim from the L8 SOC scf deck) ---
+PREC = Accurate       # [L8] dense FFT grid for LASPH + DFT+U aspherical terms
+ENCUT = 500           # [L8] eV; plan-pinned (Sec. III)
+EDIFF = 1E-7          # [L8] eV; plan-pinned SCF tolerance (Sec. III) -- clean edges
+ISMEAR = 0            # [L8] Gaussian, gapped FM insulator (never ISMEAR>0 here)
+SIGMA = 0.05          # [L8]
+LREAL = .FALSE.       # [L8] reciprocal-space projection (3-atom cell)
+LASPH = .TRUE.        # [L8] REQUIRED: open Ru-d shell + DFT+U aspherical terms
+
+# --- symmetry ---
+ISYM = -1             # [L8] symmetry off for the noncollinear run; all k-points equal weight
+
+# --- noncollinear magnetism + SOC (canonical M || -c) ---
+LSORBIT = .TRUE.      # [L8] SOC gives the K/K' valley Zeeman split (the two resonances)
+GGA_COMPAT = .FALSE.  # [L8] VASP-wiki recommendation for noncollinear runs
+SAXIS = 0 0 1         # [L8] spin quantization along c
+MAGMOM = 0 0 -2  0 0 0  0 0 0    # [L8] Ru 0 0 -2 muB || -c (canonical); each Cl 0
+
+# --- DFT+U (Dudarev, single effective U on Ru-4d; carried from L8) ---
+LDAU = .TRUE.
+LDAUTYPE = 2
+LDAUL = 2 -1          # Ru: d (l=2); Cl: none (-1)
+LDAUU = 2.0 0.0
+LDAUJ = 0.0 0.0
+LDAUPRINT = 1
+LMAXMIX = 4           # [L8] REQUIRED for DFT+U on d; carried into the ICHARG=11 NSCF
+
+# --- step (a): self-consistent SCF on the displaced geometry (writes CHGCAR/WAVECAR) ---
+NELM = 200            # [scf] SCF iteration cap (carried from L8)
+NBANDS = 48     # [scf] matches the L8 scf deck (28 occupied spinor bands + 20 empty)
+IBRION = -1           # [scf] no ionic motion: frozen displaced geometry (frozen-phonon rule)
+NSW = 0               # [scf]
+LCHARG = .TRUE.       # [scf] write CHGCAR for the step-(b) ICHARG=11 optics NSCF
+LWAVE = .FALSE.       # [scf] no WAVECAR: step (b) has a different k-mesh/NBANDS and
+                      # starts fresh (ISTART=0), so a step-(a) WAVECAR is useless and
+                      # its stale dimensions trip VASP's auto-read (probe finding).
+
+# --- parallelization ---
+KPAR = 4         # [scf] 12x12x1 SCF: small KPAR for the SOC cell

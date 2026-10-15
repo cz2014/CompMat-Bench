@@ -1,0 +1,44 @@
+{
+  "subtask": "L3 analyze",
+  "kind": "analyze (Berry-phase spontaneous polarization of wurtzite Zn(1-x)Mg(x)O from pw.x outputs along the wurtzite -> layered-hexagonal lambda path: branch tracking on primitive and supercell ladders, composition-continuity branch assignment at x = 0.25 and 0.75, and the wurtzite-minus-reference energy density at the end members)",
+  "provenance": "3_reproduction/L3/result.json keys polarization.P_sp_C_m2 and energetics (commit e844cc3; reviewer acceptance of the composition-continuity assignment 2026-09-05). Re-derived from the staged outputs by reviewer/make_reference_submission.py; identical to the record.",
+  "primary": {
+    "P_sp_x000_C_m2": {
+      "truth": 0.849369,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value (+c). Recorded pure-guesser softness: the textbook ZnO value 0.85 is inside the band (standing policy: recorded, not fixed)"
+    },
+    "P_sp_x025_C_m2": {
+      "truth": 0.831832,
+      "rule": "+/-10 percent relative; the raw lambda = 1 value one quantum below (-0.048) fails"
+    },
+    "P_sp_x050_C_m2": {
+      "truth": 0.807224,
+      "rule": "+/-10 percent relative; the raw lambda = 1 value (-0.065) and the difference without unwrapping (-0.065) fail; the quantum is 0.8726, so a one-quantum slip fails"
+    },
+    "P_sp_x075_C_m2": {
+      "truth": 0.770429,
+      "rule": "+/-10 percent relative; the raw lambda = 1 value (-0.093) fails"
+    },
+    "P_sp_x100_C_m2": {
+      "truth": 0.704194,
+      "rule": "+/-10 percent relative; an intermediate raw lambda = 0.5 value is on a different branch (-3.03), visible from neighbouring input points. The lambda = 1 raw value already equals the answer here; intermediate path tracking is not separately graded."
+    },
+    "df_x000_GJ_m3": {
+      "truth": -1.819645,
+      "rule": "+/-10 percent relative; sign is part of the value. Recorded softness: the literature value -1.683 sits at -7.5 percent and passes"
+    },
+    "df_x100_GJ_m3": {
+      "truth": -1.390884,
+      "rule": "+/-10 percent relative; sign is part of the value"
+    }
+  },
+  "not_graded": {
+    "quantum_C_m2": "3.5375 (x = 0), 0.8793 (0.25), 0.8726 (0.5), 0.8631 (0.75), 3.3937 (1): printed by pw.x, not requested",
+    "P_lambda0_x050": "0.000124 C/m2 (computed x=0.5 reference is polar, Pmc2_1); subtracting or ignoring it changes P_sp(0.5) by 0.015 percent",
+    "branch_integers": "0, 1, 1, 1, 0 quanta added to the raw lambda = 1 values; implied by the graded P_sp",
+    "df_alloy": "no scf.out staged at x = 0.25, 0.5, 0.75; not defined in the record"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)",
+  "coverage_limits": "The five P bands overlap on [0.7644321, 0.7746134] C/m2. All P=0.77 and endpoint-interpolated P with correct energies pass. The grader does not establish path following or enforce the composition trend.",
+  "polarization_provenance": "Measured path differences at x=0, 0.5, 1 (including the measured x=0.5 reference subtraction); raw+nq at x=0.25, 0.75, with composition-continuity branch and no computed/subtracted reference."
+}

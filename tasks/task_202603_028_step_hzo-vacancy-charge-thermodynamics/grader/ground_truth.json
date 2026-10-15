@@ -1,0 +1,103 @@
+{
+  "subtask": "L2 analyze",
+  "kind": "analyze (isotropic static dielectric constant from five DFPT runs; FNV-corrected oxygen-vacancy formation energies of nine environments x five charge states at the oxygen-poor limit on the true-VBM Fermi reference; the lowest-energy environment per charge state; the charge-transition levels of the lower envelope)",
+  "provenance": "3_reproduction/L2/ (reproduced 2026-09-06 on reviewer's rulings, commit ef2b641): formation_energies.csv (E_Vo, E_cor, the per-axis alignment constants, E_f_poor_trueVBM_eV), dielectric.json, result.json (envelope, transition levels on the true-VBM reference, minimising environments). Re-expressed by reviewer/make_reference_submission.py on 2026-09-10: E_bulk and the VBM re-read from the staged pristine OUTCAR, eps re-read from the five staged DFPT OUTCARs, every value asserted against result.json.",
+  "environment_order": [
+    "4Hf",
+    "3Hf1Zr",
+    "2Hf2Zr",
+    "1Hf3Zr",
+    "4Zr",
+    "3Hf",
+    "2Hf1Zr",
+    "1Hf2Zr",
+    "3Zr"
+  ],
+  "charge_order": [
+    2,
+    1,
+    0,
+    -1,
+    -2
+  ],
+  "primary": {
+    "eps_iso": {
+      "truth": 22.816,
+      "rel": 0.01,
+      "rule": "+/-1 % (rule 2(5) exception: the five single-cell values span 21.6 to 24.1, +/-5 %, so the universal 10 % band would not test the ensemble mean; 1 % = 0.23 separates it from every single cell but the 2Hf2Zr one, whose 22.80 is inside by construction); result.json dielectric.mean_eps_iso"
+    },
+    "formation_energies_eV": {
+      "truth_file": "reference_submission/answer.json",
+      "abs_tol_neutral": 0.02,
+      "abs_tol_charged": 0.15,
+      "rule": "Neutral entries: absolute 0.02 eV (D2 floor; no correction enters). Charged entries: absolute 0.15 eV, the approved numerical approximation allowance. The prompt fixes the FNV implementation, its default model charge and alignment settings, dielectric constant, three-axis mean and total-energy definition. The allowance does not authorize varying these settings."
+    },
+    "lowest_environment": {
+      "truth": [
+        "2Hf2Zr",
+        "4Zr",
+        "4Zr",
+        "4Zr",
+        "4Zr"
+      ],
+      "self_consistent_charges": [
+        2,
+        1,
+        0,
+        -1,
+        -2
+      ],
+      "margins_eV": {
+        "+2": 0.044,
+        "+1": 0.014,
+        "0": 0.078,
+        "-1": 0.186,
+        "-2": 0.25
+      },
+      "rule": "For every charge column, the reported label must minimize the submitted formation-energy table. Any tied minimizer is accepted; only machine rounding is allowed in determining ties. The stored labels describe our reference table, not extra label restrictions."
+    },
+    "transition_levels_eV": {
+      "truth": [
+        [
+          2,
+          0,
+          2.5582
+        ],
+        [
+          0,
+          -1,
+          3.7355
+        ],
+        [
+          -1,
+          -2,
+          3.9067
+        ]
+      ],
+      "abs_tol_eV": [
+        0.15,
+        0.15,
+        0.15
+      ],
+      "rule": "Direct reference scoring: exact ordered charge pairs (+2,0), (0,-1), (-1,-2), and each level within 0.15 eV of the stored reference. The 0.15 eV direct-reference allowance is a separate policy for all three level outputs, continuing the former +2 departure allowance; it is not the former 0.02 eV internal-consistency tolerance. Formation energies and transition levels are scored independently; in-band changes of the submitted table do not authorize another transition sequence."
+    }
+  },
+  "declared_pins": {
+    "mu_O_eV": "-10.09 eV, stated in the prompt (a pin the grader does not score)",
+    "fermi_reference": "the valence-band maximum of the defect-free cell (true VBM 5.1388 eV, D2); the source's convention (VASP E-fermi 6.0561 eV) shifts every level by +0.9173 eV and fails",
+    "eps_definition": "ensemble mean over the five 12-atom cells of the isotropic value of the total (electronic + ionic) tensor",
+    "alignment_axes": "Mean of the three lattice-direction alignments, using the pinned implementation default window and model charge. A single-axis alternative can shift an entry by 0.288 eV.",
+    "fnv_implementation": "pymatgen-analysis-defects 2026.3.20, get_freysoldt_correction at its defaults: the alignment of each axis is the mean of the short-range residual over a 1.0 A window centred on the point farthest from the vacancy along that axis, the correction uses the three-axis mean, the model charge is the default Gaussian (necessity, measured on the leaf's own planar averages 2026-09-11: the window is the sensitive choice because the residual has no plateau in a 10 A cell; max |dE_f| vs ours for a 2 A window 0.067 eV, 3 A 0.152 eV, 5 A 0.232 eV, the far half-cell mean 0.227 eV, a single far point 0.055 eV, so every window wider than about 2 A leaves the 0.15 eV band; the model width is insensitive, Gaussian width 0.5 / 1.0 / 2.0 / 3.0 A moves entries by 0.002 / 0.007 / 0.030 / 0.071 eV. pymatgen.analysis.defects is not part of core pymatgen, so the sealed environment must ship pymatgen-analysis-defects 2026.3.20, the version of the reproduction)",
+    "total_energy_line": "the energy of each calculation is its electronic free energy at the smearing used (VASP TOTEN), with no extrapolation to zero smearing and no removal of the smearing term (necessity, measured on the staged OUTCARs 2026-09-11: with ISMEAR = 0, SIGMA = 0.20 the charged cells carry smearing terms; TOTEN vs without-entropy / vs sigma->0: every q = +1 cell 0.111 / 0.056 eV, 4Hf q = -1 0.227 / 0.114, 4Hf q = -2 0.322 / 0.161, 3Hf1Zr q = -2 0.284 / 0.142; the neutral cells 0. With our own corrections the sigma->0 convention scores 0 (E_f[4Hf][q=-2] off by 0.161) and the without-entropy convention scores 0 (seven entries 0.16 to 0.32 eV off); both are readings a competent scientist makes, so the line is pinned in physics words, not by token)",
+    "spin": "spin-unpolarised (reviewer ruling (d))"
+  },
+  "not_graded": {
+    "intermediate_and_rich_limits": "formation_energies.csv carries all three chemical potentials; only the poor limit is asked",
+    "alignment_at_abs_q_1": "the |q| = 1 alignment is never tested: the true corrections span -0.007 to 0.032 eV (q = +1) and 0.094 to 0.127 eV (q = -1), so the bare Madelung term (0.088 eV) passes those rows; only the q = +2 row (corrections -0.013 to 0.223 eV) and the q = -2 row (0.295 to 0.419 eV) require the alignment and the Madelung term",
+    "scheme_identity_inside_the_band": "the grader tests a finite-size correction of the right size, not the FNV scheme specifically: a plateau-only alignment without the model potential (max 0.129 eV off) and a Lany-Zunger-scaled Madelung term with the FNV alignment (0.117 eV) both sit inside the band and pass; the prompt names the scheme and its implementation, so these are declared softnesses",
+    "model_charge_width": "the Gaussian width is left to the implementation default; measured insensitive (0.5 to 3 A: at most 0.071 eV)",
+    "ispin2_shift": "the 142 meV q = +1 ISPIN = 2 shift at site 95 is recorded in the L2 record; production is ISPIN = 1 and the prompt pins it",
+    "environment_labels_against_reference": "All five labels are checked against the submitted table, not fixed to the reference labels."
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

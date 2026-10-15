@@ -1,0 +1,18 @@
+task_id: task_202603_016_step_si-ge-interface-cells
+title: build the ideal (100) Si/Ge interface cells for a phonon transport device
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-03
+source_date: 2026-03-31
+earliest_public_date: 2026-03-31
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: []
+docs: []
+image: phonons-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

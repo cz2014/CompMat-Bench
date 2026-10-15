@@ -1,0 +1,83 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (harmonic force constants of the 512-atom BAs supercell from five staged pw.x finite-displacement runs; displacement identification, acoustic-sum residual, zone-centre TO frequencies at three boron masses, supercell spectrum top)",
+  "provenance": "3_reproduction/L1/result.json (G1 pure-isotope TO 691.1701 / 720.5293 cm^-1; commit 1296cbe), 3_reproduction/L1/ifc_harmonic_512.npz (the ALAMODE-fitted dense Phi, symlinked at reviewer/reference/ifc_harmonic_512.npz, from which every frequency below is recomputed by the reference builder), 3_reproduction/L1/hpc_computations/20_alamode/extract_dfset.log (force sums and peak forces per run). The staged runs agent/runs/* are scrubbed copies of hpc_computations/10_*_512 (3_reproduction/L1/auditor/make_staged.py): disp_a = 10_disp_p1p_512, disp_b = 10_disp_p1m_512, disp_c = 10_disp_p2p_512, disp_d = 10_disp_p2m_512.",
+  "production": {
+    "displaced_runs": {
+      "disp_a": {
+        "atom_index": 1,
+        "species": "B",
+        "axis": "x",
+        "displacement_A": 0.01
+      },
+      "disp_b": {
+        "atom_index": 1,
+        "species": "B",
+        "axis": "x",
+        "displacement_A": -0.01
+      },
+      "disp_c": {
+        "atom_index": 257,
+        "species": "As",
+        "axis": "x",
+        "displacement_A": 0.01
+      },
+      "disp_d": {
+        "atom_index": 257,
+        "species": "As",
+        "axis": "x",
+        "displacement_A": -0.01
+      }
+    },
+    "acoustic_sum_residual_by_run": {
+      "disp_a": 2.62e-05,
+      "disp_b": 1.54e-05,
+      "disp_c": 3.52e-05,
+      "disp_d": 2.48e-05
+    },
+    "acoustic_sum_residual_max": 3.52e-05,
+    "omega_TO_11B_cm1": 691.1701,
+    "omega_TO_10B_cm1": 720.5293,
+    "omega_TO_natural_cm1": 696.6751,
+    "omega_max_supercell_natural_cm1": 730.287,
+    "omega_max_supercell_11B_cm1": 723.68,
+    "omega_max_supercell_10B_cm1": 758.83,
+    "note": "frequencies recomputed 2026-09-10 from ifc_harmonic_512.npz with CODATA 2022 constants: reduced 6x6 optical eigenvalue and the full 1536 x 1536 maximum; they agree with result.json G1 and with the L2 validation V1 (folded X mode 730.2870) to 1e-4 cm^-1"
+  },
+  "primary": {
+    "displaced_runs": {
+      "rule": "for each of the four runs: atom_index exact, species exact, axis exact, displacement_A within 0.0005 A of ours (sign included). Deterministic on the staged decks (the displaced deck differs from the reference deck in one coordinate of one atom by 0.010 A)."
+    },
+    "acoustic_sum_residual_max": {
+      "truth": 3.52e-05,
+      "upper_bound": 0.001,
+      "rule": "acoustic_sum_residual_max < 1e-3 (a deviation upper bound: ours is 3.5e-5; a correct parse of the total-force block gives 1e-5 to 4e-5; the SCF-correction block that pw.x prints in the same format at verbosity high gives forces of 1e-8 Ry/Bohr with no acoustic sum, so a misparsed block returns a ratio of order 1)"
+    },
+    "omega_TO_11B_cm1": {
+      "truth": 691.1701,
+      "tol_cm1": 0.5,
+      "rule": "within 0.5 cm^-1. The reconstructed raw central-difference TO frequencies differ from the fitted references by about 0.084-0.090 cm^-1; ASR-projected reconstruction agrees within 0.0003 cm^-1. The archived phonopy agreement applies after symmetrization. The retained one-sided reconstruction also passes, differing from the central result by about 0.0008-0.0009 cm^-1. No difference scheme is required, and the existing tolerance is unchanged."
+    },
+    "omega_TO_10B_cm1": {
+      "truth": 720.5293,
+      "tol_cm1": 0.5,
+      "rule": "within 0.5 cm^-1 (as above; the 10B/11B ratio 1.042478 is fixed kinematically by sqrt(mu_11/mu_10) = 1.042474, so the two TO fields are not independent and a wrong mass on either isotope fails one of them)"
+    },
+    "omega_TO_natural_cm1": {
+      "truth": 696.6751,
+      "tol_cm1": 0.5,
+      "rule": "within 0.5 cm^-1 (as above)"
+    },
+    "omega_max_supercell_natural_cm1": {
+      "truth": 730.287,
+      "tol_cm1": 1.0,
+      "rule": "within 1.0 cm^-1. This is the folded X-point maximum of the uniform natural-mass supercell, distinct from primitive q=0 TO by about 33.6 cm^-1. The staged central-difference path gives 730.287029 cm^-1 and agrees with the fitted reference at the displayed precision. A retained incomplete reconstruction with y,z rows zero reproduces these scalar outputs, whereas copying x rows into y,z fails. The scalar checks do not establish recovery of every IFC entry. The tolerance is unchanged."
+    }
+  },
+  "not_graded": {
+    "per_run_acoustic_sums": "recorded; only the maximum is graded",
+    "omega_max_supercell_11B_10B": "recorded (723.68 / 758.83 cm^-1); the natural-mass value carries the same test",
+    "full_Phi_object": "not submitted: 1536 x 1536 entries. The task checks specified IFC-derived scalar outputs; it does not certify recovery of every matrix element."
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

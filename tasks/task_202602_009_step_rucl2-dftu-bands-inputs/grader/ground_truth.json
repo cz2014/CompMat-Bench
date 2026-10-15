@@ -1,0 +1,140 @@
+{
+  "subtask": "L8 gen_input",
+  "kind": "gen_input (VASP DFT+U+SOC input sets: static SCF + NSCF band line)",
+  "provenance": "rubric and structure reference from 3_reproduction/L8/ (canonical M||-c chain: scf_mneg + bands_mneg on the relax_final geometry); see ../../../3_reproduction/L8/index.md and result.json",
+  "run_labels": [
+    "scf",
+    "bands"
+  ],
+  "structure_reference": "reference/POSCAR",
+  "structure_reference_provenance": "reference/POSCAR symlinks 3_reproduction/L8/hpc_computations/relax_final/CONTCAR -- our self-consistently relaxed monolayer 2H-RuCl2 cell (P-6m2 #187, a=3.5095 A, c=20 A cell height). The SAME file is staged to the agent as agent/POSCAR_2H_RuCl2; both graded runs must use this geometry. No relaxation is graded here (scf and bands are both static/NSCF), the existing 0.1 A structure policy is retained.",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "matcher",
+    "note": "2H-RuCl2 is non-polar (a sigma_h mirror through the Ru plane makes the two Cl equivalent) and single-layer, so it has no polarity/sublattice/layer-order absorption hazard: the species-aware StructureMatcher fails every designed-wrong variant (Ru<->Cl swap, 1T octahedral polymorph, wrong a, wrong Cl height). Verified in selfcheck.py; a fallback (translation-only) run also passes the reference and fails the same variants."
+  },
+  "dftu": {
+    "u_eff_eV": 2.0,
+    "u_eff_band_eV": 0.2,
+    "note": "Declared pin: Dudarev (LDAUTYPE effectively 2; the VASP default, omit passes) single effective U = 2 eV on Ru-4d (LDAUL Ru=2; Cl carries no U: LDAUL=-1, or any shell with effective U within 0.2 eV of zero, which is the same physics). Graded as effective U = LDAUU - LDAUJ within 2.0 +/- 0.2 eV so LDAUU=2/LDAUJ=0 and any (U,J) with U-J=2 both pass (the +/-0.2 band = 10% of the pin, graded as consistency with the value printed in the prompt)."
+  },
+  "band_path_points": {
+    "Gamma": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "K": [
+      0.3333333333333333,
+      0.3333333333333333,
+      0.0
+    ],
+    "M": [
+      0.5,
+      0.0,
+      0.0
+    ],
+    "Kprime": [
+      0.6666666666666666,
+      -0.3333333333333333,
+      0.0
+    ],
+    "note": "The specified vertices define the valley labels in the staged reciprocal basis. K and Kprime are time-reversed corners modulo a reciprocal vector; (2/3,+1/3,0) is not a valley corner in this basis. Line-mode and equivalent explicit reciprocal/Cartesian lists are accepted; the four required vertices are matched within 1e-3 per component. Density, segment count and order are not graded."
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      12,
+      12,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "incar_required": {
+    "note": "Each rule grades the EFFECTIVE value (explicit if set, else the VASP default). Only these settings are graded; the per-tag triage and the VASP defaults are in notes.md. 'both' = scf and bands; others are per-run.",
+    "static_both": "NSW effectively 0 (no ionic motion; default 0)",
+    "ENCUT_both": "ENCUT >= max ENMAX over {Ru_pv 230.429, Cl 280.000} = 280 eV (pseudopotential floor)",
+    "EDIFF_both": "EDIFF <= 1e-5 eV (default 1e-4)",
+    "functional_both": "PBE: GGA absent or GGA=Pe",
+    "LASPH_both": "LASPH=.TRUE. (open d-shell + DFT+U aspherical gradient; default .FALSE.)",
+    "LMAXMIX_both": "LMAXMIX >= 4 (DFT+U d-electron on-site mixing; default 2; carried into the ICHARG=11 NSCF)",
+    "LSORBIT_both": "LSORBIT=.TRUE. (noncollinear SOC = the valley Zeeman split; default .FALSE.)",
+    "LDAU_both": "Dudarev U_eff=2 eV on Ru-4d (see dftu)",
+    "ISMEAR_scf": "ISMEAR in {-5, 0} (gapped magnetic insulator; default 1)",
+    "SAXIS_both": "SAXIS effectively (0,0,1), spin axis || c (default (0,0,1)); on bands the same frame as the density it reads",
+    "LCHARG_scf": "LCHARG effectively .TRUE. (the bands run reads this density; default .TRUE.)",
+    "MAGMOM_scf": "Noncollinear explicit MAGMOM, Ru |z|>=0.5 and z-dominant in the supported spin frame. Either global sign allowed; this seed criterion is not proof of convergence.",
+    "kmesh_scf": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+    "ICHARG_bands": "ICHARG=11 (NSCF from the fixed SCF charge; default 2)",
+    "kpath_bands": "Line-mode or explicit reciprocal/Cartesian band points containing Gamma,K,M,Kprime within 1e-3 per fractional component; density and segment order are not graded.",
+    "self_consistent_charge_scf": "SCF must update charge: ICHARG omitted or one of 0,1,2,4,5. No startup-file or restart-source check."
+  },
+  "score": "1 only if BOTH runs (scf, bands) pass their structure match AND every REQUIRED INCAR/KPOINTS check; any single failure scores 0",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "scf": [
+        7,
+        7,
+        1
+      ]
+    },
+    "references": {
+      "scf": {
+        "automatic_subdivisions": [
+          7,
+          7,
+          1
+        ],
+        "minimum": [
+          7,
+          7,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "a05b190543952937a4796a1e49b1cbc4e84f2fabeb228765472e05e75a25b6d2",
+        "reference_lattice_angstrom": [
+          [
+            3.5095,
+            0.0,
+            2e-16
+          ],
+          [
+            -1.7547499999999994,
+            3.0393161545814875,
+            2e-16
+          ],
+          [
+            0.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "reference_atom_count": 3
+      }
+    }
+  }
+}

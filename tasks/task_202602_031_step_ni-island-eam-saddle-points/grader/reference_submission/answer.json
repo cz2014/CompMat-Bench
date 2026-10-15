@@ -1,0 +1,23 @@
+{
+  "start_a": {
+    "dE_eV": 0.83682873,
+    "lambda1_eV_A2": -0.714822255,
+    "lambda2_eV_A2": 1.23758432,
+    "n_atoms_moved": 1,
+    "dE_final_eV": 0.71996916
+  },
+  "start_b": {
+    "dE_eV": 0.72171885,
+    "lambda1_eV_A2": -0.359580261,
+    "lambda2_eV_A2": 0.554223617,
+    "n_atoms_moved": 2,
+    "dE_final_eV": 0.34310313
+  },
+  "start_c": {
+    "dE_eV": 0.63204664,
+    "lambda1_eV_A2": -0.617321099,
+    "lambda2_eV_A2": 0.24037628,
+    "n_atoms_moved": 7,
+    "dE_final_eV": 0.01440205
+  }
+}

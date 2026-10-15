@@ -1,0 +1,18 @@
+task_id: task_202603_011_step_crn-wannier-exchange-inputs
+title: input files for Wannier-function exchange parameters of antiferromagnetic CrN
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-10
+earliest_public_date: 2026-03-10
+promoted: 2026-09-13
+env_bundles: [env_tb2j_0.9.20]
+requires: [tb2j-source==0.9.20]
+third_party_docs: []
+codes: [vasp, wannier90]
+docs: [vasp, wannier90]
+image: vampire-source-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

@@ -1,0 +1,120 @@
+# Input protocol reference: finite passes are not a convergence certificate.
+# No actual relaxation is run or evaluated by this input-task grader.
+atom_style full
+units metal	# distance = angstroms, time = ps, force = eV/angstroms, energy = eV
+dimension 3
+boundary p p p
+processors * * 1
+
+read_data input.lmp   # load desired input
+
+# setting per atom charges
+set type 1 charge 5.62 # Ba core
+set type 2 charge 4.76 # Ti core
+set type 3 charge 0.91 # O core
+set type 4 charge -3.76 # Ba shell
+set type 5 charge -1.58 # Ti shell
+set type 6 charge -2.59 # O shell  
+
+# setting up the potential
+pair_style buck/coul/long/cs 15.0
+#		   i j  A           rho      C 		
+pair_coeff * * 	0.0 		0.1 	 0.0  			# setting all to zero
+pair_coeff 4 6 	1061.30 	0.3740 	 0.0			# Ba-O
+pair_coeff 5 6 	3769.93 	0.2589 	 0.0	 		# Ti-O
+pair_coeff 6 6 	4740.00 	0.2686 	 160.0			# O-O            
+pair_modify table 0
+
+# defining the kpspace solver
+kspace_style pppm 1.0e-7
+
+# setting up the springs between cores and shells
+bond_style class2
+#	            r       K2          K3 		K4
+bond_coeff 1 	0.0		125.9    	0.0 	0.0 		# Ba core-shell
+bond_coeff 2 	0.0		161.0   	0.0 	20.833 		# Ti core-shell
+bond_coeff 3 	0.0 	15.5    	0.0 	166.666 	# O core-shell
+
+# switching off the coulmbic interactions between the cores and shells
+special_bonds coul 0.0 1.0 1.0
+
+# building neighbor list
+neighbor 2.0 bin
+comm_modify vel yes
+neigh_modify delay 0 check yes every 1 one 50000 page 500000
+
+# energy minimization variables
+variable etol equal 0.0
+variable ftol equal 1e-4
+variable maxiter equal 10000
+variable maxeval equal 100000 
+variable nrelax equal 10
+
+# grouping Ti atoms
+group Ti_atoms type 2 5
+
+thermo 100
+timestep 0.0002
+thermo_style custom step pe etotal press pxx pyy pzz lx ly lz
+
+# applying electric field
+fix field all efield 0.1 0.0 0.0  # poling along x
+fix_modify field energy yes
+
+# shrinking x-length
+change_box all x scale 0.99 boundary p p p remap units box
+
+min_style fire
+fix freeze1 all setforce NULL 0.0 0.0
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+unfix freeze1
+
+# relaxing atomic positions in all directions
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+
+write_data prerelax_x.lmp nocoeff
+
+# relaxing (atomic positions cell shape and volume) in all directions
+label loop1
+variable i loop ${nrelax}
+min_style cg
+fix 1 all box/relax aniso 0.0
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+unfix 1
+min_style fire
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+print "CYCLE1_x $i lx $(lx) ly $(ly) lz $(lz) pe $(pe) press $(press)"
+next i
+jump SELF loop1
+
+# dumping atomic trajectory
+write_dump all cfg relaxed_wfield.cfg mass type xs ys zs fx fy fz modify sort id element Ba Ti O Ba Ti O
+
+# writing LAMMPS data file
+print "BOX_WFIELD_x lx $(lx) ly $(ly) lz $(lz) pe $(pe) press $(press)"
+write_data relaxed_wfield.lmp nocoeff
+
+# removing electric field
+unfix field
+
+# relaxing (atomic positions cell shape and volume) in all directions
+label loop2
+variable i loop ${nrelax}
+min_style cg
+fix 1 all box/relax aniso 0.0
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+unfix 1
+min_style fire
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+print "CYCLE2_x $i lx $(lx) ly $(ly) lz $(lz) pe $(pe) press $(press)"
+next i
+jump SELF loop2
+
+# dumping atomic trajectory
+write_dump all cfg relaxed_nofield.cfg mass type xs ys zs fx fy fz modify sort id element Ba Ti O Ba Ti O
+
+# writing LAMMPS data file
+print "BOX_NOFIELD_x lx $(lx) ly $(ly) lz $(lz) pe $(pe) press $(press)"
+write_data relaxed_nofield.lmp nocoeff
+
+

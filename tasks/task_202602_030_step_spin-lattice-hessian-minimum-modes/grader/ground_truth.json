@@ -1,0 +1,71 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (tangent-space minimum-mode kernel; no DFT)",
+  "provenance": "truth lambda_min from the validated kernel 3_reproduction/L1/moto_kernel.py: make_tangent_operator + scipy eigsh(k=1, which='SA', maxiter=200, tol=0), float64 CPU; for the four small configs cross-checked against the dense explicit_tangent_hessian eigh and lobpcg (all agree to <1e-9 rel). Reference minimum modes in reviewer/reference/ref_modes.npz: the DENSE explicit_tangent_hessian eigh eigenvector of each small config, mapped from 2N tangent coordinates to the ambient (30,30,3) embedding with the same per-site tangent frames, unit-normalised. Fig. 2a protocol anchor: 3_reproduction/L1/result.json. Model parameters (J=1.0, D=0.3, K=0.1, B=0.2) are documented-ours; the paper's are unpublished.",
+  "seeds": {
+    "small_1": 0,
+    "small_2": 1,
+    "small_3": 2,
+    "small_4": 3,
+    "large": 0
+  },
+  "lambda_min_rule": "handbook 2(1): +/-10% relative with sign, per config, against these truth values (via within_relative)",
+  "mode_overlap_rule": "small configs only: the submitted mode (30,30,3) is flattened to 2700 components, normalised, and compared with the reference mode in reviewer/reference/ref_modes.npz by |dot| >= mode_overlap_lower_bound (sign and scale free). The config selection rule (gap >= 0.01) makes the minimum mode unique up to sign, and our own eigsh-vs-dense ambient overlaps are 1.0 to machine precision, so the bound is generous for any converged solver.",
+  "mode_overlap_lower_bound": 0.99,
+  "configs": {
+    "small_1": {
+      "seed": 0,
+      "L": 30,
+      "lambda_min": -4.836174640552328,
+      "lambda_2": -4.774319281287189,
+      "gap": 0.061855359265138965,
+      "lambda_min_eigsh": -4.836174640552329,
+      "rel_eigsh_vs_dense": 1.8365309065817532e-16,
+      "lambda_min_lobpcg": -4.836174640550175,
+      "rel_lobpcg_vs_dense": 4.45175091755417e-13
+    },
+    "small_2": {
+      "seed": 1,
+      "L": 30,
+      "lambda_min": -5.01435370494369,
+      "lambda_2": -4.806133803571778,
+      "gap": 0.20821990137191193,
+      "lambda_min_eigsh": -5.014353704943691,
+      "rel_eigsh_vs_dense": 1.771271976335581e-16,
+      "lambda_min_lobpcg": -5.01435370494369,
+      "rel_lobpcg_vs_dense": 0.0
+    },
+    "small_3": {
+      "seed": 2,
+      "L": 30,
+      "lambda_min": -4.683546621420674,
+      "lambda_2": -4.626382672835579,
+      "gap": 0.05716394858509499,
+      "lambda_min_eigsh": -4.683546621420673,
+      "rel_eigsh_vs_dense": 1.8963800117585068e-16,
+      "lambda_min_lobpcg": -4.683546621420673,
+      "rel_lobpcg_vs_dense": 1.8963800117585068e-16
+    },
+    "small_4": {
+      "seed": 3,
+      "L": 30,
+      "lambda_min": -4.942704869622342,
+      "lambda_2": -4.896478643768959,
+      "gap": 0.046226225853382985,
+      "lambda_min_eigsh": -4.942704869622339,
+      "rel_eigsh_vs_dense": 7.187792458812038e-16,
+      "lambda_min_lobpcg": -4.942704869622342,
+      "rel_lobpcg_vs_dense": 0.0
+    },
+    "large": {
+      "seed": 0,
+      "L": 300,
+      "lambda_min": -5.775886190899045,
+      "lambda_min_eigsh": -5.775886190899045,
+      "lambda_min_lobpcg": -5.775886190899056,
+      "rel_lobpcg_vs_eigsh": 1.9990559153147694e-15,
+      "note": "dense reference infeasible at L=300 (tangent dim 180000); truth = eigsh, cross-checked vs lobpcg"
+    }
+  },
+  "score": "1 only if every lambda_min check AND every mode-overlap check passes; any single failure scores 0 (binary all-primary-pass)"
+}

@@ -1,0 +1,32 @@
+{
+  "runs": {
+    "WS2_eps_m15_relax": "answer/WS2_eps_m15_relax",
+    "WS2_eps_m15_static": "answer/WS2_eps_m15_static",
+    "WS2_eps_m10_relax": "answer/WS2_eps_m10_relax",
+    "WS2_eps_m10_static": "answer/WS2_eps_m10_static",
+    "WS2_eps_m05_relax": "answer/WS2_eps_m05_relax",
+    "WS2_eps_m05_static": "answer/WS2_eps_m05_static",
+    "WS2_eps_p00_relax": "answer/WS2_eps_p00_relax",
+    "WS2_eps_p00_static": "answer/WS2_eps_p00_static",
+    "WS2_eps_p05_relax": "answer/WS2_eps_p05_relax",
+    "WS2_eps_p05_static": "answer/WS2_eps_p05_static",
+    "WS2_eps_p10_relax": "answer/WS2_eps_p10_relax",
+    "WS2_eps_p10_static": "answer/WS2_eps_p10_static",
+    "WS2_eps_p15_relax": "answer/WS2_eps_p15_relax",
+    "WS2_eps_p15_static": "answer/WS2_eps_p15_static",
+    "WSe2_eps_m15_relax": "answer/WSe2_eps_m15_relax",
+    "WSe2_eps_m15_static": "answer/WSe2_eps_m15_static",
+    "WSe2_eps_m10_relax": "answer/WSe2_eps_m10_relax",
+    "WSe2_eps_m10_static": "answer/WSe2_eps_m10_static",
+    "WSe2_eps_m05_relax": "answer/WSe2_eps_m05_relax",
+    "WSe2_eps_m05_static": "answer/WSe2_eps_m05_static",
+    "WSe2_eps_p00_relax": "answer/WSe2_eps_p00_relax",
+    "WSe2_eps_p00_static": "answer/WSe2_eps_p00_static",
+    "WSe2_eps_p05_relax": "answer/WSe2_eps_p05_relax",
+    "WSe2_eps_p05_static": "answer/WSe2_eps_p05_static",
+    "WSe2_eps_p10_relax": "answer/WSe2_eps_p10_relax",
+    "WSe2_eps_p10_static": "answer/WSe2_eps_p10_static",
+    "WSe2_eps_p15_relax": "answer/WSe2_eps_p15_relax",
+    "WSe2_eps_p15_static": "answer/WSe2_eps_p15_static"
+  }
+}

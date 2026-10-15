@@ -1,0 +1,253 @@
+{
+  "subtask": "L2 gen_input",
+  "kind": "gen_input (VASP relax+static deck for the two ordered V2CoAl cells)",
+  "provenance": "rubric from the as-run INCAR/KPOINTS at 3_reproduction/L2/auditor/co_confirm/outputs/{L2_1,XA}/ (INCAR.relax, KPOINTS); ENCUT floor from the shared PAW PBE catalog tasks/grader_potcar_vasp54.yaml (V/Co/Al ENMAX sourced from our as-run OUTCARs); structure references are the unrelaxed L1 cells 3_reproduction/L1/structures/{L2_1,XA}.vasp; the graded truth is our own reproduction, not the paper's value",
+  "run_labels": [
+    "L21_relax",
+    "L21_static",
+    "XA_relax",
+    "XA_static"
+  ],
+  "label_to_cell": {
+    "L21_relax": "L2_1",
+    "L21_static": "L2_1",
+    "XA_relax": "XA",
+    "XA_static": "XA"
+  },
+  "structure_reference_dir": "reference",
+  "cell_to_reference": {
+    "L2_1": "L2_1.vasp",
+    "XA": "XA.vasp"
+  },
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "matcher",
+    "note": "the agent's submitted relax/static POSCAR must reproduce the staged unrelaxed L1 cell (the starting geometry). Three distinct species V/Co/Al, no two-sublattice polarity degeneracy, so StructureMatcher with ElementComparator is safe; an L2_1-vs-XA mix-up or a V/Co/Al mis-assignment changes the structure and fails the match. The static POSCAR is graded against the SAME unrelaxed cell (we do not stage the relaxed CONTCAR, and the prompt allows the static to start from the given cell)."
+  },
+  "expected_counts": {
+    "V": 8,
+    "Co": 4,
+    "Al": 4
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      10,
+      10,
+      10
+    ],
+    "vacuum_axes": [],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "incar_required": {
+    "note": "Each rule applies to the effective value: the tag if explicitly set, else the VASP default. Only the settings listed here are graded; the per-tag reasoning is in notes.md. Reference INCAR = 3_reproduction/L2/auditor/co_confirm/outputs/{L2_1,XA}/INCAR.relax.",
+    "shared": {
+      "ISPIN_2": "ISPIN=2 (spin-polarized; default 1, REQUIRED-explicit)",
+      "MAGMOM_present": "Effective one scalar moment per atom; abs >=0.1 on every V/Co. Omitted MAGMOM under ISPIN=2 is 1.0 per ion; either sign allowed.",
+      "ENCUT_floor": "Explicit ENCUT >= max ENMAX(V_pv,Co,Al) = 267.969 eV; existing approved 1.0x floor, including full-cell relaxation.",
+      "LASPH_true": "LASPH=.TRUE. (aspherical PAW; default .FALSE., REQUIRED-explicit)",
+      "functional": "PBE: GGA absent (PBE via POTCAR) or GGA=Pe",
+      "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints."
+    },
+    "relax_only": {
+      "ISMEAR_metal": "ISMEAR in {0,1,2} (Gaussian or Methfessel-Paxton, metal relaxation; default 1; SIGMA ungraded)",
+      "ISIF_3": "ISIF=3 (relax ions + cell shape + volume; default 2)",
+      "IBRION_relax": "IBRION in {1,2,3}; damped optimization is accepted.",
+      "EDIFFG_force": "EDIFFG < 0 (force-based stop; REQUIRED-explicit)",
+      "NSW_positive": "Effective NSW is a positive integer; default 0 fails relaxation."
+    },
+    "static_only": {
+      "static": "Valid nonnegative integer NSW; no ionic motion if NSW=0 (default) or explicit IBRION=-1. Explicit IBRION must be an integer."
+    }
+  },
+  "score": "1 only if all four runs pass structure match AND their per-run INCAR/KPOINTS REQUIRED rubric (all checks must pass; any single failure scores 0)",
+  "input_scope": "Input checkpoint only; four input sets, no magnetic-ground-state search, engine execution or inferred restart-state checks.",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "L21_relax": [
+        4,
+        4,
+        4
+      ],
+      "L21_static": [
+        4,
+        4,
+        4
+      ],
+      "XA_relax": [
+        4,
+        4,
+        4
+      ],
+      "XA_static": [
+        4,
+        4,
+        4
+      ]
+    },
+    "references": {
+      "L21_relax": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          4
+        ],
+        "minimum": [
+          4,
+          4,
+          4
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "c2c0edfebf680eb008ae5b309e435bd3599c5b3eff1c5d264de6dd1faec1b047",
+        "reference_lattice_angstrom": [
+          [
+            5.95,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.95,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.95
+          ]
+        ],
+        "reference_atom_count": 16
+      },
+      "L21_static": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          4
+        ],
+        "minimum": [
+          4,
+          4,
+          4
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "c2c0edfebf680eb008ae5b309e435bd3599c5b3eff1c5d264de6dd1faec1b047",
+        "reference_lattice_angstrom": [
+          [
+            5.95,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.95,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.95
+          ]
+        ],
+        "reference_atom_count": 16
+      },
+      "XA_relax": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          4
+        ],
+        "minimum": [
+          4,
+          4,
+          4
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "38ba472d578132fe9088314e0287e3ae23cd09ab075d8bf88ef0eeb09d5ddece",
+        "reference_lattice_angstrom": [
+          [
+            5.95,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.95,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.95
+          ]
+        ],
+        "reference_atom_count": 16
+      },
+      "XA_static": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          4
+        ],
+        "minimum": [
+          4,
+          4,
+          4
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "38ba472d578132fe9088314e0287e3ae23cd09ab075d8bf88ef0eeb09d5ddece",
+        "reference_lattice_angstrom": [
+          [
+            5.95,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.95,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.95
+          ]
+        ],
+        "reference_atom_count": 16
+      }
+    }
+  }
+}

@@ -1,0 +1,1082 @@
+# lammps offline documentation
+
+code: LAMMPS
+version_documented: upstream commit c46bbef; original mirror pulled 2026-06-19
+upstream: https://github.com/lammps/lammps/tree/c46bbef/doc/src ; https://docs.lammps.org/Intro_opensource.html
+licence: GPL-2.0
+licence_note: Anyone is free to use, copy, modify, or extend LAMMPS in any way they choose, including for commercial purposes.
+redistributable: yes
+pulled: 2026-09-13
+method: cp of all upstream .rst documentation, unchanged with tree preserved; original SOURCE.md metadata transcribed into this record
+local_origin: MatClaw_prod/corpus/docs/lammps/
+files: 1058
+size: 8.376591 MB
+excluded: local SOURCE.md wrapper, whose benchmark-specific advice is not upstream documentation; images and other non-text assets were already absent from the mirror
+
+## Scope and provenance
+
+The permission sentence is from Intro_opensource.rst item (1), with whitespace normalized. The upstream GPL obligations, including retaining licence notices and supplying licence text, still apply to any redistribution. The pre-existing mirror records commit c46bbef and its original pull date. This collection date does not imply a newer upstream revision. Native rst references to omitted figures remain as in the source.
+
+Counts and sizes cover every file in this code directory except this README. MB means 1,000,000 bytes. No size ceiling applies. `pulled` records collection into this library; earlier source-mirror dates are stated separately.
+
+## File map
+
+- `Bibliography.rst`: software reference page: Bibliography
+- `Build.rst`: software reference page: Build
+- `Build_basics.rst`: software reference page: Build basics
+- `Build_cmake.rst`: software reference page: Build cmake
+- `Build_development.rst`: software reference page: Build development
+- `Build_diskspace.rst`: software reference page: Build diskspace
+- `Build_extras.rst`: software reference page: Build extras
+- `Build_link.rst`: software reference page: Build link
+- `Build_make.rst`: software reference page: Build make
+- `Build_manual.rst`: software reference page: Build manual
+- `Build_package.rst`: software reference page: Build package
+- `Build_prerequisites.rst`: software reference page: Build prerequisites
+- `Build_settings.rst`: software reference page: Build settings
+- `Build_windows.rst`: software reference page: Build windows
+- `Classes.rst`: software reference page: Classes
+- `Classes_atom.rst`: software reference page: Classes atom
+- `Classes_cite.rst`: software reference page: Classes cite
+- `Classes_input.rst`: software reference page: Classes input
+- `Classes_lammps.rst`: software reference page: Classes lammps
+- `Commands.rst`: software reference page: Commands
+- `Commands_all.rst`: software reference page: Commands all
+- `Commands_bond.rst`: software reference page: Commands bond
+- `Commands_category.rst`: software reference page: Commands category
+- `Commands_compute.rst`: software reference page: Commands compute
+- `Commands_dump.rst`: software reference page: Commands dump
+- `Commands_fix.rst`: software reference page: Commands fix
+- `Commands_html.rst`: software reference page: Commands html
+- `Commands_input.rst`: software reference page: Commands input
+- `Commands_kspace.rst`: software reference page: Commands kspace
+- `Commands_pair.rst`: software reference page: Commands pair
+- `Commands_parse.rst`: software reference page: Commands parse
+- `Commands_removed.rst`: software reference page: Commands removed
+- `Commands_structure.rst`: software reference page: Commands structure
+- `Cplusplus.rst`: software reference page: Cplusplus
+- `Developer.rst`: software reference page: Developer
+- `Developer_atom.rst`: software reference page: Developer atom
+- `Developer_code_design.rst`: software reference page: Developer code design
+- `Developer_comm_ops.rst`: software reference page: Developer comm ops
+- `Developer_flow.rst`: software reference page: Developer flow
+- `Developer_grid.rst`: software reference page: Developer grid
+- `Developer_internal.rst`: software reference page: Developer internal
+- `Developer_notes.rst`: software reference page: Developer notes
+- `Developer_org.rst`: software reference page: Developer org
+- `Developer_par_comm.rst`: software reference page: Developer par comm
+- `Developer_par_long.rst`: software reference page: Developer par long
+- `Developer_par_neigh.rst`: software reference page: Developer par neigh
+- `Developer_par_openmp.rst`: software reference page: Developer par openmp
+- `Developer_par_part.rst`: software reference page: Developer par part
+- `Developer_parallel.rst`: software reference page: Developer parallel
+- `Developer_platform.rst`: software reference page: Developer platform
+- `Developer_plugins.rst`: software reference page: Developer plugins
+- `Developer_unittest.rst`: software reference page: Developer unittest
+- `Developer_updating.rst`: software reference page: Developer updating
+- `Developer_utils.rst`: software reference page: Developer utils
+- `Developer_write.rst`: software reference page: Developer write
+- `Developer_write_bond.rst`: software reference page: Developer write bond
+- `Developer_write_command.rst`: software reference page: Developer write command
+- `Developer_write_compute.rst`: software reference page: Developer write compute
+- `Developer_write_docs.rst`: software reference page: Developer write docs
+- `Developer_write_fix.rst`: software reference page: Developer write fix
+- `Developer_write_openmp.rst`: software reference page: Developer write openmp
+- `Developer_write_pair.rst`: software reference page: Developer write pair
+- `Errors.rst`: software reference page: Errors
+- `Errors_bugs.rst`: software reference page: Errors bugs
+- `Errors_common.rst`: software reference page: Errors common
+- `Errors_debug.rst`: software reference page: Errors debug
+- `Errors_details.rst`: software reference page: Errors details
+- `Errors_messages.rst`: software reference page: Errors messages
+- `Errors_warnings.rst`: software reference page: Errors warnings
+- `Examples.rst`: software reference page: Examples
+- `Fortran.rst`: software reference page: Fortran
+- `Howto.rst`: software reference page: Howto
+- `Howto_2d.rst`: software reference page: Howto 2d
+- `Howto_FFgeneral.rst`: software reference page: Howto FFgeneral
+- `Howto_amber2lammps.rst`: software reference page: Howto amber2lammps
+- `Howto_amoeba.rst`: software reference page: Howto amoeba
+- `Howto_apip.rst`: software reference page: Howto apip
+- `Howto_barostat.rst`: software reference page: Howto barostat
+- `Howto_bioFF.rst`: software reference page: Howto bioFF
+- `Howto_body.rst`: software reference page: Howto body
+- `Howto_bpm.rst`: software reference page: Howto bpm
+- `Howto_broken_bonds.rst`: software reference page: Howto broken bonds
+- `Howto_bulk2slab.rst`: software reference page: Howto bulk2slab
+- `Howto_chunk.rst`: software reference page: Howto chunk
+- `Howto_cmake.rst`: software reference page: Howto cmake
+- `Howto_coreshell.rst`: software reference page: Howto coreshell
+- `Howto_couple.rst`: software reference page: Howto couple
+- `Howto_diffusion.rst`: software reference page: Howto diffusion
+- `Howto_dispersion.rst`: software reference page: Howto dispersion
+- `Howto_drude.rst`: software reference page: Howto drude
+- `Howto_drude2.rst`: software reference page: Howto drude2
+- `Howto_elastic.rst`: software reference page: Howto elastic
+- `Howto_github.rst`: software reference page: Howto github
+- `Howto_granular.rst`: software reference page: Howto granular
+- `Howto_grid.rst`: software reference page: Howto grid
+- `Howto_kappa.rst`: software reference page: Howto kappa
+- `Howto_lammps_gui.rst`: software reference page: Howto lammps gui
+- `Howto_ldd.rst`: software reference page: Howto ldd
+- `Howto_library.rst`: software reference page: Howto library
+- `Howto_manifold.rst`: software reference page: Howto manifold
+- `Howto_mdi.rst`: software reference page: Howto mdi
+- `Howto_moltemplate.rst`: software reference page: Howto moltemplate
+- `Howto_multiple.rst`: software reference page: Howto multiple
+- `Howto_nemd.rst`: software reference page: Howto nemd
+- `Howto_output.rst`: software reference page: Howto output
+- `Howto_peri.rst`: software reference page: Howto peri
+- `Howto_polarizable.rst`: software reference page: Howto polarizable
+- `Howto_python.rst`: software reference page: Howto python
+- `Howto_replica.rst`: software reference page: Howto replica
+- `Howto_restart.rst`: software reference page: Howto restart
+- `Howto_rheo.rst`: software reference page: Howto rheo
+- `Howto_spc.rst`: software reference page: Howto spc
+- `Howto_spherical.rst`: software reference page: Howto spherical
+- `Howto_spins.rst`: software reference page: Howto spins
+- `Howto_structured_data.rst`: software reference page: Howto structured data
+- `Howto_temperature.rst`: software reference page: Howto temperature
+- `Howto_thermostat.rst`: software reference page: Howto thermostat
+- `Howto_tip3p.rst`: software reference page: Howto tip3p
+- `Howto_tip4p.rst`: software reference page: Howto tip4p
+- `Howto_tip5p.rst`: software reference page: Howto tip5p
+- `Howto_triclinic.rst`: software reference page: Howto triclinic
+- `Howto_type_labels.rst`: software reference page: Howto type labels
+- `Howto_viscosity.rst`: software reference page: Howto viscosity
+- `Howto_viz.rst`: software reference page: Howto viz
+- `Howto_walls.rst`: software reference page: Howto walls
+- `Howto_wsl.rst`: software reference page: Howto wsl
+- `Install.rst`: software reference page: Install
+- `Install_conda.rst`: software reference page: Install conda
+- `Install_git.rst`: software reference page: Install git
+- `Install_linux.rst`: software reference page: Install linux
+- `Install_mac.rst`: software reference page: Install mac
+- `Install_tarball.rst`: software reference page: Install tarball
+- `Install_windows.rst`: software reference page: Install windows
+- `Intro.rst`: software reference page: Intro
+- `Intro_authors.rst`: software reference page: Intro authors
+- `Intro_citing.rst`: software reference page: Intro citing
+- `Intro_features.rst`: software reference page: Intro features
+- `Intro_nonfeatures.rst`: software reference page: Intro nonfeatures
+- `Intro_opensource.rst`: software reference page: Intro opensource
+- `Intro_overview.rst`: software reference page: Intro overview
+- `Intro_portability.rst`: software reference page: Intro portability
+- `Intro_website.rst`: software reference page: Intro website
+- `Library.rst`: software reference page: Library
+- `Library_add.rst`: software reference page: Library add
+- `Library_atoms.rst`: software reference page: Library atoms
+- `Library_config.rst`: software reference page: Library config
+- `Library_create.rst`: software reference page: Library create
+- `Library_execute.rst`: software reference page: Library execute
+- `Library_neighbor.rst`: software reference page: Library neighbor
+- `Library_objects.rst`: software reference page: Library objects
+- `Library_properties.rst`: software reference page: Library properties
+- `Library_scatter.rst`: software reference page: Library scatter
+- `Library_utility.rst`: software reference page: Library utility
+- `Manual.rst`: software reference page: Manual
+- `Manual_version.rst`: software reference page: Manual version
+- `Modify.rst`: software reference page: Modify
+- `Modify_atom.rst`: software reference page: Modify atom
+- `Modify_body.rst`: software reference page: Modify body
+- `Modify_bond.rst`: software reference page: Modify bond
+- `Modify_command.rst`: software reference page: Modify command
+- `Modify_compute.rst`: software reference page: Modify compute
+- `Modify_contribute.rst`: software reference page: Modify contribute
+- `Modify_dump.rst`: software reference page: Modify dump
+- `Modify_fix.rst`: software reference page: Modify fix
+- `Modify_gran_sub_mod.rst`: software reference page: Modify gran sub mod
+- `Modify_kspace.rst`: software reference page: Modify kspace
+- `Modify_min.rst`: software reference page: Modify min
+- `Modify_overview.rst`: software reference page: Modify overview
+- `Modify_pair.rst`: software reference page: Modify pair
+- `Modify_region.rst`: software reference page: Modify region
+- `Modify_requirements.rst`: software reference page: Modify requirements
+- `Modify_style.rst`: software reference page: Modify style
+- `Modify_thermo.rst`: software reference page: Modify thermo
+- `Modify_variable.rst`: software reference page: Modify variable
+- `Packages.rst`: software reference page: Packages
+- `Packages_details.rst`: software reference page: Packages details
+- `Python_atoms.rst`: software reference page: Python atoms
+- `Python_call.rst`: software reference page: Python call
+- `Python_config.rst`: software reference page: Python config
+- `Python_create.rst`: software reference page: Python create
+- `Python_error.rst`: software reference page: Python error
+- `Python_examples.rst`: software reference page: Python examples
+- `Python_execute.rst`: software reference page: Python execute
+- `Python_ext.rst`: software reference page: Python ext
+- `Python_formats.rst`: software reference page: Python formats
+- `Python_head.rst`: software reference page: Python head
+- `Python_install.rst`: software reference page: Python install
+- `Python_jupyter.rst`: software reference page: Python jupyter
+- `Python_launch.rst`: software reference page: Python launch
+- `Python_module.rst`: software reference page: Python module
+- `Python_neighbor.rst`: software reference page: Python neighbor
+- `Python_objects.rst`: software reference page: Python objects
+- `Python_overview.rst`: software reference page: Python overview
+- `Python_properties.rst`: software reference page: Python properties
+- `Python_run.rst`: software reference page: Python run
+- `Python_scatter.rst`: software reference page: Python scatter
+- `Python_trouble.rst`: software reference page: Python trouble
+- `Run_basics.rst`: software reference page: Run basics
+- `Run_formats.rst`: software reference page: Run formats
+- `Run_head.rst`: software reference page: Run head
+- `Run_options.rst`: software reference page: Run options
+- `Run_output.rst`: software reference page: Run output
+- `Run_windows.rst`: software reference page: Run windows
+- `Speed.rst`: software reference page: Speed
+- `Speed_bench.rst`: software reference page: Speed bench
+- `Speed_compare.rst`: software reference page: Speed compare
+- `Speed_gpu.rst`: software reference page: Speed gpu
+- `Speed_intel.rst`: software reference page: Speed intel
+- `Speed_kokkos.rst`: software reference page: Speed kokkos
+- `Speed_measure.rst`: software reference page: Speed measure
+- `Speed_omp.rst`: software reference page: Speed omp
+- `Speed_opt.rst`: software reference page: Speed opt
+- `Speed_packages.rst`: software reference page: Speed packages
+- `Speed_tips.rst`: software reference page: Speed tips
+- `Tools.rst`: software reference page: Tools
+- `accel_styles.rst`: software reference page: accel styles
+- `angle_amoeba.rst`: software reference page: angle amoeba
+- `angle_charmm.rst`: software reference page: angle charmm
+- `angle_class2.rst`: software reference page: angle class2
+- `angle_coeff.rst`: software reference page: angle coeff
+- `angle_cosine.rst`: software reference page: angle cosine
+- `angle_cosine_buck6d.rst`: software reference page: angle cosine buck6d
+- `angle_cosine_delta.rst`: software reference page: angle cosine delta
+- `angle_cosine_periodic.rst`: software reference page: angle cosine periodic
+- `angle_cosine_shift.rst`: software reference page: angle cosine shift
+- `angle_cosine_shift_exp.rst`: software reference page: angle cosine shift exp
+- `angle_cosine_squared.rst`: software reference page: angle cosine squared
+- `angle_cosine_squared_restricted.rst`: software reference page: angle cosine squared restricted
+- `angle_cross.rst`: software reference page: angle cross
+- `angle_dipole.rst`: software reference page: angle dipole
+- `angle_fourier.rst`: software reference page: angle fourier
+- `angle_fourier_simple.rst`: software reference page: angle fourier simple
+- `angle_gaussian.rst`: software reference page: angle gaussian
+- `angle_harmonic.rst`: software reference page: angle harmonic
+- `angle_hybrid.rst`: software reference page: angle hybrid
+- `angle_lepton.rst`: software reference page: angle lepton
+- `angle_mesocnt.rst`: software reference page: angle mesocnt
+- `angle_mm3.rst`: software reference page: angle mm3
+- `angle_mwlc.rst`: software reference page: angle mwlc
+- `angle_none.rst`: software reference page: angle none
+- `angle_quartic.rst`: software reference page: angle quartic
+- `angle_spica.rst`: software reference page: angle spica
+- `angle_style.rst`: software reference page: angle style
+- `angle_table.rst`: software reference page: angle table
+- `angle_write.rst`: software reference page: angle write
+- `angle_zero.rst`: software reference page: angle zero
+- `atc_add_molecule.rst`: software reference page: atc add molecule
+- `atc_add_species.rst`: software reference page: atc add species
+- `atc_atom_element_map.rst`: software reference page: atc atom element map
+- `atc_atom_weight.rst`: software reference page: atc atom weight
+- `atc_atomic_charge.rst`: software reference page: atc atomic charge
+- `atc_boundary_dynamics.rst`: software reference page: atc boundary dynamics
+- `atc_boundary_faceset.rst`: software reference page: atc boundary faceset
+- `atc_boundary_type.rst`: software reference page: atc boundary type
+- `atc_consistent_fe_initialization.rst`: software reference page: atc consistent fe initialization
+- `atc_control_localized_lambda.rst`: software reference page: atc control localized lambda
+- `atc_control_momentum.rst`: software reference page: atc control momentum
+- `atc_control_thermal.rst`: software reference page: atc control thermal
+- `atc_decomposition.rst`: software reference page: atc decomposition
+- `atc_electron_integration.rst`: software reference page: atc electron integration
+- `atc_equilibrium_start.rst`: software reference page: atc equilibrium start
+- `atc_extrinsic_exchange.rst`: software reference page: atc extrinsic exchange
+- `atc_fe_md_boundary.rst`: software reference page: atc fe md boundary
+- `atc_filter_scale.rst`: software reference page: atc filter scale
+- `atc_filter_type.rst`: software reference page: atc filter type
+- `atc_fix.rst`: software reference page: atc fix
+- `atc_fix_flux.rst`: software reference page: atc fix flux
+- `atc_hardy_computes.rst`: software reference page: atc hardy computes
+- `atc_hardy_fields.rst`: software reference page: atc hardy fields
+- `atc_hardy_gradients.rst`: software reference page: atc hardy gradients
+- `atc_hardy_kernel.rst`: software reference page: atc hardy kernel
+- `atc_hardy_on_the_fly.rst`: software reference page: atc hardy on the fly
+- `atc_hardy_rates.rst`: software reference page: atc hardy rates
+- `atc_initial.rst`: software reference page: atc initial
+- `atc_internal_element_set.rst`: software reference page: atc internal element set
+- `atc_internal_quadrature.rst`: software reference page: atc internal quadrature
+- `atc_kernel_bandwidth.rst`: software reference page: atc kernel bandwidth
+- `atc_lumped_lambda_solve.rst`: software reference page: atc lumped lambda solve
+- `atc_mask_direction.rst`: software reference page: atc mask direction
+- `atc_mass_matrix.rst`: software reference page: atc mass matrix
+- `atc_material.rst`: software reference page: atc material
+- `atc_mesh_add_to_nodeset.rst`: software reference page: atc mesh add to nodeset
+- `atc_mesh_create.rst`: software reference page: atc mesh create
+- `atc_mesh_create_elementset.rst`: software reference page: atc mesh create elementset
+- `atc_mesh_create_faceset_box.rst`: software reference page: atc mesh create faceset box
+- `atc_mesh_create_faceset_plane.rst`: software reference page: atc mesh create faceset plane
+- `atc_mesh_create_nodeset.rst`: software reference page: atc mesh create nodeset
+- `atc_mesh_delete_elements.rst`: software reference page: atc mesh delete elements
+- `atc_mesh_nodeset_to_elementset.rst`: software reference page: atc mesh nodeset to elementset
+- `atc_mesh_output.rst`: software reference page: atc mesh output
+- `atc_mesh_quadrature.rst`: software reference page: atc mesh quadrature
+- `atc_mesh_read.rst`: software reference page: atc mesh read
+- `atc_mesh_write.rst`: software reference page: atc mesh write
+- `atc_output.rst`: software reference page: atc output
+- `atc_output_boundary_integral.rst`: software reference page: atc output boundary integral
+- `atc_output_contour_integral.rst`: software reference page: atc output contour integral
+- `atc_output_nodeset.rst`: software reference page: atc output nodeset
+- `atc_output_volume_integral.rst`: software reference page: atc output volume integral
+- `atc_pair_interactions.rst`: software reference page: atc pair interactions
+- `atc_poisson_solver.rst`: software reference page: atc poisson solver
+- `atc_read_restart.rst`: software reference page: atc read restart
+- `atc_remove_molecule.rst`: software reference page: atc remove molecule
+- `atc_remove_source.rst`: software reference page: atc remove source
+- `atc_remove_species.rst`: software reference page: atc remove species
+- `atc_reset_atomic_reference.rst`: software reference page: atc reset atomic reference
+- `atc_reset_time.rst`: software reference page: atc reset time
+- `atc_sample_frequency.rst`: software reference page: atc sample frequency
+- `atc_set_reference_pe.rst`: software reference page: atc set reference pe
+- `atc_source.rst`: software reference page: atc source
+- `atc_source_integration.rst`: software reference page: atc source integration
+- `atc_temperature_definition.rst`: software reference page: atc temperature definition
+- `atc_time_filter.rst`: software reference page: atc time filter
+- `atc_time_integration.rst`: software reference page: atc time integration
+- `atc_track_displacement.rst`: software reference page: atc track displacement
+- `atc_unfix.rst`: software reference page: atc unfix
+- `atc_unfix_flux.rst`: software reference page: atc unfix flux
+- `atc_write_atom_weights.rst`: software reference page: atc write atom weights
+- `atc_write_restart.rst`: software reference page: atc write restart
+- `atom_modify.rst`: software reference page: atom modify
+- `atom_style.rst`: software reference page: atom style
+- `balance.rst`: software reference page: balance
+- `bond_bpm_rotational.rst`: software reference page: bond bpm rotational
+- `bond_bpm_spring.rst`: software reference page: bond bpm spring
+- `bond_bpm_spring_plastic.rst`: software reference page: bond bpm spring plastic
+- `bond_class2.rst`: software reference page: bond class2
+- `bond_coeff.rst`: software reference page: bond coeff
+- `bond_fene.rst`: software reference page: bond fene
+- `bond_fene_expand.rst`: software reference page: bond fene expand
+- `bond_gaussian.rst`: software reference page: bond gaussian
+- `bond_gromos.rst`: software reference page: bond gromos
+- `bond_harmonic.rst`: software reference page: bond harmonic
+- `bond_harmonic_restrain.rst`: software reference page: bond harmonic restrain
+- `bond_harmonic_shift.rst`: software reference page: bond harmonic shift
+- `bond_harmonic_shift_cut.rst`: software reference page: bond harmonic shift cut
+- `bond_hybrid.rst`: software reference page: bond hybrid
+- `bond_lepton.rst`: software reference page: bond lepton
+- `bond_mesocnt.rst`: software reference page: bond mesocnt
+- `bond_mm3.rst`: software reference page: bond mm3
+- `bond_morse.rst`: software reference page: bond morse
+- `bond_none.rst`: software reference page: bond none
+- `bond_nonlinear.rst`: software reference page: bond nonlinear
+- `bond_oxdna.rst`: software reference page: bond oxdna
+- `bond_quartic.rst`: software reference page: bond quartic
+- `bond_quartic_exp.rst`: software reference page: bond quartic exp
+- `bond_rheo_shell.rst`: software reference page: bond rheo shell
+- `bond_special.rst`: software reference page: bond special
+- `bond_style.rst`: software reference page: bond style
+- `bond_table.rst`: software reference page: bond table
+- `bond_write.rst`: software reference page: bond write
+- `bond_zero.rst`: software reference page: bond zero
+- `boundary.rst`: software reference page: boundary
+- `change_box.rst`: software reference page: change box
+- `clear.rst`: software reference page: clear
+- `comm_modify.rst`: software reference page: comm modify
+- `comm_style.rst`: software reference page: comm style
+- `commands_list.rst`: software reference page: commands list
+- `compute.rst`: software reference page: compute
+- `compute_ackland_atom.rst`: software reference page: compute ackland atom
+- `compute_adf.rst`: software reference page: compute adf
+- `compute_angle.rst`: software reference page: compute angle
+- `compute_angle_local.rst`: software reference page: compute angle local
+- `compute_angmom_chunk.rst`: software reference page: compute angmom chunk
+- `compute_ave_sphere_atom.rst`: software reference page: compute ave sphere atom
+- `compute_basal_atom.rst`: software reference page: compute basal atom
+- `compute_body_local.rst`: software reference page: compute body local
+- `compute_bond.rst`: software reference page: compute bond
+- `compute_bond_local.rst`: software reference page: compute bond local
+- `compute_born_matrix.rst`: software reference page: compute born matrix
+- `compute_centro_atom.rst`: software reference page: compute centro atom
+- `compute_chunk_atom.rst`: software reference page: compute chunk atom
+- `compute_chunk_spread_atom.rst`: software reference page: compute chunk spread atom
+- `compute_cluster_atom.rst`: software reference page: compute cluster atom
+- `compute_cna_atom.rst`: software reference page: compute cna atom
+- `compute_cnp_atom.rst`: software reference page: compute cnp atom
+- `compute_com.rst`: software reference page: compute com
+- `compute_com_chunk.rst`: software reference page: compute com chunk
+- `compute_composition_atom.rst`: software reference page: compute composition atom
+- `compute_contact_atom.rst`: software reference page: compute contact atom
+- `compute_coord_atom.rst`: software reference page: compute coord atom
+- `compute_count_type.rst`: software reference page: compute count type
+- `compute_damage_atom.rst`: software reference page: compute damage atom
+- `compute_dihedral.rst`: software reference page: compute dihedral
+- `compute_dihedral_local.rst`: software reference page: compute dihedral local
+- `compute_dilatation_atom.rst`: software reference page: compute dilatation atom
+- `compute_dipole.rst`: software reference page: compute dipole
+- `compute_dipole_chunk.rst`: software reference page: compute dipole chunk
+- `compute_displace_atom.rst`: software reference page: compute displace atom
+- `compute_dpd.rst`: software reference page: compute dpd
+- `compute_dpd_atom.rst`: software reference page: compute dpd atom
+- `compute_edpd_temp_atom.rst`: software reference page: compute edpd temp atom
+- `compute_efield_atom.rst`: software reference page: compute efield atom
+- `compute_efield_wolf_atom.rst`: software reference page: compute efield wolf atom
+- `compute_entropy_atom.rst`: software reference page: compute entropy atom
+- `compute_erotate_asphere.rst`: software reference page: compute erotate asphere
+- `compute_erotate_rigid.rst`: software reference page: compute erotate rigid
+- `compute_erotate_sphere.rst`: software reference page: compute erotate sphere
+- `compute_erotate_sphere_atom.rst`: software reference page: compute erotate sphere atom
+- `compute_event_displace.rst`: software reference page: compute event displace
+- `compute_fabric.rst`: software reference page: compute fabric
+- `compute_fep.rst`: software reference page: compute fep
+- `compute_fep_ta.rst`: software reference page: compute fep ta
+- `compute_gaussian_grid_local.rst`: software reference page: compute gaussian grid local
+- `compute_global_atom.rst`: software reference page: compute global atom
+- `compute_group_group.rst`: software reference page: compute group group
+- `compute_gyration.rst`: software reference page: compute gyration
+- `compute_gyration_chunk.rst`: software reference page: compute gyration chunk
+- `compute_gyration_shape.rst`: software reference page: compute gyration shape
+- `compute_gyration_shape_chunk.rst`: software reference page: compute gyration shape chunk
+- `compute_hbond_local.rst`: software reference page: compute hbond local
+- `compute_heat_flux.rst`: software reference page: compute heat flux
+- `compute_hexorder_atom.rst`: software reference page: compute hexorder atom
+- `compute_hma.rst`: software reference page: compute hma
+- `compute_improper.rst`: software reference page: compute improper
+- `compute_improper_local.rst`: software reference page: compute improper local
+- `compute_inertia_chunk.rst`: software reference page: compute inertia chunk
+- `compute_ke.rst`: software reference page: compute ke
+- `compute_ke_atom.rst`: software reference page: compute ke atom
+- `compute_ke_atom_eff.rst`: software reference page: compute ke atom eff
+- `compute_ke_eff.rst`: software reference page: compute ke eff
+- `compute_ke_rigid.rst`: software reference page: compute ke rigid
+- `compute_mliap.rst`: software reference page: compute mliap
+- `compute_modify.rst`: software reference page: compute modify
+- `compute_momentum.rst`: software reference page: compute momentum
+- `compute_msd.rst`: software reference page: compute msd
+- `compute_msd_chunk.rst`: software reference page: compute msd chunk
+- `compute_msd_nongauss.rst`: software reference page: compute msd nongauss
+- `compute_nbond_atom.rst`: software reference page: compute nbond atom
+- `compute_omega_chunk.rst`: software reference page: compute omega chunk
+- `compute_orientorder_atom.rst`: software reference page: compute orientorder atom
+- `compute_pace.rst`: software reference page: compute pace
+- `compute_pair.rst`: software reference page: compute pair
+- `compute_pair_local.rst`: software reference page: compute pair local
+- `compute_pe.rst`: software reference page: compute pe
+- `compute_pe_atom.rst`: software reference page: compute pe atom
+- `compute_plasticity_atom.rst`: software reference page: compute plasticity atom
+- `compute_pod_atom.rst`: software reference page: compute pod atom
+- `compute_pressure.rst`: software reference page: compute pressure
+- `compute_pressure_alchemy.rst`: software reference page: compute pressure alchemy
+- `compute_pressure_uef.rst`: software reference page: compute pressure uef
+- `compute_property_atom.rst`: software reference page: compute property atom
+- `compute_property_chunk.rst`: software reference page: compute property chunk
+- `compute_property_grid.rst`: software reference page: compute property grid
+- `compute_property_local.rst`: software reference page: compute property local
+- `compute_ptm_atom.rst`: software reference page: compute ptm atom
+- `compute_rattlers_atom.rst`: software reference page: compute rattlers atom
+- `compute_rdf.rst`: software reference page: compute rdf
+- `compute_reaxff_atom.rst`: software reference page: compute reaxff atom
+- `compute_reduce.rst`: software reference page: compute reduce
+- `compute_reduce_chunk.rst`: software reference page: compute reduce chunk
+- `compute_rheo_property_atom.rst`: software reference page: compute rheo property atom
+- `compute_rigid_local.rst`: software reference page: compute rigid local
+- `compute_saed.rst`: software reference page: compute saed
+- `compute_slcsa_atom.rst`: software reference page: compute slcsa atom
+- `compute_slice.rst`: software reference page: compute slice
+- `compute_smd_contact_radius.rst`: software reference page: compute smd contact radius
+- `compute_smd_damage.rst`: software reference page: compute smd damage
+- `compute_smd_hourglass_error.rst`: software reference page: compute smd hourglass error
+- `compute_smd_internal_energy.rst`: software reference page: compute smd internal energy
+- `compute_smd_plastic_strain.rst`: software reference page: compute smd plastic strain
+- `compute_smd_plastic_strain_rate.rst`: software reference page: compute smd plastic strain rate
+- `compute_smd_rho.rst`: software reference page: compute smd rho
+- `compute_smd_tlsph_defgrad.rst`: software reference page: compute smd tlsph defgrad
+- `compute_smd_tlsph_dt.rst`: software reference page: compute smd tlsph dt
+- `compute_smd_tlsph_num_neighs.rst`: software reference page: compute smd tlsph num neighs
+- `compute_smd_tlsph_shape.rst`: software reference page: compute smd tlsph shape
+- `compute_smd_tlsph_strain.rst`: software reference page: compute smd tlsph strain
+- `compute_smd_tlsph_strain_rate.rst`: software reference page: compute smd tlsph strain rate
+- `compute_smd_tlsph_stress.rst`: software reference page: compute smd tlsph stress
+- `compute_smd_triangle_vertices.rst`: software reference page: compute smd triangle vertices
+- `compute_smd_ulsph_effm.rst`: software reference page: compute smd ulsph effm
+- `compute_smd_ulsph_num_neighs.rst`: software reference page: compute smd ulsph num neighs
+- `compute_smd_ulsph_strain.rst`: software reference page: compute smd ulsph strain
+- `compute_smd_ulsph_strain_rate.rst`: software reference page: compute smd ulsph strain rate
+- `compute_smd_ulsph_stress.rst`: software reference page: compute smd ulsph stress
+- `compute_smd_vol.rst`: software reference page: compute smd vol
+- `compute_sna_atom.rst`: software reference page: compute sna atom
+- `compute_sph_e_atom.rst`: software reference page: compute sph e atom
+- `compute_sph_rho_atom.rst`: software reference page: compute sph rho atom
+- `compute_sph_t_atom.rst`: software reference page: compute sph t atom
+- `compute_spin.rst`: software reference page: compute spin
+- `compute_stress_atom.rst`: software reference page: compute stress atom
+- `compute_stress_cartesian.rst`: software reference page: compute stress cartesian
+- `compute_stress_curvilinear.rst`: software reference page: compute stress curvilinear
+- `compute_stress_mop.rst`: software reference page: compute stress mop
+- `compute_tally.rst`: software reference page: compute tally
+- `compute_tdpd_cc_atom.rst`: software reference page: compute tdpd cc atom
+- `compute_temp.rst`: software reference page: compute temp
+- `compute_temp_asphere.rst`: software reference page: compute temp asphere
+- `compute_temp_body.rst`: software reference page: compute temp body
+- `compute_temp_chunk.rst`: software reference page: compute temp chunk
+- `compute_temp_com.rst`: software reference page: compute temp com
+- `compute_temp_cs.rst`: software reference page: compute temp cs
+- `compute_temp_deform.rst`: software reference page: compute temp deform
+- `compute_temp_deform_eff.rst`: software reference page: compute temp deform eff
+- `compute_temp_drude.rst`: software reference page: compute temp drude
+- `compute_temp_eff.rst`: software reference page: compute temp eff
+- `compute_temp_partial.rst`: software reference page: compute temp partial
+- `compute_temp_profile.rst`: software reference page: compute temp profile
+- `compute_temp_ramp.rst`: software reference page: compute temp ramp
+- `compute_temp_region.rst`: software reference page: compute temp region
+- `compute_temp_region_eff.rst`: software reference page: compute temp region eff
+- `compute_temp_rotate.rst`: software reference page: compute temp rotate
+- `compute_temp_sphere.rst`: software reference page: compute temp sphere
+- `compute_temp_uef.rst`: software reference page: compute temp uef
+- `compute_ti.rst`: software reference page: compute ti
+- `compute_torque_chunk.rst`: software reference page: compute torque chunk
+- `compute_vacf.rst`: software reference page: compute vacf
+- `compute_vacf_chunk.rst`: software reference page: compute vacf chunk
+- `compute_vcm_chunk.rst`: software reference page: compute vcm chunk
+- `compute_viscosity_cos.rst`: software reference page: compute viscosity cos
+- `compute_voronoi_atom.rst`: software reference page: compute voronoi atom
+- `compute_xrd.rst`: software reference page: compute xrd
+- `create_atoms.rst`: software reference page: create atoms
+- `create_bonds.rst`: software reference page: create bonds
+- `create_box.rst`: software reference page: create box
+- `delete_atoms.rst`: software reference page: delete atoms
+- `delete_bonds.rst`: software reference page: delete bonds
+- `dielectric.rst`: software reference page: dielectric
+- `dihedral_charmm.rst`: software reference page: dihedral charmm
+- `dihedral_class2.rst`: software reference page: dihedral class2
+- `dihedral_coeff.rst`: software reference page: dihedral coeff
+- `dihedral_cosine_shift_exp.rst`: software reference page: dihedral cosine shift exp
+- `dihedral_cosine_squared_restricted.rst`: software reference page: dihedral cosine squared restricted
+- `dihedral_fourier.rst`: software reference page: dihedral fourier
+- `dihedral_harmonic.rst`: software reference page: dihedral harmonic
+- `dihedral_helix.rst`: software reference page: dihedral helix
+- `dihedral_hybrid.rst`: software reference page: dihedral hybrid
+- `dihedral_lepton.rst`: software reference page: dihedral lepton
+- `dihedral_multi_harmonic.rst`: software reference page: dihedral multi harmonic
+- `dihedral_nharmonic.rst`: software reference page: dihedral nharmonic
+- `dihedral_none.rst`: software reference page: dihedral none
+- `dihedral_opls.rst`: software reference page: dihedral opls
+- `dihedral_quadratic.rst`: software reference page: dihedral quadratic
+- `dihedral_spherical.rst`: software reference page: dihedral spherical
+- `dihedral_style.rst`: software reference page: dihedral style
+- `dihedral_table.rst`: software reference page: dihedral table
+- `dihedral_write.rst`: software reference page: dihedral write
+- `dihedral_zero.rst`: software reference page: dihedral zero
+- `dimension.rst`: software reference page: dimension
+- `displace_atoms.rst`: software reference page: displace atoms
+- `dump.rst`: software reference page: dump
+- `dump_adios.rst`: software reference page: dump adios
+- `dump_cfg_uef.rst`: software reference page: dump cfg uef
+- `dump_h5md.rst`: software reference page: dump h5md
+- `dump_image.rst`: software reference page: dump image
+- `dump_modify.rst`: software reference page: dump modify
+- `dump_molfile.rst`: software reference page: dump molfile
+- `dump_netcdf.rst`: software reference page: dump netcdf
+- `dump_vtk.rst`: software reference page: dump vtk
+- `dumps.rst`: software reference page: dumps
+- `dynamical_matrix.rst`: software reference page: dynamical matrix
+- `echo.rst`: software reference page: echo
+- `fitpod_command.rst`: software reference page: fitpod command
+- `fix.rst`: software reference page: fix
+- `fix_accelerate_cos.rst`: software reference page: fix accelerate cos
+- `fix_acks2_reaxff.rst`: software reference page: fix acks2 reaxff
+- `fix_adapt.rst`: software reference page: fix adapt
+- `fix_adapt_fep.rst`: software reference page: fix adapt fep
+- `fix_add_heat.rst`: software reference page: fix add heat
+- `fix_addforce.rst`: software reference page: fix addforce
+- `fix_addtorque_atom.rst`: software reference page: fix addtorque atom
+- `fix_addtorque_group.rst`: software reference page: fix addtorque group
+- `fix_alchemy.rst`: software reference page: fix alchemy
+- `fix_align_self.rst`: software reference page: fix align self
+- `fix_amoeba_bitorsion.rst`: software reference page: fix amoeba bitorsion
+- `fix_amoeba_pitorsion.rst`: software reference page: fix amoeba pitorsion
+- `fix_append_atoms.rst`: software reference page: fix append atoms
+- `fix_atc.rst`: software reference page: fix atc
+- `fix_atom_swap.rst`: software reference page: fix atom swap
+- `fix_atom_weight_apip.rst`: software reference page: fix atom weight apip
+- `fix_ave_atom.rst`: software reference page: fix ave atom
+- `fix_ave_chunk.rst`: software reference page: fix ave chunk
+- `fix_ave_correlate.rst`: software reference page: fix ave correlate
+- `fix_ave_correlate_long.rst`: software reference page: fix ave correlate long
+- `fix_ave_grid.rst`: software reference page: fix ave grid
+- `fix_ave_histo.rst`: software reference page: fix ave histo
+- `fix_ave_moments.rst`: software reference page: fix ave moments
+- `fix_ave_spatial.rst`: software reference page: fix ave spatial
+- `fix_ave_spatial_sphere.rst`: software reference page: fix ave spatial sphere
+- `fix_ave_time.rst`: software reference page: fix ave time
+- `fix_aveforce.rst`: software reference page: fix aveforce
+- `fix_balance.rst`: software reference page: fix balance
+- `fix_baoab.rst`: software reference page: fix baoab
+- `fix_bocs.rst`: software reference page: fix bocs
+- `fix_bond_break.rst`: software reference page: fix bond break
+- `fix_bond_create.rst`: software reference page: fix bond create
+- `fix_bond_react.rst`: software reference page: fix bond react
+- `fix_bond_swap.rst`: software reference page: fix bond swap
+- `fix_box_relax.rst`: software reference page: fix box relax
+- `fix_brownian.rst`: software reference page: fix brownian
+- `fix_charge_regulation.rst`: software reference page: fix charge regulation
+- `fix_cmap.rst`: software reference page: fix cmap
+- `fix_colvars.rst`: software reference page: fix colvars
+- `fix_controller.rst`: software reference page: fix controller
+- `fix_damping_cundall.rst`: software reference page: fix damping cundall
+- `fix_deform.rst`: software reference page: fix deform
+- `fix_deform_pressure.rst`: software reference page: fix deform pressure
+- `fix_deposit.rst`: software reference page: fix deposit
+- `fix_dpd_energy.rst`: software reference page: fix dpd energy
+- `fix_dpd_source.rst`: software reference page: fix dpd source
+- `fix_drag.rst`: software reference page: fix drag
+- `fix_drude.rst`: software reference page: fix drude
+- `fix_drude_transform.rst`: software reference page: fix drude transform
+- `fix_dt_reset.rst`: software reference page: fix dt reset
+- `fix_efield.rst`: software reference page: fix efield
+- `fix_efield_lepton.rst`: software reference page: fix efield lepton
+- `fix_ehex.rst`: software reference page: fix ehex
+- `fix_electrode.rst`: software reference page: fix electrode
+- `fix_electron_stopping.rst`: software reference page: fix electron stopping
+- `fix_enforce2d.rst`: software reference page: fix enforce2d
+- `fix_eos_cv.rst`: software reference page: fix eos cv
+- `fix_eos_table.rst`: software reference page: fix eos table
+- `fix_eos_table_rx.rst`: software reference page: fix eos table rx
+- `fix_evaporate.rst`: software reference page: fix evaporate
+- `fix_external.rst`: software reference page: fix external
+- `fix_ffl.rst`: software reference page: fix ffl
+- `fix_filter_corotate.rst`: software reference page: fix filter corotate
+- `fix_flow_gauss.rst`: software reference page: fix flow gauss
+- `fix_freeze.rst`: software reference page: fix freeze
+- `fix_gcmc.rst`: software reference page: fix gcmc
+- `fix_gemc.rst`: software reference page: fix gemc
+- `fix_gjf.rst`: software reference page: fix gjf
+- `fix_gld.rst`: software reference page: fix gld
+- `fix_gle.rst`: software reference page: fix gle
+- `fix_graphics_arrows.rst`: software reference page: fix graphics arrows
+- `fix_graphics_chunk.rst`: software reference page: fix graphics chunk
+- `fix_graphics_isosurface.rst`: software reference page: fix graphics isosurface
+- `fix_graphics_labels.rst`: software reference page: fix graphics labels
+- `fix_graphics_lines.rst`: software reference page: fix graphics lines
+- `fix_graphics_objects.rst`: software reference page: fix graphics objects
+- `fix_graphics_periodic.rst`: software reference page: fix graphics periodic
+- `fix_graphics_replica.rst`: software reference page: fix graphics replica
+- `fix_gravity.rst`: software reference page: fix gravity
+- `fix_grem.rst`: software reference page: fix grem
+- `fix_halt.rst`: software reference page: fix halt
+- `fix_heat.rst`: software reference page: fix heat
+- `fix_heat_flow.rst`: software reference page: fix heat flow
+- `fix_hmc.rst`: software reference page: fix hmc
+- `fix_hyper_global.rst`: software reference page: fix hyper global
+- `fix_hyper_local.rst`: software reference page: fix hyper local
+- `fix_imd.rst`: software reference page: fix imd
+- `fix_indent.rst`: software reference page: fix indent
+- `fix_ipi.rst`: software reference page: fix ipi
+- `fix_lambda_apip.rst`: software reference page: fix lambda apip
+- `fix_lambda_la_csp_apip.rst`: software reference page: fix lambda la csp apip
+- `fix_lambda_thermostat_apip.rst`: software reference page: fix lambda thermostat apip
+- `fix_langevin.rst`: software reference page: fix langevin
+- `fix_langevin_drude.rst`: software reference page: fix langevin drude
+- `fix_langevin_eff.rst`: software reference page: fix langevin eff
+- `fix_langevin_spin.rst`: software reference page: fix langevin spin
+- `fix_lb_fluid.rst`: software reference page: fix lb fluid
+- `fix_lb_momentum.rst`: software reference page: fix lb momentum
+- `fix_lb_viscous.rst`: software reference page: fix lb viscous
+- `fix_lineforce.rst`: software reference page: fix lineforce
+- `fix_manifoldforce.rst`: software reference page: fix manifoldforce
+- `fix_mdi_qm.rst`: software reference page: fix mdi qm
+- `fix_mdi_qmmm.rst`: software reference page: fix mdi qmmm
+- `fix_meso_move.rst`: software reference page: fix meso move
+- `fix_modify.rst`: software reference page: fix modify
+- `fix_mol_swap.rst`: software reference page: fix mol swap
+- `fix_momentum.rst`: software reference page: fix momentum
+- `fix_move.rst`: software reference page: fix move
+- `fix_msst.rst`: software reference page: fix msst
+- `fix_mvv_dpd.rst`: software reference page: fix mvv dpd
+- `fix_neb.rst`: software reference page: fix neb
+- `fix_neb_spin.rst`: software reference page: fix neb spin
+- `fix_neighbor_swap.rst`: software reference page: fix neighbor swap
+- `fix_nh.rst`: software reference page: fix nh
+- `fix_nh_eff.rst`: software reference page: fix nh eff
+- `fix_nh_uef.rst`: software reference page: fix nh uef
+- `fix_nonaffine_displacement.rst`: software reference page: fix nonaffine displacement
+- `fix_nph_asphere.rst`: software reference page: fix nph asphere
+- `fix_nph_body.rst`: software reference page: fix nph body
+- `fix_nph_sphere.rst`: software reference page: fix nph sphere
+- `fix_nphug.rst`: software reference page: fix nphug
+- `fix_npt_asphere.rst`: software reference page: fix npt asphere
+- `fix_npt_body.rst`: software reference page: fix npt body
+- `fix_npt_cauchy.rst`: software reference page: fix npt cauchy
+- `fix_npt_sphere.rst`: software reference page: fix npt sphere
+- `fix_numdiff.rst`: software reference page: fix numdiff
+- `fix_numdiff_virial.rst`: software reference page: fix numdiff virial
+- `fix_nve.rst`: software reference page: fix nve
+- `fix_nve_asphere.rst`: software reference page: fix nve asphere
+- `fix_nve_asphere_noforce.rst`: software reference page: fix nve asphere noforce
+- `fix_nve_body.rst`: software reference page: fix nve body
+- `fix_nve_bpm_sphere.rst`: software reference page: fix nve bpm sphere
+- `fix_nve_dot.rst`: software reference page: fix nve dot
+- `fix_nve_dotc_langevin.rst`: software reference page: fix nve dotc langevin
+- `fix_nve_eff.rst`: software reference page: fix nve eff
+- `fix_nve_limit.rst`: software reference page: fix nve limit
+- `fix_nve_line.rst`: software reference page: fix nve line
+- `fix_nve_manifold_rattle.rst`: software reference page: fix nve manifold rattle
+- `fix_nve_noforce.rst`: software reference page: fix nve noforce
+- `fix_nve_sphere.rst`: software reference page: fix nve sphere
+- `fix_nve_spin.rst`: software reference page: fix nve spin
+- `fix_nve_tri.rst`: software reference page: fix nve tri
+- `fix_nvk.rst`: software reference page: fix nvk
+- `fix_nvt_asphere.rst`: software reference page: fix nvt asphere
+- `fix_nvt_body.rst`: software reference page: fix nvt body
+- `fix_nvt_manifold_rattle.rst`: software reference page: fix nvt manifold rattle
+- `fix_nvt_sllod.rst`: software reference page: fix nvt sllod
+- `fix_nvt_sllod_eff.rst`: software reference page: fix nvt sllod eff
+- `fix_nvt_sphere.rst`: software reference page: fix nvt sphere
+- `fix_oneway.rst`: software reference page: fix oneway
+- `fix_orient.rst`: software reference page: fix orient
+- `fix_orient_eco.rst`: software reference page: fix orient eco
+- `fix_pafi.rst`: software reference page: fix pafi
+- `fix_pair.rst`: software reference page: fix pair
+- `fix_phonon.rst`: software reference page: fix phonon
+- `fix_pimd.rst`: software reference page: fix pimd
+- `fix_planeforce.rst`: software reference page: fix planeforce
+- `fix_plumed.rst`: software reference page: fix plumed
+- `fix_poems.rst`: software reference page: fix poems
+- `fix_polarize.rst`: software reference page: fix polarize
+- `fix_pour.rst`: software reference page: fix pour
+- `fix_precession_spin.rst`: software reference page: fix precession spin
+- `fix_press_berendsen.rst`: software reference page: fix press berendsen
+- `fix_press_langevin.rst`: software reference page: fix press langevin
+- `fix_print.rst`: software reference page: fix print
+- `fix_propel_self.rst`: software reference page: fix propel self
+- `fix_property_atom.rst`: software reference page: fix property atom
+- `fix_python_invoke.rst`: software reference page: fix python invoke
+- `fix_python_move.rst`: software reference page: fix python move
+- `fix_qbmsst.rst`: software reference page: fix qbmsst
+- `fix_qeq.rst`: software reference page: fix qeq
+- `fix_qeq_comb.rst`: software reference page: fix qeq comb
+- `fix_qeq_reaxff.rst`: software reference page: fix qeq reaxff
+- `fix_qeq_rel_reaxff.rst`: software reference page: fix qeq rel reaxff
+- `fix_qmmm.rst`: software reference page: fix qmmm
+- `fix_qtb.rst`: software reference page: fix qtb
+- `fix_qtpie_reaxff.rst`: software reference page: fix qtpie reaxff
+- `fix_reaxff_bonds.rst`: software reference page: fix reaxff bonds
+- `fix_reaxff_species.rst`: software reference page: fix reaxff species
+- `fix_recenter.rst`: software reference page: fix recenter
+- `fix_restrain.rst`: software reference page: fix restrain
+- `fix_rheo.rst`: software reference page: fix rheo
+- `fix_rheo_oxidation.rst`: software reference page: fix rheo oxidation
+- `fix_rheo_pressure.rst`: software reference page: fix rheo pressure
+- `fix_rheo_thermal.rst`: software reference page: fix rheo thermal
+- `fix_rheo_viscosity.rst`: software reference page: fix rheo viscosity
+- `fix_rhok.rst`: software reference page: fix rhok
+- `fix_rigid.rst`: software reference page: fix rigid
+- `fix_rigid_meso.rst`: software reference page: fix rigid meso
+- `fix_rx.rst`: software reference page: fix rx
+- `fix_saed_vtk.rst`: software reference page: fix saed vtk
+- `fix_set.rst`: software reference page: fix set
+- `fix_setforce.rst`: software reference page: fix setforce
+- `fix_settorque_atom.rst`: software reference page: fix settorque atom
+- `fix_sgcmc.rst`: software reference page: fix sgcmc
+- `fix_shake.rst`: software reference page: fix shake
+- `fix_shardlow.rst`: software reference page: fix shardlow
+- `fix_smd.rst`: software reference page: fix smd
+- `fix_smd_adjust_dt.rst`: software reference page: fix smd adjust dt
+- `fix_smd_integrate_tlsph.rst`: software reference page: fix smd integrate tlsph
+- `fix_smd_integrate_ulsph.rst`: software reference page: fix smd integrate ulsph
+- `fix_smd_move_triangulated_surface.rst`: software reference page: fix smd move triangulated surface
+- `fix_smd_setvel.rst`: software reference page: fix smd setvel
+- `fix_smd_wall_surface.rst`: software reference page: fix smd wall surface
+- `fix_sph.rst`: software reference page: fix sph
+- `fix_sph_stationary.rst`: software reference page: fix sph stationary
+- `fix_spring.rst`: software reference page: fix spring
+- `fix_spring_chunk.rst`: software reference page: fix spring chunk
+- `fix_spring_rg.rst`: software reference page: fix spring rg
+- `fix_spring_self.rst`: software reference page: fix spring self
+- `fix_srd.rst`: software reference page: fix srd
+- `fix_store_force.rst`: software reference page: fix store force
+- `fix_store_state.rst`: software reference page: fix store state
+- `fix_temp_berendsen.rst`: software reference page: fix temp berendsen
+- `fix_temp_csvr.rst`: software reference page: fix temp csvr
+- `fix_temp_rescale.rst`: software reference page: fix temp rescale
+- `fix_temp_rescale_eff.rst`: software reference page: fix temp rescale eff
+- `fix_tfmc.rst`: software reference page: fix tfmc
+- `fix_tgnh_drude.rst`: software reference page: fix tgnh drude
+- `fix_thermal_conductivity.rst`: software reference page: fix thermal conductivity
+- `fix_ti_spring.rst`: software reference page: fix ti spring
+- `fix_tmd.rst`: software reference page: fix tmd
+- `fix_ttm.rst`: software reference page: fix ttm
+- `fix_tune_kspace.rst`: software reference page: fix tune kspace
+- `fix_vector.rst`: software reference page: fix vector
+- `fix_viscosity.rst`: software reference page: fix viscosity
+- `fix_viscous.rst`: software reference page: fix viscous
+- `fix_viscous_sphere.rst`: software reference page: fix viscous sphere
+- `fix_wall.rst`: software reference page: fix wall
+- `fix_wall_body_polygon.rst`: software reference page: fix wall body polygon
+- `fix_wall_body_polyhedron.rst`: software reference page: fix wall body polyhedron
+- `fix_wall_ees.rst`: software reference page: fix wall ees
+- `fix_wall_flow.rst`: software reference page: fix wall flow
+- `fix_wall_gran.rst`: software reference page: fix wall gran
+- `fix_wall_gran_region.rst`: software reference page: fix wall gran region
+- `fix_wall_piston.rst`: software reference page: fix wall piston
+- `fix_wall_reflect.rst`: software reference page: fix wall reflect
+- `fix_wall_reflect_stochastic.rst`: software reference page: fix wall reflect stochastic
+- `fix_wall_region.rst`: software reference page: fix wall region
+- `fix_wall_srd.rst`: software reference page: fix wall srd
+- `fix_widom.rst`: software reference page: fix widom
+- `geturl.rst`: software reference page: geturl
+- `group.rst`: software reference page: group
+- `group2ndx.rst`: software reference page: group2ndx
+- `hyper.rst`: software reference page: hyper
+- `if.rst`: software reference page: if
+- `improper_amoeba.rst`: software reference page: improper amoeba
+- `improper_class2.rst`: software reference page: improper class2
+- `improper_coeff.rst`: software reference page: improper coeff
+- `improper_cossq.rst`: software reference page: improper cossq
+- `improper_cvff.rst`: software reference page: improper cvff
+- `improper_distance.rst`: software reference page: improper distance
+- `improper_distharm.rst`: software reference page: improper distharm
+- `improper_fourier.rst`: software reference page: improper fourier
+- `improper_harmonic.rst`: software reference page: improper harmonic
+- `improper_hybrid.rst`: software reference page: improper hybrid
+- `improper_inversion_harmonic.rst`: software reference page: improper inversion harmonic
+- `improper_none.rst`: software reference page: improper none
+- `improper_ring.rst`: software reference page: improper ring
+- `improper_sqdistharm.rst`: software reference page: improper sqdistharm
+- `improper_style.rst`: software reference page: improper style
+- `improper_umbrella.rst`: software reference page: improper umbrella
+- `improper_zero.rst`: software reference page: improper zero
+- `include.rst`: software reference page: include
+- `info.rst`: software reference page: info
+- `jump.rst`: software reference page: jump
+- `kim_commands.rst`: software reference page: kim commands
+- `kspace_modify.rst`: software reference page: kspace modify
+- `kspace_style.rst`: software reference page: kspace style
+- `label.rst`: software reference page: label
+- `labelmap.rst`: software reference page: labelmap
+- `lattice.rst`: software reference page: lattice
+- `lepton_expression.rst`: software reference page: lepton expression
+- `log.rst`: software reference page: log
+- `mass.rst`: software reference page: mass
+- `mdi.rst`: software reference page: mdi
+- `min_modify.rst`: software reference page: min modify
+- `min_spin.rst`: software reference page: min spin
+- `min_style.rst`: software reference page: min style
+- `minimize.rst`: software reference page: minimize
+- `molecule.rst`: software reference page: molecule
+- `neb.rst`: software reference page: neb
+- `neb_spin.rst`: software reference page: neb spin
+- `neigh_modify.rst`: software reference page: neigh modify
+- `neighbor.rst`: software reference page: neighbor
+- `newton.rst`: software reference page: newton
+- `next.rst`: software reference page: next
+- `package.rst`: software reference page: package
+- `pair_adp.rst`: software reference page: pair adp
+- `pair_agni.rst`: software reference page: pair agni
+- `pair_aip_water_2dm.rst`: software reference page: pair aip water 2dm
+- `pair_airebo.rst`: software reference page: pair airebo
+- `pair_amoeba.rst`: software reference page: pair amoeba
+- `pair_atm.rst`: software reference page: pair atm
+- `pair_beck.rst`: software reference page: pair beck
+- `pair_body_nparticle.rst`: software reference page: pair body nparticle
+- `pair_body_rounded_polygon.rst`: software reference page: pair body rounded polygon
+- `pair_body_rounded_polyhedron.rst`: software reference page: pair body rounded polyhedron
+- `pair_bondval.rst`: software reference page: pair bondval
+- `pair_bop.rst`: software reference page: pair bop
+- `pair_born.rst`: software reference page: pair born
+- `pair_born_gauss.rst`: software reference page: pair born gauss
+- `pair_bpm_spring.rst`: software reference page: pair bpm spring
+- `pair_brownian.rst`: software reference page: pair brownian
+- `pair_buck.rst`: software reference page: pair buck
+- `pair_buck6d_coul_gauss.rst`: software reference page: pair buck6d coul gauss
+- `pair_buck_long.rst`: software reference page: pair buck long
+- `pair_charmm.rst`: software reference page: pair charmm
+- `pair_class2.rst`: software reference page: pair class2
+- `pair_coeff.rst`: software reference page: pair coeff
+- `pair_colloid.rst`: software reference page: pair colloid
+- `pair_comb.rst`: software reference page: pair comb
+- `pair_cosine_squared.rst`: software reference page: pair cosine squared
+- `pair_coul.rst`: software reference page: pair coul
+- `pair_coul_diel.rst`: software reference page: pair coul diel
+- `pair_coul_shield.rst`: software reference page: pair coul shield
+- `pair_coul_slater.rst`: software reference page: pair coul slater
+- `pair_coul_tt.rst`: software reference page: pair coul tt
+- `pair_cs.rst`: software reference page: pair cs
+- `pair_dielectric.rst`: software reference page: pair dielectric
+- `pair_dipole.rst`: software reference page: pair dipole
+- `pair_dispersion_d3.rst`: software reference page: pair dispersion d3
+- `pair_dpd.rst`: software reference page: pair dpd
+- `pair_dpd_coul_slater_long.rst`: software reference page: pair dpd coul slater long
+- `pair_dpd_ext.rst`: software reference page: pair dpd ext
+- `pair_dpd_fdt.rst`: software reference page: pair dpd fdt
+- `pair_drip.rst`: software reference page: pair drip
+- `pair_dsmc.rst`: software reference page: pair dsmc
+- `pair_e3b.rst`: software reference page: pair e3b
+- `pair_eam.rst`: software reference page: pair eam
+- `pair_eam_apip.rst`: software reference page: pair eam apip
+- `pair_edip.rst`: software reference page: pair edip
+- `pair_eff.rst`: software reference page: pair eff
+- `pair_eim.rst`: software reference page: pair eim
+- `pair_exp6_rx.rst`: software reference page: pair exp6 rx
+- `pair_extep.rst`: software reference page: pair extep
+- `pair_fep_soft.rst`: software reference page: pair fep soft
+- `pair_gauss.rst`: software reference page: pair gauss
+- `pair_gayberne.rst`: software reference page: pair gayberne
+- `pair_gran.rst`: software reference page: pair gran
+- `pair_granular.rst`: software reference page: pair granular
+- `pair_granular_superellipsoid.rst`: software reference page: pair granular superellipsoid
+- `pair_gromacs.rst`: software reference page: pair gromacs
+- `pair_gw.rst`: software reference page: pair gw
+- `pair_harmonic_cut.rst`: software reference page: pair harmonic cut
+- `pair_hbond_dreiding.rst`: software reference page: pair hbond dreiding
+- `pair_hdnnp.rst`: software reference page: pair hdnnp
+- `pair_hybrid.rst`: software reference page: pair hybrid
+- `pair_ilp_graphene_hbn.rst`: software reference page: pair ilp graphene hbn
+- `pair_ilp_tmd.rst`: software reference page: pair ilp tmd
+- `pair_kim.rst`: software reference page: pair kim
+- `pair_kolmogorov_crespi_full.rst`: software reference page: pair kolmogorov crespi full
+- `pair_kolmogorov_crespi_z.rst`: software reference page: pair kolmogorov crespi z
+- `pair_lambda_input_apip.rst`: software reference page: pair lambda input apip
+- `pair_lambda_zone_apip.rst`: software reference page: pair lambda zone apip
+- `pair_lcbop.rst`: software reference page: pair lcbop
+- `pair_ldd.rst`: software reference page: pair ldd
+- `pair_lebedeva_z.rst`: software reference page: pair lebedeva z
+- `pair_lepton.rst`: software reference page: pair lepton
+- `pair_line_lj.rst`: software reference page: pair line lj
+- `pair_list.rst`: software reference page: pair list
+- `pair_lj.rst`: software reference page: pair lj
+- `pair_lj96.rst`: software reference page: pair lj96
+- `pair_lj_cubic.rst`: software reference page: pair lj cubic
+- `pair_lj_cut_coul.rst`: software reference page: pair lj cut coul
+- `pair_lj_cut_sphere.rst`: software reference page: pair lj cut sphere
+- `pair_lj_cut_tip4p.rst`: software reference page: pair lj cut tip4p
+- `pair_lj_expand.rst`: software reference page: pair lj expand
+- `pair_lj_expand_sphere.rst`: software reference page: pair lj expand sphere
+- `pair_lj_long.rst`: software reference page: pair lj long
+- `pair_lj_pirani.rst`: software reference page: pair lj pirani
+- `pair_lj_relres.rst`: software reference page: pair lj relres
+- `pair_lj_smooth.rst`: software reference page: pair lj smooth
+- `pair_lj_smooth_linear.rst`: software reference page: pair lj smooth linear
+- `pair_lj_switch3_coulgauss_long.rst`: software reference page: pair lj switch3 coulgauss long
+- `pair_local_density.rst`: software reference page: pair local density
+- `pair_lubricate.rst`: software reference page: pair lubricate
+- `pair_lubricateU.rst`: software reference page: pair lubricateU
+- `pair_mbx.rst`: software reference page: pair mbx
+- `pair_mdf.rst`: software reference page: pair mdf
+- `pair_meam.rst`: software reference page: pair meam
+- `pair_meam_spline.rst`: software reference page: pair meam spline
+- `pair_meam_sw_spline.rst`: software reference page: pair meam sw spline
+- `pair_mesocnt.rst`: software reference page: pair mesocnt
+- `pair_mesodpd.rst`: software reference page: pair mesodpd
+- `pair_mgpt.rst`: software reference page: pair mgpt
+- `pair_mie.rst`: software reference page: pair mie
+- `pair_mliap.rst`: software reference page: pair mliap
+- `pair_modify.rst`: software reference page: pair modify
+- `pair_momb.rst`: software reference page: pair momb
+- `pair_morse.rst`: software reference page: pair morse
+- `pair_multi_lucy.rst`: software reference page: pair multi lucy
+- `pair_multi_lucy_rx.rst`: software reference page: pair multi lucy rx
+- `pair_nb3b.rst`: software reference page: pair nb3b
+- `pair_nm.rst`: software reference page: pair nm
+- `pair_none.rst`: software reference page: pair none
+- `pair_oxdna.rst`: software reference page: pair oxdna
+- `pair_oxdna2.rst`: software reference page: pair oxdna2
+- `pair_oxdna3.rst`: software reference page: pair oxdna3
+- `pair_oxrna2.rst`: software reference page: pair oxrna2
+- `pair_pace.rst`: software reference page: pair pace
+- `pair_pace_apip.rst`: software reference page: pair pace apip
+- `pair_pedone.rst`: software reference page: pair pedone
+- `pair_peri.rst`: software reference page: pair peri
+- `pair_pod.rst`: software reference page: pair pod
+- `pair_polymorphic.rst`: software reference page: pair polymorphic
+- `pair_python.rst`: software reference page: pair python
+- `pair_quip.rst`: software reference page: pair quip
+- `pair_rann.rst`: software reference page: pair rann
+- `pair_reaxff.rst`: software reference page: pair reaxff
+- `pair_rebomos.rst`: software reference page: pair rebomos
+- `pair_resquared.rst`: software reference page: pair resquared
+- `pair_rheo.rst`: software reference page: pair rheo
+- `pair_rheo_solid.rst`: software reference page: pair rheo solid
+- `pair_runner.rst`: software reference page: pair runner
+- `pair_saip_metal.rst`: software reference page: pair saip metal
+- `pair_sdpd_taitwater_isothermal.rst`: software reference page: pair sdpd taitwater isothermal
+- `pair_smatb.rst`: software reference page: pair smatb
+- `pair_smd_hertz.rst`: software reference page: pair smd hertz
+- `pair_smd_tlsph.rst`: software reference page: pair smd tlsph
+- `pair_smd_triangulated_surface.rst`: software reference page: pair smd triangulated surface
+- `pair_smd_ulsph.rst`: software reference page: pair smd ulsph
+- `pair_smtbq.rst`: software reference page: pair smtbq
+- `pair_snap.rst`: software reference page: pair snap
+- `pair_soft.rst`: software reference page: pair soft
+- `pair_sph_heatconduction.rst`: software reference page: pair sph heatconduction
+- `pair_sph_idealgas.rst`: software reference page: pair sph idealgas
+- `pair_sph_lj.rst`: software reference page: pair sph lj
+- `pair_sph_rhosum.rst`: software reference page: pair sph rhosum
+- `pair_sph_taitwater.rst`: software reference page: pair sph taitwater
+- `pair_sph_taitwater_morris.rst`: software reference page: pair sph taitwater morris
+- `pair_spica.rst`: software reference page: pair spica
+- `pair_spin_dipole.rst`: software reference page: pair spin dipole
+- `pair_spin_dmi.rst`: software reference page: pair spin dmi
+- `pair_spin_exchange.rst`: software reference page: pair spin exchange
+- `pair_spin_magelec.rst`: software reference page: pair spin magelec
+- `pair_spin_neel.rst`: software reference page: pair spin neel
+- `pair_srp.rst`: software reference page: pair srp
+- `pair_style.rst`: software reference page: pair style
+- `pair_sw.rst`: software reference page: pair sw
+- `pair_sw_angle_table.rst`: software reference page: pair sw angle table
+- `pair_table.rst`: software reference page: pair table
+- `pair_table_rx.rst`: software reference page: pair table rx
+- `pair_tersoff.rst`: software reference page: pair tersoff
+- `pair_tersoff_mod.rst`: software reference page: pair tersoff mod
+- `pair_tersoff_zbl.rst`: software reference page: pair tersoff zbl
+- `pair_thole.rst`: software reference page: pair thole
+- `pair_threebody_table.rst`: software reference page: pair threebody table
+- `pair_tracker.rst`: software reference page: pair tracker
+- `pair_tri_lj.rst`: software reference page: pair tri lj
+- `pair_uf3.rst`: software reference page: pair uf3
+- `pair_ufm.rst`: software reference page: pair ufm
+- `pair_vashishta.rst`: software reference page: pair vashishta
+- `pair_wf_cut.rst`: software reference page: pair wf cut
+- `pair_write.rst`: software reference page: pair write
+- `pair_ylz.rst`: software reference page: pair ylz
+- `pair_yukawa.rst`: software reference page: pair yukawa
+- `pair_yukawa_colloid.rst`: software reference page: pair yukawa colloid
+- `pair_zbl.rst`: software reference page: pair zbl
+- `pair_zero.rst`: software reference page: pair zero
+- `partition.rst`: software reference page: partition
+- `plugin.rst`: software reference page: plugin
+- `prd.rst`: software reference page: prd
+- `print.rst`: software reference page: print
+- `processors.rst`: software reference page: processors
+- `python.rst`: software reference page: python
+- `quit.rst`: software reference page: quit
+- `read_data.rst`: software reference page: read data
+- `read_dump.rst`: software reference page: read dump
+- `read_restart.rst`: software reference page: read restart
+- `region.rst`: software reference page: region
+- `region2vmd.rst`: software reference page: region2vmd
+- `replicate.rst`: software reference page: replicate
+- `rerun.rst`: software reference page: rerun
+- `reset_atoms.rst`: software reference page: reset atoms
+- `reset_timestep.rst`: software reference page: reset timestep
+- `restart.rst`: software reference page: restart
+- `run.rst`: software reference page: run
+- `run_style.rst`: software reference page: run style
+- `set.rst`: software reference page: set
+- `shell.rst`: software reference page: shell
+- `special_bonds.rst`: software reference page: special bonds
+- `suffix.rst`: software reference page: suffix
+- `tad.rst`: software reference page: tad
+- `temper.rst`: software reference page: temper
+- `temper_grem.rst`: software reference page: temper grem
+- `temper_npt.rst`: software reference page: temper npt
+- `thermo.rst`: software reference page: thermo
+- `thermo_modify.rst`: software reference page: thermo modify
+- `thermo_style.rst`: software reference page: thermo style
+- `third_order.rst`: software reference page: third order
+- `timer.rst`: software reference page: timer
+- `timestep.rst`: software reference page: timestep
+- `uncompute.rst`: software reference page: uncompute
+- `undump.rst`: software reference page: undump
+- `unfix.rst`: software reference page: unfix
+- `units.rst`: software reference page: units
+- `variable.rst`: software reference page: variable
+- `velocity.rst`: software reference page: velocity
+- `write_coeff.rst`: software reference page: write coeff
+- `write_data.rst`: software reference page: write data
+- `write_dump.rst`: software reference page: write dump
+- `write_molecule.rst`: software reference page: write molecule
+- `write_restart.rst`: software reference page: write restart
+- `README.md`: source, licence, scope and file map

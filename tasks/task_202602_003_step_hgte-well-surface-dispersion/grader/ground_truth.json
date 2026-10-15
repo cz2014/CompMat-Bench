@@ -1,0 +1,32 @@
+{
+  "_doc": "L3 analyze ground truth = our self-consistent reproduction (3_reproduction/L3/result.json + auditor/l3_metrics.json), never the paper's numbers (the source figure prints none). The <z> truths are the record's native dimensionless <z>/d values converted to nm by multiplying with the full 155 nm computational stack thickness (55+45+55; kdotpy normalizes its z observable by the full stack).",
+  "gap_k0_neg2e11_meV": 10.706,
+  "gap_k0_pos2e11_meV": 4.888,
+  "anisotropy_neg2e11_meV": 3.170,
+  "anisotropy_pos2e11_meV": 0.630,
+  "zmax_neg2e11_nm": 16.0456,
+  "zmin_neg2e11_nm": -3.1155,
+  "zmax_pos2e11_nm": 2.8954,
+  "zmin_pos2e11_nm": -8.2894,
+  "_rules": {
+    "gap_k0_neg2e11_meV": "+/-10% relative (handbook 2(1))",
+    "gap_k0_pos2e11_meV": "+/-10% relative (handbook 2(1))",
+    "anisotropy_contrast": "documented 2(5) exception: PASS iff anisotropy_neg2e11_meV >= 2.0 AND anisotropy_pos2e11_meV >= 0 AND anisotropy_neg2e11_meV >= 3.0 * anisotropy_pos2e11_meV; individual magnitudes recorded as diagnostics, not toleranced",
+    "z_neg2e11": "zmax_neg2e11_nm > 0 AND zmin_neg2e11_nm < 0 AND (zmax - zmin) >= 7.5 nm",
+    "z_pos2e11": "zmax_pos2e11_nm > 0 AND zmin_pos2e11_nm < 0 AND (zmax - zmin) >= 7.5 nm"
+  },
+  "anisotropy_contrast_min_neg_meV": 2.0,
+  "anisotropy_contrast_min_ratio": 3.0,
+  "z_min_spread_nm": 7.5,
+  "_spread_truth_nm": {"neg2e11": 19.1611, "pos2e11": 11.1848},
+  "_secondary_recorded_not_scored": {
+    "cnp0_neg2e11_meV": -33.743,
+    "cnp0_pos2e11_meV": 23.077
+  },
+  "_provenance": {
+    "record": "3_reproduction/L3/result.json (paper directory)",
+    "native_z": {"neg2e11": {"zmax": 0.10352, "zmin": -0.0201}, "pos2e11": {"zmax": 0.01868, "zmin": -0.05348}},
+    "stack_nm": 155.0,
+    "pins": "k* = 0.4 nm^-1, near-CNP window CNP0 +/- 25 meV, grid step <= 0.05 nm^-1 (record validates 0.02-0.05)"
+  }
+}

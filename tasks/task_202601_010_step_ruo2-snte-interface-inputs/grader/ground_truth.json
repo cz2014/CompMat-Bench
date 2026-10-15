@@ -1,0 +1,202 @@
+{
+  "subtask": "L2 gen_input",
+  "kind": "gen_input (VASP input set + generated interface structure)",
+  "_doc": "Ground truth is the constructed RuO2/SnTe interface and a reconstructed intended relax/static input deck. No completed SOC DFT result validates these settings at the meV scale. An original step-1 attempt was cancelled; its spatial Ru magnetic pattern agrees with the corrected reference. The reference is not an as-run successful DFT deck.",
+  "provenance": "Geometry: 3_reproduction/L2/references/POSCAR_RuO2_SnTe110 (auditor build guards). Input rubric: 3_reproduction/L2/task.txt with user-approved self-review corrections to spatial magnetism and accepted equivalent settings. No completed DFT calculation is claimed.",
+  "run_labels": [
+    "relax",
+    "static"
+  ],
+  "structure_reference": "reference/POSCAR_RuO2_SnTe110",
+  "structure_match": {
+    "termination_convention": "The bottom RuO2 plane adjacent to SnTe has each Ru's two nearest coplanar O neighbors along the prompt's y axis. This human-approved reproduction geometry is fixed in the prompt; the alternative film termination is excluded. Lateral registry remains free.",
+    "max_disp_A": 0.1,
+    "method": "two_block",
+    "blocks": {
+      "substrate": [
+        "Sn",
+        "Te"
+      ],
+      "film": [
+        "Ru",
+        "O"
+      ]
+    },
+    "method_reason": "Two-block species-aware matching within 0.1 A: a common rigid 3D translation aligns the Sn/Te substrate, then one lateral translation aligns Ru/O. A one-to-one site correspondence transfers spatial Ru sublattice and bottom-fixed-region labels. Atom permutations, periodic wrapping, rigid translations and free film registry are accepted; the declared termination and normal interface separation remain fixed.",
+    "applies_to": "both runs (relax and static share the same POSCAR)"
+  },
+  "poscar": {
+    "species_counts": {
+      "Sn": 160,
+      "Te": 160,
+      "Ru": 36,
+      "O": 72
+    },
+    "n_atoms": 428,
+    "cell_A": [
+      6.3716,
+      18.0217,
+      117.8341
+    ],
+    "vacuum_axis": 2,
+    "min_vacuum_A": 18.0,
+    "n_fixed_atoms": 160,
+    "fixed_note": "The bottom 20 SnTe planes (80 Sn + 80 Te) are FFF; every coordinate of every other atom is TTT. Labels follow the geometric mapping, not submitted atom indices."
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      5,
+      2,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "encut": {
+    "rule": "ENCUT >= the largest ENMAX over Sn_d, Te, Ru_pv, O = 400 eV (O; the pseudopotential's own floor)",
+    "status": "ACTIVE",
+    "reason": "ENMAX sourced from the POTCAR headers of the VASP 5.4 PBE library (Ru_pv 230.429, O 400.000, Sn_d 241.090, Te 174.982 eV); the shared grader catalog carries them. task.txt fixes ENCUT=520 eV (the atomate2 MP-consistent value), comfortably above the 400 eV floor; the prompt no longer prints it (5.2a), and the agent catalog now carries the ENMAX values."
+  },
+  "incar_required": {
+    "_note": "Each rule applies to the effective value: the tag if explicitly set, else the VASP default. Only the settings listed here are graded; the per-tag reasoning is in notes.md.",
+    "shared_both_runs": {
+      "ENCUT": ">= the largest ENMAX over Sn_d, Te, Ru_pv, O = 400 eV (the pseudopotential's own floor; the agent derives it from the ENMAX values now listed in agent/potcar_catalog.yaml -- the prompt no longer pins a number)",
+      "EDIFF": "<= 1e-5 eV (task.txt; default 1e-4)",
+      "LDIPOL": ".TRUE. (polar slab; default .FALSE.)",
+      "IDIPOL": "3 (dipole along the z slab normal; default 0)",
+      "LDAU": ".TRUE. (DFT+U on Ru d; default .FALSE.)",
+      "LDAUTYPE": "2 (Dudarev; default 2 -- in-set, omitted passes; LDAUTYPE=1 fails)",
+      "LDAUL_Ru": "2 (d channel on Ru; -1 on Sn/Te/O)",
+      "MAGMOM": "Mapped rutile Ru sublattices alternate between adjacent c/2 planes, with opposite moments along one common Neel axis; either global sign and any common static axis are accepted. Ru magnitudes >=0.3 uB, other magnitudes <=0.1 uB; net Ru moment <=half the sum of magnitudes (existing initialization bounds).",
+      "GGA": "PBE: GGA absent or GGA=Pe",
+      "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints.",
+      "U_eff_Ru": "Dudarev U-J in [2.7,3.3] eV on Ru with LDAUL=2; other species LDAUL=-1 and U=J=0. Per-species arrays follow POSCAR block order; omitted LDAUJ defaults to zero."
+    },
+    "relax_only": {
+      "ISPIN": "2 (collinear spin-polarized; default 1)",
+      "LSORBIT": "effectively .FALSE. (collinear relax, no SOC; default .FALSE., so omitting passes; LSORBIT=.TRUE. fails)",
+      "relax_fixed_cell": "ISIF in {0,1,2}, IBRION in {1,2,3}, NSW positive integer, EDIFFG<0 and |EDIFFG|<=0.05 eV/A",
+      "LNONCOLLINEAR": "effectively false (default follows LSORBIT); scalar MAGMOM per atom",
+      "ISMEAR": "Fermi-Dirac -1, Gaussian 0 or Methfessel-Paxton 1/2; omitted value defaults to 1"
+    },
+    "static_only": {
+      "LSORBIT": ".TRUE. (noncollinear spin-orbit coupling; default .FALSE., REQUIRED-explicit)",
+      "static": "NSW effectively 0 (default 0, so omitting passes) or IBRION=-1",
+      "LNONCOLLINEAR": "effectively true (default follows LSORBIT); three MAGMOM components per atom",
+      "ISMEAR": "Fermi-Dirac -1, Gaussian 0 or Methfessel-Paxton 1/2; tetrahedron -5 only with existing integration-mesh support (at least two subdivisions on at least two axes for automatic meshes). Default 1."
+    }
+  },
+  "score": "1 only if both runs (relax, static) pass the structure match AND their per-run REQUIRED INCAR/KPOINTS rubric (all checks must pass; any single failure scores 0)",
+  "format": "answer.json root and runs must be objects; both required run paths must be nonempty strings. Basic schema failures return score 0.",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax": [
+        3,
+        1,
+        1
+      ],
+      "static": [
+        3,
+        1,
+        1
+      ]
+    },
+    "references": {
+      "relax": {
+        "automatic_subdivisions": [
+          3,
+          1,
+          1
+        ],
+        "minimum": [
+          3,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "9e84af71bdd0c66b4e212d81fcf0d2b4ef7da58197e18177fafddf95e8e3aee1",
+        "reference_lattice_angstrom": [
+          [
+            6.37163,
+            0.0,
+            4e-16
+          ],
+          [
+            -1.1e-15,
+            18.021691120846565,
+            1.1e-15
+          ],
+          [
+            0.0,
+            0.0,
+            117.83409771412703
+          ]
+        ],
+        "reference_atom_count": 428
+      },
+      "static": {
+        "automatic_subdivisions": [
+          3,
+          1,
+          1
+        ],
+        "minimum": [
+          3,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "9e84af71bdd0c66b4e212d81fcf0d2b4ef7da58197e18177fafddf95e8e3aee1",
+        "reference_lattice_angstrom": [
+          [
+            6.37163,
+            0.0,
+            4e-16
+          ],
+          [
+            -1.1e-15,
+            18.021691120846565,
+            1.1e-15
+          ],
+          [
+            0.0,
+            0.0,
+            117.83409771412703
+          ]
+        ],
+        "reference_atom_count": 428
+      }
+    }
+  }
+}

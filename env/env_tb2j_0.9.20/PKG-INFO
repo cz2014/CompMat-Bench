@@ -1,0 +1,101 @@
+Metadata-Version: 2.4
+Name: TB2J
+Version: 0.9.20
+Summary: TB2J: First principle to Heisenberg exchange J using tight-binding Green function method
+Author-email: Xu He <mailhexu@gmail.com>
+Maintainer-email: Xu He <mailhexu@gmail.com>
+License: BSD-2-Clause
+Project-URL: Homepage, https://github.com/mailhexu/TB2J
+Project-URL: Documentation, https://tb2j.readthedocs.io/en/latest/
+Project-URL: Repository, https://github.com/mailhexu/TB2J
+Project-URL: Issues, https://github.com/mailhexu/TB2J/issues
+Keywords: magnetism,DFT,Heisenberg,exchange,physics
+Classifier: Development Status :: 3 - Alpha
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Chemistry
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: License :: OSI Approved :: BSD License
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: scipy<1.17,>=1.9
+Requires-Dist: matplotlib
+Requires-Dist: ase>=3.19
+Requires-Dist: tqdm
+Requires-Dist: pathos
+Requires-Dist: packaging>=20.0
+Requires-Dist: HamiltonIO>=0.3.8
+Requires-Dist: pre-commit
+Requires-Dist: sympair>=0.1.4
+Requires-Dist: supercellmap
+Requires-Dist: tomli>=2.0.0
+Requires-Dist: tomli-w>=1.0.0
+Requires-Dist: typing_extensions
+Requires-Dist: sisl>=0.16.2
+Requires-Dist: h5py
+Provides-Extra: siesta
+Requires-Dist: sisl>=0.9.0; extra == "siesta"
+Requires-Dist: netcdf4; extra == "siesta"
+Provides-Extra: lawaf
+Requires-Dist: lawaf>=0.2.3; extra == "lawaf"
+Provides-Extra: pypao
+Requires-Dist: pypao>=0.1.0; extra == "pypao"
+Provides-Extra: magnon
+Requires-Dist: netcdf4; extra == "magnon"
+Requires-Dist: streamlit; extra == "magnon"
+Provides-Extra: all
+Requires-Dist: sisl>=0.9.0; extra == "all"
+Requires-Dist: netcdf4; extra == "all"
+Requires-Dist: lawaf>=0.2.3; extra == "all"
+Requires-Dist: streamlit; extra == "all"
+Dynamic: license-file
+
+[![Python application](https://github.com/mailhexu/TB2J/actions/workflows/python-app.yml/badge.svg)](https://github.com/mailhexu/TB2J/actions/workflows/python-app.yml)
+[![Documentation Status](https://readthedocs.org/projects/tb2j/badge/?version=latest)](https://tb2j.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://app.travis-ci.com/mailhexu/TB2J.svg?branch=master)](https://app.travis-ci.com/mailhexu/TB2J)
+[![Downloads](https://pepy.tech/badge/tb2j)](https://pepy.tech/project/tb2j)
+
+## Description
+
+TB2J is a open source python package for calculating the magnetic interaction parameters in Heisenberg models from DFT. It use the magnetic force theorem and take the local rigid spin rotation as a perturbation in the Green's function method. 
+
+The TB2J project is initialized in the PhyTheMa and Nanomat teams in the University of Liege.
+
+The features include:
+ - Calculates  parameters in Heisenberg model, including isotropic exchange, anisotropic exchange, Dyzanoshinskii-Moriya interaction.
+ - Can use the input from many DFT codes with Wannier90, e.g. Abinit, Quantum Espresso, Siesta, VASP, etc.
+ - Can use input from DFT codes with numerical orbitals from Siesta, OpenMX and ABACUS.
+ - Supports DMFT exchange calculations using self-energies from DMFT solvers (e.g., w2dynamics).
+ - Calculate magnon band structure from the Heisenberg Hamiltonian.
+ - Generate input for spin dynamics/Monte Carlo codes MULTIBINIT.
+ - Require only ground state DFT calculation.
+ - No need for supercells.
+ - Calculate magnetic interaction up to large distance. 
+ - Minimal user input, which allows for a black-box like experience and automatic workflows.
+ - Versatile API on both the input (DFT Hamiltonian) and the output (Heisenberg model) sides.
+
+For more information, see the documentation on
+ <https://tb2j.readthedocs.io/en/latest/>
+
+## Dependencies
+* python (tested for ver 3.6)
+* numpy 
+* scipy
+* ASE (atomic simulation environment) 
+* matplotlib  (optional) if you want to plot magnon band structure directly. 
+* sisl (optional) for Siesta interface
+
+## Installation
+pip install TB2J
+
+## Message:
+- We welcome contributions. If you would like to add the interface to other codes, or extend the capability of TB2J, please contact us! <mailhexu_AT_gmail_DOT_com>
+

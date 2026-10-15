@@ -1,0 +1,58 @@
+SYSTEM = CrN variant (iii) |++--> AFM, LDA+U, Wannier static for L4
+
+# --- basis and accuracy (as L3's production static) ---------------------------
+PREC   = Accurate
+ENCUT  = 520
+LREAL  = .FALSE.
+ALGO   = Normal
+NELM   = 200
+EDIFF  = 1E-7
+NBANDS = 72            # L3 used 56; band 50 is the top of the Wannier window,
+                       # so 56 leaves only six bands above it (L4 plan, OQ5)
+
+# --- spin and the |++--> magnetic order ---------------------------------------
+ISPIN  = 2
+MAGMOM = 3.0 -3.0 -3.0 3.0 0.0 0.0 0.0 0.0
+LASPH  = .TRUE.
+LMAXMIX = 4
+LORBIT = 11
+
+# --- LDA+U (Dudarev, U_eff = 4.1 eV on Cr 3d); LDA comes from the POTCAR ------
+LDAU      = .TRUE.
+LDAUTYPE  = 2
+LDAUL     = 2 -1
+LDAUU     = 4.1 0.0
+LDAUJ     = 0.0 0.0
+LDAUPRINT = 1
+
+# --- symmetry: OFF INCLUDING TIME REVERSAL --------------------------------------
+# Wannier90 needs the complete Gamma-centred mesh. At ISYM = 0 VASP still folds
+# 6x12x8 = 576 down to 292 by time reversal; ISYM = -1 keeps all 576.
+ISYM = -1
+
+# --- smearing -----------------------------------------------------------------
+ISMEAR = -5
+
+# --- fixed geometry -----------------------------------------------------------
+IBRION = -1
+NSW    = 0
+
+# --- run from scratch, so MAGMOM is a genuine initial condition ---------------
+ISTART = 0
+ICHARG = 2
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+
+# --- Wannier90 interface -------------------------------------------------------
+# NUM_WANN must be set here: VASP's default is the POTCAR projector count (52),
+# which overrides the .win and crashes the AMN step (probe, 2026-09-05).
+# LWANNIER90 alone writes only mmn/amn/eig; LWANNIER90_RUN calls wannier_run.
+LWANNIER90     = .TRUE.
+LWANNIER90_RUN = .TRUE.
+NUM_WANN       = 32
+
+# --- parallel layout (128 ranks, one cluster node) -----------------------------
+# NCORE = 1 is MANDATORY with LWANNIER90: any band grouping aborts the PEAD
+# routines (probe, 2026-09-05). KPAR = 16 divides 576 exactly (36 k/group).
+KPAR  = 16
+NCORE = 1

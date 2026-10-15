@@ -1,0 +1,2566 @@
+Command line reference
+======================
+
+Note: In the following, # #1 #2 denote parameters, usually numerical, unless
+      stated otherwise. Bracketed arguments [#] are optional.
+Note: The "primary" command-line options are not case sensitive and underscores
+      are ignored. This is not necessarily valid for their (additional)
+      parameters.
+
+
+Call signatures
+---------------
+
+The kdotpy application is actually a collection of several subprograms, each of
+which may be seen a separate python script.
+
+All subprograms are called from the main script main.py, that is invoked by the
+command kdotpy, provided that the kdotpy module has been installed correctly.
+The call signature is
+
+$ kdotpy xxx arg1 arg2 ...
+
+where xxx is replaced by the subprogram label. The available subprograms are:
+
+kdotpy 1d        For 1D dispersions, i.e., strip geometry.
+kdotpy 2d        For 2D dispersions, i.e., slab geometry.
+kdotpy ll        For 2D Landau level calculations.
+kdotpy bulk      For bulk (3D) dispersions.
+kdotpy bulk-ll   For Landau level calculations in 3D.
+kdotpy merge     For replotting and/or merging existing data files.
+kdotpy compare   For comparing data from two or more existing data files.
+kdotpy batch     For doing a batch run.
+kdotpy test      For running tests, useful for development purposes.
+kdotpy help      For showing help from this file.
+kdotpy doc       For showing development documentation.
+kdotpy version   For showing the version number.
+
+Alternatively, one may use
+
+$ python -m kdotpy xxx arg1 arg2 ...
+
+As of version 1.4.0, one may also run kdotpy from a python script or the
+interactive interpreter (REPL), as:
+
+import kdotpy
+kdotpy.run('xxx', 'arg1', 'arg2', ...)
+
+
+Command line parsing
+--------------------
+
+All primary commands (lwell, llayer, etc.) are case insensitive and underscores
+are ignored. They may also be preceded by a double dash (as --lwell, --llayer,
+etc.) to prevent them from being parsed as a value belonging to some other
+primary command. In general, any argument starting with double dash (or double
+dash by itself) stops the command line parser from taking more values. The
+latter behaviour has been introduced in version 1.4.0. The double-dash syntax is
+optional.
+
+
+Definition of the layer stack
+-----------------------------
+lwell #         Thickness of the active layer (e.g., quantum well) in nm.
+                (Alias: lqw, qw)
+lbarr #1 [#2]   Thickness of the barrier layers in nm. If one thickness is
+                given, assume this value for both barrier layers (bottom and
+                top). If two thicknesses are given, the first and second
+                argument refer to the bottom and top layer, respectively. The
+                input 'lbarr #1 lbarr #2' is equivalent to 'lbarr #1 #2'.
+                (Alias: lbar, lbarrier, bar, barr, barrier)
+llayer #1 [#2 ...]
+                Thicknesses of the layers in nm. The number of layers may be
+                arbitrary, but the number of thicknesses must always be equal to
+                the number of materials. This argument may not be combined with
+                lwell and lbarr.
+                (Alias: llayers, layer, layers, thickness, thicknesses,
+                thicknesses, thick)
+mwell #1 [#2]   Material for the well layer. See 'mlayer' on how to input a
+                material. (Alias: mqw)
+mbarr #1 [#2]   Material for the barrier layers. See 'mlayer' on how to input a
+                material. (Alias: mbarrier, mbar)
+mlayer #1 [#2 ...]
+                Material specification for an arbitrary number of layers. Each
+                material instance is a material id or compound (e.g., HgMnTe,
+                HgCdTe), optionally followed by extra numerical arguments that
+                define the composition. The composition can either be specified
+                as par of the compound (chemical formula) or as these extra
+                arguments. Fractions and percentages are both accepted. Thus,
+                all of the following are equivalent: HgMnTe 2%, HgMnTe 0.02,
+                HgMn0.02Te, Hg0.98Mn0.02Te, HgMn2%Te, HgMn_{0.02}Te, etc.
+                NOTE: The chemical formula is case sensitive. This eliminates
+                ambiguity. The number of specified materials must match the
+                number of thicknesses (llayer; lwell and lbarr).
+                (Alias: mater, material)
+msubst #1 [#2]  Material for the substrate. This only sets the lattice constant
+                which is used to calculate strain. If this argument is omitted,
+                the strain is taken from the strain or the alattice argument.
+                (Alias: msub, substrate, msubstrate)
+ltypes #1       Define the type (purpose of each layer). The argument must be a
+                string of the following letters whose length must match the
+                number of layers in the stack:
+                b       barrier
+                c       cap
+                d       doping
+                q OR w  well
+                s       spacer
+                (Alias: ltype, lstack)
+                NOTE: Some functions will work properly only if there is exactly
+                one 'well' layer.
+ldens #1 [#2 ...]
+                For each layer, the 'background density' of charge, for example
+                doping. There need to be as many values as there are layers. The
+                values are expressed in e/nm^2.
+                (Alias: layerdens, layerdensity)
+
+Other geometrical parameters
+----------------------------
+zres #          Resolution in the z direction in nm. (Alias: lres)
+width # [...]   Width of the sample (in the y direction. If 'width' is followed
+                by a single number, this determines the width of the device in
+                nm. If 'width' is followed by #1 * #2 or #1 x #2, where #1 is an
+                integer, then #1 is interpreted as the number of sites ny and #2
+                as the resolution yres in nm. If 'width' is followed by #1 / #2,
+                then #1 is the total width in nm; the value #2 is interpreted as
+                ny if it is an integer and as yres otherwise. If the
+                configuration value 'lattice_ycoord_midpoints' is set to
+                'false', then ny is increased by one. (Alias: w)
+yres #          Resolution in the y direction in nm. (Alias: wres)
+linterface #    Smoothing width of the interface in nm. (Alias: interface)
+periodicy       Enables periodic boundary conditions in the y direction (only
+                applies to 1d)
+stripangle #    Angle in degrees between the translationally invariant direction
+                of the strip/ribbon and the (100) lattice vector (kdotpy 1d
+                only). Default: 0
+                (Alias: ribbonangle)
+stripdir #      Direction of the translationally invariant direction of the
+                strip/ribbon in lattice coordinates. The argument may be a
+                lattice vector, e.g., 130 for (1,3,0) or any of x, y, xy, and
+                -xy (equivalent to 0, 90, 45, and -45 degrees). Only one
+                argument 'stripangle' or 'stripdir' should be given.
+                (Alias: ribbondir)
+orientation # [#] [#]
+                Orientation of the lattice. (Alias: orient)
+                Possible patterns (ang = angle, dir = direction triplet):
+                  ang          Rotation around z (like stripangle)
+                  ang ang      Tilt z axis, then rotate around z axis
+                  ang ang ang  Euler rotation z x z. Rotate around c axis, tilt
+                               z axis, rotate around z axis
+                  dir          Longitudinal direction x (like stripdir)
+                  - dir        Growth direction z
+                  dir dir      Longitudinal and growth direction x, z
+                  - dir dir    Transversal and growth direction y, z
+                  dir dir dir  Longitudinal, transversal, and growth direction
+                               x, y, z
+                  dir ang OR ang dir
+                               Growth direction z and rotation around z
+                Format for the inputs: For angles ('ang'), enter an explicit
+                floating point number containing a decimal sign (period '.').
+                Integer values (for example 45 degrees) can be entered as 45.,
+                45.0, 45d, or 45°. Direction triplets ('dir') are a triplet of
+                digits without separators and possibly with minus signs (e.g.,
+                100, 111, 11-2, -110) or numbers separated by commas without
+                spaces (e.g., 1,1,0 or 10,-10,3).
+NOTE: If the option 'orientation' is used, the program uses an alternative
+construction method for the Hamiltonian, which may cause the time consumption by
+this step to increase by a factor of approximately 4. There is no exception for
+trivial orientations, like 'orientation - 001', which still invokes the
+alternative construction method.
+
+
+Other physical parameters
+-------------------------
+External parameters:
+b # [...]       External magnetic field in T. Ranges are input as described in
+                the section 'Vectors and Ranges', see below.
+temp #          Temperature in K. The temperature affects the gap size (band
+                edges) and the Mn exchange coupling. Optionally, it sets the
+                thermal broadening of the density of states if the argument
+                'broadening thermal' (without value) is given.
+                NOTE: The gap dependence on temperature has been implemented
+                since version v0.81. For older versions, the values at T = 0 K
+                were used regardless of the temperature set by 'temp #'.
+
+Specification of strain:
+ignorestrain    Ignore the strain terms in the Hamiltonian. (Alias: nostrain)
+strain # [# #]  Set strain value. The value may be set as a number or percentage
+                (e.g., -0.002 or -0.2%). The value is interpreted as the
+                'relative strain' epsilon = (a_strained / a_unstrained) - 1,
+                where a_unstrained refers to the well material. (In layer stacks
+                with more than three layers, the well may not be identified, and
+                then this option cannot be used. Setting 'strain none' is
+                equivalent to 'ignorestrain'. It is also possible to specify
+                more than one argument; then the values are interpreted as
+                epsilon_xx, epsilon_yy, and epsilon_zz. It is possible to enter
+                - for one or two values; then the strain values corresponding to
+                these components are determined from the other one(s). If
+                'strain' is used together with "ignorestrain", the latter has
+                priority, i.e., no strain is applied.
+                NOTE: It is no longer possible to specify a strain axis. One can
+                use 'strain' with two or three numerical arguments instead.
+alattice #1     Set the lattice constant of the strained materials.
+                (Alias: alatt, latticeconst)
+NOTE: Only one of the three options 'msubst', 'alattice', 'strain #value' may be
+used at once.
+
+Material parameters:
+matparam #      Modify the material parameters. The argument can either be a
+                materials file or a sequence of parameter=value pairs. For the
+                latter, multiple parameters must be separated by semicolons (;)
+                and must be preceded by the material identifier, like so:
+                matparam 'HgTe:gamma1=4.1;gamma2=0.7;CdTe:gamma1=1.6'
+                Spaces are ignored and the colon (:) after the material may be
+                replaced by period (.) or underscore (_). The argument must be
+                quoted in the shell if it contains spaces. The material need not
+                be repeated for subsequent parameters, so that in the example,
+                gamma2 refers to the material HgTe. The values may be Python
+                expressions, but restrictions apply (see the information for
+                material parameter files). Note that all expressions must
+                resolve to numerical values in order for kdotpy to run
+                successfully. Multiple matparam arguments will be processed in
+                order of appearance on the command line. (Alias: materialparam)
+
+Options affecting calculation
+-----------------------------
+Modelling:
+norb #          Number of orbitals in the Kane model. The argument can be either
+                6 or 8, which means exclusion or inclusion, respectively, of the
+                Gamma7 orbitals. (Alias: orbitals, orb)
+                Shorthand for 'norb 6': 6o, 6orb, 6orbital, 6band, sixband
+                Shorthand for 'norb 8': 8o, 8orb, 8orbital, 8band, eightband
+                NOTE: Omission of this input is not permitted.
+noren           Do not renormalize the parameters if using anything else than
+                then eight-orbital Kane model. (Alias: norenorm,
+                norenormalization, norenormalisation)
+lllegacy, llfull
+                Force Landau level mode to be 'legacy' or 'full'. By default,
+                the Landau level calculation uses either the symbolic mode 'sym'
+                if possible or the full mode if necessary. The legacy mode may
+                not be used if the full mode were required. By giving 'llfull',
+                one may also use the full mode if the automatically chosen 'sym'
+                mode does not give the desired results. Beware that full mode is
+                much heavier on resources. (kdotpy ll and kdotpy bulk-ll)
+llmax           Maximum Landau level index. This has to be an integer >= 0. If
+                omitted, 30 is used. Larger values yield a more complete result,
+                but require more computation time and memory. (Alias: nll)
+
+Symmetries, boundary conditions, degeneracy lifting, etc.:
+noax            Include non-axial terms, i.e., break the axial symmetry. (Alias:
+                noaxial, nonaxial)
+ax              Use axial symmetry, i.e., the axial approximation. This is the
+                default for Landau level mode (kdotpy ll and kdotpy bulk-ll).
+                For dispersions, either 'ax' or 'noax' is required.
+                (Alias: axial)
+split #         Splitting (in meV) to lift the degeneracies. (Choose it to be
+                small, e.g., 0.01.
+splittype #     Type of degeneracy splitting. One of the following choices:
+                  automatic  Choose sgnjz if BIA is disabled, bia if BIA is
+                             enabled. (Alias: auto; default)
+                  sgnjz      Use the operator sgn(J_z). Despite the fact that
+                             this quantity is not a conserved quantum number, it
+                             works remarkably well. This is also the default for
+                             calculations without BIA.
+                  sgnjz0     Use the operator sgn(J_z) at k = 0 only. This type
+                             can be useful if the degeneracy is broken for
+                             nonzero k as a result of some other term, for
+                             example an electric field.
+                  isopz      Use isoparity 'isopz'. This observable
+                             distinguishes the two blocks and is a conserved
+                             quantum number for symmetric geometries in many
+                             circumstances. Sometimes gives cleaner results than
+                             sgnjz.
+                  isopzw     Use isoparity 'isopzw', applied to the well layer
+                             only. While 'isopz' is not a conserved quantity for
+                             asymmetric geometries (e.g., a well layer and two
+                             barriers with unequal thickness), 'isopzw' can
+                             remain almost conserved in that case. Due to
+                             incomplete confinement in the well region, the
+                             eigenvalues may deviate significantly from ±1.
+                  isopzs     Use isoparity 'isopzs', applied to a region 
+                             symmetric around the centre of the well layer.
+                             Like 'isopzw', the observable 'isopzs' is also an
+                             almost conserved quantity for asymmetric geometries
+                             and tend to have eigenvalues closer to ±1, because
+                             it generally takes into account the decaying wave
+                             function in (a part of) the barriers.
+                  bia        Modified form of sgnjz, that works better if bulk
+                             inversion asymmetry (BIA) is present.
+                  helical    Momentum dependent splitting, with the quantization
+                             axis along the momentum direction. Zero at k = 0.
+                  helical0   Same as helical, but with sgn(J_z) at k = 0.
+                  cross      Momentum dependent splitting, with the quantization
+                             axis perpendicular to the in-plane momentum
+                             direction, i.e., kx Sy - ky Sx. Zero at k = 0.
+                  cross0     Same as cross, but with sgn(J_z) at k = 0.
+bia             Include bulk inversion asymmetry. Note that combination of BIA
+                with 'split' may cause unwanted asymmetries, for example under
+                kz -> -kz. (For kdotpy 2d, kdotpy ll, and kdotpy bulk)
+ignoremagnxy    Ignore the in-plane components of the magnetic field in the
+                gauge field (i.e., the 'orbital field'). The in-plane components
+                still have an effect through the Zeeman and exchange couplings
+                even if this option is enabled. Enabling this option 'simulates'
+                the calculation before the in-plane orbital fields were
+                implemented, as of version v0.58 (kdotpy 1d) or v0.74
+                (kdotpy 2d), respectively. (Alias: ignoreorbxy, ignorebxy)
+gaugezero #     Set the y position where the magnetic gauge potential is zero.
+                The position coordinates are relative: -1.0 and +1.0 for the
+                bottom and top edges of the sample, 0.0 for the center
+                (default). (Alias: gauge0)
+yconfinement #  Set a confinement in the y direction; local potential on the
+                outermost sites, in meV. A large value (such as the default) 
+                suppresses the wave function at the edges, which effectively 
+                imposes Dirichlet boundary conditions (wave functions = 0). If
+                the value is set to zero, the boundary conditions are
+                effectively of Neumann type (derivative of wave functions = 0).
+                Default: 100000 (meV) (Alias: yconf, confinement)
+
+Diagonalization options:
+neig #          Number of eigenvalues and -states to be asked from the Lanczos
+                method. (Alias: neigs)
+targetenergy #  Energy (meV) at which the shift-and-invert Lanczos is targeted.
+                If multiple values are given, then apply Lanczos at each of
+                these energies (experimental feature). If large numbers of
+                eigenvalues are to be calculated (e.g., 500), it may be faster
+                to calculate multiple sets with a smaller number of eigenvalues
+                (e.g., 5 sets of 150). Note that the values need to be chosen
+                carefully. If there is no overlap between the intervals where
+                eigenvalues are found, the calculation is aborted. For smaller
+                numbers of eigenvalues, it is recommended to use a single value
+                for targetenergy. (Alias: e0)
+energyshift #   Shift energies afterwards by this amount (in meV). Other energy
+                values may still refer to the unshifted energies. This is an
+                experimental feature that should be used with care. In case one
+                intends to merge data (e.g., using kdotpy merge), then one
+                should avoid using this option for the individual runs.
+                Afterwards, this option may be used with kdotpy merge. (Alias:
+                eshift)
+zeroenergy      Try to align the charge-neutral gap with E = 0 meV. In
+                combination with 'energyshift', align at that energy instead of
+                0 meV. See also the warnings under 'energyshift #'.
+
+System options (calculation):
+cpus #          Number of parallel processes to be used. Note: The processes do
+                not share memory, so it should be chosen such that the total
+                memory requirement does not exceed the available memory. Can
+                also be set to value 'max', 'auto' or 'automatic', for using
+                all available cores; this is the default. For a single-core
+                run, 'cpus 1' must be given explicitly. (Alias: cpu, ncpu)
+threads #       Number of threads used per process in external libraries like
+                Intel MKL (PARDISO), FEAST, LU decomposition. (Defaults to 1 if
+                omitted; Alias: nthreads) 
+gpus #          Number of parallel workers using the GPU when running a CUDA
+                capable solver (defaults to 'cpus' if omitted. Alias: gpu,
+                ngpu).
+gpuselect #     NOT YET IMPLEMENTED: Select GPU(s) to be used on a multi-GPU
+                environment. Currently uses first CUDA capable device. Can be
+                controlled via CUDA environment variables.
+showetf         Show estimated completion time in the progress monitor. When
+                this option is omitted, the 'estimated time left' (ETL) is
+                shown. This option is particularly convenient for longer jobs.
+                Alias: monitoretf
+verbose         Show more information on screen (written to stdout). Useful for
+                debugging purposes.
+tempout         Create a timestamped subdirectory in the output directory.
+                After each step that updates a DiagDataPoint instance, it is
+                'pickled' (using Python library 'pickle') and saved to disk as
+                temporary binary file. This output can be loaded with the
+                'resume' argument. See also the notes for 'resume' right below.
+keepeivecs      Keep eigenvectors in memory for all DiagDataPoints and also for
+                temporary output files (see 'tempout').
+                Warning: This can drastically increase the RAM usage.
+resume #1 [#2]  Path to folder created by argument 'tempout' during a previous
+                script run. If a matching DiagDataPoint is found in this folder,
+                it is restored into RAM and already processed calculation steps
+                are skipped.
+                Optionally, an integer step index may be specified to overwrite
+                the step from which the process is resumed. This can be used,
+                e.g. to redo the postprocessing for each DiagDataPoint, if
+                eigenvectors have been saved (see 'keepeivecs').
+                Note: Some command line arguments may be changed between runs
+                (e.g. cpu/threads configuration) without affecting the validity
+                of older DDPs for new runs. Apart from matching k & B values,
+                there is no further automatic validation.
+                Note: These files should be used for temporary storage and
+                immediate re-use only. This is not a suitable data format for
+                long-time storage. Compatibility between different versions of
+                kdotpy is NOT guaranteed. For permanent storage of eigenvectors,
+                enable the configuration option diag_save_binary_ddp. See also
+                the security warnings for the pickle module at
+                https://docs.python.org/3/library/pickle.html.
+                Usage suggestions: Resuming a preemptively canceled job (e.g.,
+                due to walltime limit, out of resources, etc), testing/debugging
+                restartable from partial solutions.
+
+
+Options affecting output
+------------------------
+Observables:
+obs #           Use observable # for the colouring of the plot. It must be one
+                of the available observables in the data files. There is also an
+                option to plot the standard deviation by prepending sigma to the
+                observable. For example, sigmay will look for y and y2 in the
+                list of observables, and assign plot colours according to the
+                values of sqrt(<y2> - <y>^2).
+                There is a special case "orbitalrgb", which colours the states
+                with RGB colours determined by the (gamma6,gamma8l,gamma8h)
+                expectation values.
+                In kdotpy, using this option will leave only the markers to
+                distinguish the data sets; without it, distinct markers and
+                colours are used.
+obsrange [#] #  Minimum and maximum value of the observable that determines the
+                colour scale. If one value is given, it is the maximum and the
+                minimum is either 0.0 or the minus the maximum, which is
+                determined by whether the standard scale is symmetric or not. If
+                this option is omitted, use the predefined setting for the
+                colour scale (recommended). (Alias: orange, colorrange,
+                colourrange)
+dimful          Use dimensionful observables. Some observables, for example z
+                and y, are dimensionless by default, and this option changes
+                them to observables with a dimension (for example length in
+                nm). This option affects output data (xml and csv) and graphics.
+                Alias: dimfull
+orbitalobs      Calculate the observables 'orbital[j]', that is the squared
+                overlaps of the eigenstates within orbital number j, where j
+                runs from 1 to norb (the number of orbitals). (For kdotpy 2d
+                only.) (Alias: orbitaloverlaps, orbobs, orboverlaps)
+llobs           Calculate the observables 'll[j]', that is the squared overlaps
+                of the eigenstates within Landau level j, where j runs from -2
+                to llmax (the largest LL index). This option is available for
+                kdotpy ll in full LL mode only. (Alias: lloverlaps)
+custominterfacelengthnm #
+                When given calculate additional interface (character)
+                observables, but within a custom length interval given by #
+                (integer value in nm).
+radians         Use radians for angular coordinate values. If omitted, use
+                degrees (default).
+
+Data and plot range:
+erange #1 #2    Energy range, minimum and maximum value in meV. The energy range
+                determines the vertical plot range in plots. It is also used as
+                range for density of states calculations. For Landau level
+                calculations, states outside the energy range are not saved in
+                the B dependence data file.
+xrange [#1] #2
+                Horizontal range to display in the plot. If just one value is
+                given, the range runs from 0 to the specified value.
+                DEPRECATED: From version v0.95 onwards, the optional third
+                argument '+' is ignored. Up to version v0.94, the extra '+' was
+                used to extend the horizontal range by 5% in both directions.
+                (Alias: krange, brange)
+dosrange [#1] #2
+                Plot range of carrier density (integrated DOS) axis in plots
+                "versus density". If just one value is given, use the symmetric
+                range [-value, value]. Omission means that the plot range is
+                determined automatically. The resolution can be adjusted using
+                the configuration value 'dos_density_axis_points'. Small inputs
+                (<= 1000) are interpreted as having units of nm^-d and large
+                numbers as cm^-d, where d is the dimension.
+                (Alias: densityrange, dosmax, densitymax)
+plotvar #       Plot against the given variable, instead of the default variable
+                (coordinate component).
+xoffset         Offsets the data points slightly in horizontal direction, so
+                that (almost) degenerate points can be resolved. The direction
+                (left or right) is determined by the sign of the requested
+                observable.
+
+Plot style:
+plotstyle #     Choose the plot style. (Alias: plotmode). The second argument is
+                one of the following plot styles.
+                  normal     Unconnected data points
+                  curves     Connect the data points horizontally, i.e., by band
+                             index. This option replaces the old 'join' option.
+                             (Alias: join)
+                  horizontal Group the data points 'horizontally', but plot them
+                             as separate data points.
+                  auto       Use 'curves' if possible; otherwise use 'normal'.
+                             (Alias: automatic)
+                  spin       Use different markers based on the 'jz' observable
+                             value. (NOTE: jz is the total angular momentum, not
+                             the actual 'proper' spin)
+                  spinxy, spinxz, spinyz
+                             Like the 'normal' plot, but add arrows to indicate
+                             the spin components (sx, sy), (sx, sz) or (sy, sz),
+                             respectively.
+                  spinxy1, spinxz1, spinyz1
+                             Like spinxy, spinxz, and spinyz, but rather plot
+                             directions (unit vectors) that indicate the spin
+                             direction in the given plane.
+                  berryxy, berryxz, berryyz, berryxy1, berryxz1, berryyz1
+                             Arrows indicating Berry curvature, analogous to the
+                             above spin arrow modes
+                  isopz      Use different markers based on the 'isopz'
+                             observable value.
+                Upon omission, the default value is 'auto'.
+spin            Indicate spin expectation value (up, down) with different plot
+                markers/symbols.
+
+Other plot elements, style, etc.:
+labels          Display band characters or band labels at k = 0 (B = 0 if the
+                horizontal axis is magnetic field) and Landau level indices,
+                if applicable. This option replaces 'char', which can still be
+                used as an alias.
+                Contrary to older versions, the band characters are always
+                computed, if applicable, not only if this option is given.
+                (Alias: plotlabels, char)
+title #         Assign plot title. One may use {var} to substitute the variable
+                named var. In order to find out which are the available variable
+                names (keys), use 'title ?' to get a list. The format syntax
+                follows Python's string format function, including the format
+                specification "Mini-Language"; see:
+                  https://docs.python.org/3/library/string.html#format-string-syntax
+                Here, only named variables can be specified. Positional ones,
+                like "{0}" or "{1}" are not permitted. Some special variable
+                names are:
+                  llayer(#)       For layer properties, append parenthesized
+                                  integer index (n), e.g., llayer(1), for the
+                                  property of the nth layer.
+                  b_x, b_y, b_z   Cartesian vector components
+                  b_phi, b_theta  Angular coordinates of a vector in degrees
+                  b_len, b_abs    Vector length (len and abs are aliases)
+                Alias: plottitle
+titlepos #      Position of the plot title. This may be any of the following:
+                  l, r, t, b;
+                  left, right, top, bottom, center;
+                  top-center, bottom-center;
+                  tl, tr, bl, br;
+                  top-left, top-right, bottom-left, bottom-right
+                  n, s, ne, nw, se, sw;
+                  north, south, north-east, north-west, south-east, south-west.
+                NOTE: left and right are synonyms to "top left" and "top right"
+                NOTE: Double words can be with hyphen (top-center), underscore
+                  (top_center), space ("top center"; quotes are usually needed)
+                  or be joined (topcenter).
+                NOTE: e, east, w, west are not legal values
+                Alias: plottitlepos, titleposition, plottitleposition
+legend          Include a legend in the plot. For coloured observables, this is
+                a colour bar plus the indication of the observable.
+                (Alias: filelegend)
+legend label # [label # ...]
+                If the argument 'legend' is directly followed by 'label'
+                followed by the label text, use this text in the legend instead
+                of the file names. The label text must be quoted on the command
+                line if it contains spaces. (For kdotpy compare only.)
+
+System options (output):
+out #           Determines the names of the output files. For example, if the
+                argument is "1", the program produces output1.xml, plot1.pdf,
+                etc. This option also uses variable substitution using Python's
+                string format function; see command 'plottitle' above. In order
+                to obtain -- (double dash) at the start, precede by = (equals
+                sign), i.e., input '=--test' to obtain '--test'.
+                (Alias: outfile, outid, outputid, outputname)
+outdir #        Name of the output directory. If the directory does not exist,
+                try to create it. If omitted, try to write to the subdirectory
+                "data" if it exists, otherwise in the current directory. In
+                order to obtain -- (double dash) at the start, precede by =
+                (equals sign), i.e., input '=--test' to obtain '--test'.
+                (Alias: dir, outputdir)
+
+Extras
+------
+Density of states, electrostatics, etc.:
+dos             Plot density of states and integrated density of states. The
+                Fermi energy and chemical potential are also indicated in the
+                plots and printed to stdout, if their calculation has been
+                successful. The range of validity is shown in red: In the shaded
+                regions, additional states (typically at larger momentum k) are
+                not taken into account in the present calculation and may cause
+                the actual DOS to be higher than indicated. The validity range
+                typically grows upon increasing the momentum range (argument k).
+                For kdotpy ll, 'dos' will generate equal-DOS contours and put
+                them in the LL plot. This is done either at a number of
+                predefined densities, or at the density given by 'cardens'. For
+                this script, also plot the total DOS, and the 'numeric DOS'
+                (roughly the number of filled LL).
+localdos        For kdotpy 2d, plot the 'local DOS', the momentum-dependent
+                density of states. For kdotpy ll, plot the equivalent quantity,
+                DOS depending on magnetic field. For kdotpy ll, additionally
+                plot the 'differential DOS', the integrated DOS differentiated
+                in the magnetic field direction.
+banddos         For kdotpy 2d and kdotpy bulk, output the DOS by band. One
+                obtains two csv files, for DOS and IDOS, respectively. Each
+                column represents one band. (alias: dosbyband)
+byblock         For kdotpy 2d and kdotpy ll, in combination with 'dos'. Give
+                density of states where all states are separated by isoparity
+                value (isopz = -1 or +1). Note: By nature, this function does
+                not take into account spectral asymmetry of the individual
+                blocks. (Alias: byisopz)
+densityz        For kdotpy ll, plot density as function of z at the Fermi level,
+                for all values of the magnetic field B. The output is a
+                multipage pdf file and a csv file with z and B values over the
+                rows and columns, respectively. The output is for one carrier
+                density only.
+selfcon [# [#]] Do a selfconsistent calculation of the electrostatic potential
+                ("selfconsistent Hartree"). This method solves the Poisson
+                equation iteratively, taking into account the occupied states in
+                the well. This option also provides plots of the density as
+                function of z and of the potential.
+                Two optional numerical arguments: maximum number of iterations
+                (default: 10) and accuracy in meV (default: 0.01)
+selfconweight # Use this fractional amount to calculate the new potential in
+                each iteration of the self-consistent Hartree method. This has
+                to be a number between 0 and 1. The default value is 0.9. It may
+                be set to a smaller value in case the iteration goes back and
+                forth between two configurations, without really converging. A
+                small number also slows down convergence, so the number of
+                iterations may need to be increased. (Alias: scweight, scw)
+vgate #         Replaced by option vtotal (alias v_outer; same functionality as
+                vgate formerly) and vwell (alias v_inner). (Alias: vtb, vg)
+vtotal #        Add a potential difference between top and bottom of the whole
+                layer stack. The value is in meV and may be positive as well as
+                negative. (Alias: v_outer, vouter)
+vwell #         Add a potential difference between top and bottom of the 'well
+                region'. The value is in meV and may be positive as well as
+                negative. (Alias: v_inner, vinner)
+vsurf # [# [#]] Add a surface/interface potential. The first argument is the
+                value of the potential at the interfaces (barrier-well) in meV.
+                The second parameter determines the distance (in nm) for which
+                the potential decrease to 0 (default: 2.0). If the latter
+                argument is q (alias: quadr, quadratic), then the potential has
+                a parabolic shape. Otherwise, the decrease to 0 is linear.
+                (Alias: vif)
+potential # [# ...]
+                Read potential from a file. The file must be in CSV format,
+                i.e., with commas between the data values. Data for one-
+                dimensional potentials V(z) or V(y) should be arranged in
+                columns with the appropriate headings, i.e., 'z' or 'y', and
+                'potential'. Data for potentials V(z, y) can be stored in a
+                two-dimensional table (grid-type data) or a three-column table
+                (mesh-type data). If the coordinates of the file do not align
+                with those of the current calculation, then values are found by
+                found by linear interpolation. Extrapolation is supported for
+                one-dimensional potentials. If extrapolation is performed, a
+                warning is given.
+                The first argument after 'potential' must be a valid file name.
+                The following arguments may be further filenames, and each
+                filename may be followed by a number, interpreted as multiplier.
+                For example, 'potential v1.csv -0.5 v2.csv' will yield the
+                potential given by V(z) = -0.5 * V1(z) + V2(z). Multiple
+                arguments 'potential' are also allowed; the results are added.
+                Thus, '... potential v1.csv -0.5 ... potential v2.csv ...' is
+                equivalent to the previous example.
+potentialbc #   Apply custom boundary conditions for solving Poisson's equation
+                in selfconsistent calculations. The argument must be a string,
+                which can be one of three different formats:
+                1. Input like python dict instance without any spaces:
+                   "{'v1':5,'z1':-10.,'v2':7,'z2':10.}"
+                   All boundary names must be given explicitly, the order is
+                   irrelevant.
+                2. Input single quantities as string separated with semicolon
+                   without any spaces:
+                   "v1=5;z1=-10.;v2=7;z2=10."
+                   All boundary names must be given explicitly, the order is
+                   irrelevant.
+                3. Input quantity pairs as string separated with semicolon
+                   without any spaces:
+                   Either explicit: 'v1[-10.]=5;v2[10.]=7'
+                   Or implicit: 'v[-10.]=5;v[10.]=7'
+                   When using the explicit format, the order is irrelevant. When
+                   using the implicit format there is an internal counter, which
+                   applies an index to the quantity name, thus, the order does
+                   matter.
+                Here, all given examples will result in the same boundary
+                condition dictionary: {'v1':5,'z1':-10.,'v2':7,'z2':10.}.
+                The z-values must be given as coordinate in nm, or as one of the
+                following labels:
+                  bottom      Bottom end of the layer stack
+                  bottom_if   Bottom interface of the "well" layer
+                  mid         Center of the "well" layer
+                  top_if      Top interface of the "well" layer
+                  top         Top end of the layer stack
+                If less than 4 key-value pairs are given, only the corresponding
+                values of the automatically determined boundary conditions
+                are overwritten. The ones that do not appear in the automatic
+                determined boundary conditions, are ignored. This also means,
+                you can decide to only overwrite the z-coordinates but keep the
+                automatic determined values for 'v1', 'v2', etc.
+                If two full boundary conditions are given (4 or 5 key-value
+                pairs), automatic boundary conditions are always fully
+                overwritten.
+                NOTE: A special case for the implicit type 3 input is 'v12'.
+                There you can use 'v[-10.,10.]=0;v[0.]=7' for example, which
+                will result in {'v12':0,z1':-10.,'z2':10.,'v3':7,'z3':0.}.
+                Another special case for the same input type is the combination
+                of 'dv1' and 'v1' (or 'dv2' and 'v2'). Here you can use 
+                'dv[-10.]=0;v[-10.]=7' (or 'v[-10.]=7;dv[-10.]=0'); note the
+                same z-coordinates.
+                (Alias: potbc)
+cardens # [...] Carrier density in the well in units of e/nm^2. This value sets
+                the chemical potential, i.e., "filling" of the states in the
+                well. The sign is positive for electrons and negative for holes.
+                In combination with 'kdotpy ll ... dos', specify the density at
+                which the equal-density contour should be drawn. This option may
+                take a single number as well as a range (for example 'cardens
+                -0.002 0.002 / 20'). In that case, plots are generated for all
+                carrier density values in the range. (Alias: carrdens,
+                carrierdensity, ncarr, ncar, ncarrier)
+ndepletion # [#]   Density of the depletion layer(s) in the barrier, in units of
+                   e/nm^2. The sign is positive for holes and negative for
+                   electrons. The whole sample is neutral if the arguments
+                   'cardens' and 'ndepletion' come with the same value. If one
+                   value is specified, the charge is equally divided between
+                   top and bottom barrier. If two values are specified, they
+                   refer to bottom and top layer, consecutively.
+                   (Alias: ndepl, ndep)
+ldepletion # [#]   Length (thickness) of the depletion layers in nm. The values
+                   may be numbers > 0 or "inf" or "-" for infinite (which means
+                   zero charge volume density). The numbers refer to the bottom
+                   and top barrier, respectively. If a single value is given,
+                   use the same value for both bottom and top barrier. The
+                   default (if the argument is omitted) is infinity.
+                   (Alias: ldepl, ldep)
+efield # #      Electric field at the bottom and top of the sample in mV/nm.
+                Alternatively, one may enter a single value for either the top
+                or the bottom electric field:
+                  efield - #, efield top #, efield t #, efield # top, ... (top)
+                  efield # -, efield btm #, efield b #, efield # btm, ... (btm)
+                If the variant with two values is used, the carrier density is
+                calculated automatically. In that case, the explicit input of
+                the carrier density (option 'cardens') is not permitted.
+                NOTE: 'efield 0 #' is not the same as 'efield - #'.
+                NOTE: A positive electric field at the top boundary corresponds
+                to a negative gate voltage, and vice versa.
+                NOTE: As of version 1.4.0, using -- is no longer permitted. Use
+                - (a single dash) instead.
+berry           Calculate and plot the Berry curvature for the states close to
+                the neutral gap. Also plot the integrated Berry curvature as
+                function of energy. If combined with the option 'dos', then also
+                plot the integrated Berry curvature as function of density. For
+                LL mode (kdotpy ll), the Berry curvature is implicitly
+                integrated, and the resulting output values are the Chern
+                numbers of the eigenstates instead.
+                (Alias: chern (for kdotpy ll only))
+broadening [#] [#] [#]
+                Broadening parameter for the density of the eigenstates (for
+                kdotpy ll: Landau levels). The broadening is determined by a
+                numerical width parameter which may be supplemented by
+                additional parameters, the broadening shape, the scaling
+                function, and a parameter for the Berry broadening (the latter
+                for kdotpy ll only).
+                The broadening types are:
+                  thermal  Fermi distribution, width parameter is temperature;
+                           if the width parameter is omitted, use the
+                           temperature set by 'temp #'.
+                  fermi    Fermi distribution, width parameter is energy
+                           (alias: logistic, sech)
+                  gauss    Gaussian distribution, width parameter is energy
+                           (alias: gaussian, normal)
+                  lorentz  Lorentzian distribution, width parameter is energy
+                           (alias: lorentzian)
+                  step     Dirac-delta or Heaviside-step function; if width
+                           parameter is given, it is ignored (alias: delta)
+                If omitted, use the default 'auto' which selects 'thermal' for
+                dispersion mode and 'gauss' for LL mode.
+                The scaling function determines how the width w scales as
+                function of x (momentum k in nm^-1 or field B in T) (w1 is the
+                input width parameter):
+                  auto   Use 'const' for dispersion mode and 'sqrt' for LL mode
+                         (alias: automatic)
+                  const  Use constant width, w = w1
+                  lin    The width scales as w = w1 x (alias: linear)
+                  sqrt   The width scales as w = w1 sqrt(x)
+                  cbrt   The width scales as w = w1 x^1/3
+                  ^n     Where n is a number (integer, float, or fraction like
+                         '1/2'). The width scales as w = w1 x^n.
+                The final optional value (kdotpy ll only) is numeric (floating
+                point number or a percentage like '10%') that defines a
+                different broadening width for the Berry curvature/Hall
+                conductivity. Floating point input is interpreted as the
+                broadening width itself, a percentage defines this broadening
+                width as percentage of the density broadening width. The
+                Berry/Hall broadening inherits the shape and scaling function 
+                from the density broadening.
+                Multiple 'broadening' arguments may be given; these will then
+                be iteratively applied to the (integrated) DOS, in the given
+                order. NOTE: Due to limitations of the numerical integration
+                (convolution operation), combining multiple broadening functions
+                may lead to larger numerical errors than a single broadening
+                function. The convolution operation is commutative only up to
+                numerical errors, so changing the order may lead to slight
+                differences in the result.
+berrybroadening [#] [#] [#]
+                Broadening parameter for the Berry curvature/Hall conductivity.
+                The syntax is the same as the ordinary broadening parameter.
+                Also multiple ones can be combined. Note that it is not
+                permitted to combine 'berrybroadening' with a 'broadening' with
+                argument with a extra numerical argument, for example,
+                'broadening 0.5 gauss 10%'. For kdotpy ll only. (Alias:
+                hallbroadening, chernbroadening)
+dostemp #       Temperature used for thermal broadening of the DOS. This input
+                is equivalent to 'broadening # thermal const' (but only one of
+                these may be used at a time). This temperature may be different
+                than the temperature set by 'temp' on the command line (which
+                controls the temperature in the exchange coupling, for example).
+                If neither 'dostemp' nor 'broadening' is given, no broadening is
+                applied. (NOTE: This behaviour has changed since v0.85.)
+                This option is especially useful for calculating the DOS with
+                the re-plotting scripts: In that case, 'temp' has no effect,
+                because the value is read from the data files, whereas 'dostemp'
+                *can* be used to set the thermal broadening.
+                (Alias: tbroadening, tempbroadening)
+hall            Shortcut that activates all options for calculation of Hall
+                conductivity with kdotpy ll. It is equivalent to the
+                combination 'berry dos localdos broadening 0.5 10%'. The default
+                value of the broadening can be overridden with the explicit
+                option 'broadening # [#]' combined with 'hall'. This applies to
+                berrybroadening as well.
+ecnp #          Set charge-neutral energy (zero density) to this energy. The
+                value determines the point where the density is zero. This
+                affects integrated density of states in dispersion mode only.
+                In order to manipulate band indices by determining the zero gap,
+                use the 'bandalign' argument. (Alias: cnp, efermi, ef0)
+densoffset #    Set a density offset. Basically, this number is added to the
+                integrated DOS / carrier density in the selfconsistent
+                calculation. The value is in units of charge density and can be
+                interpreted as free carriers inside the quantum well. (Alias:
+                noffset, ncnp)
+cardensbg #     Set a background density. Calculates a rectangular carrier
+                distribution for this number, which is then added to the carrier
+                distribution used in solving Poisson's equation. The value is in
+                units of charge density and can be interpreted as immobile
+                background charge.
+idosoffset #    Set an offset to the density of states, in appropriate DOS
+                units. This option is identical to 'densoffset' up to a factor
+                of 4 pi^2. (Alias: dosoffset)
+NOTE: Most of these options are currently available with kdotpy 2d only. Some
+can be used in kdotpy ll, which is explicitly indicated above.
+
+Other extras:
+plotfz [#]      See comments "Plotting z-dependent values" below. (Alias:
+                plotqz)
+plotwf [# ...]  Plot wave functions. The extra arguments are the plot style for
+                the wave function plot and the locations (momenta) for which the
+                plots are made. See also comments "Plotting wave functions"
+                below.
+overlaps        Calculate overlaps between the eigenstates with those at zero
+                momentum. By default, the overlaps are calculated with E1+/-,
+                H1+/-, H2+/-, and L1+/-. A nice visualization can be obtained
+                with 'obs subbandrgb', which assigns colours depending on the
+                overlaps with E1, H1, and H2. A visualization with different
+                bands can be obtained by using 'obs subbandh1e1e2', for example,
+                where the observable id ends with >= 3 pairs of subband
+                identifiers. Each subband identifier is a band character ('e',
+                'l', or 'h' followed by a number) denoting a pair of subbands,
+                a single subband (the previous followed by '+' or '-'), or a
+                band index (a signed integer preceded by 'b' or parenthesized,
+                e.g., 'b+2', '(-25)').
+                (kdotpy 2d and kdotpy ll)
+currents        Calculate currents, i.e., the expectation values of the operator
+                derivative dH/dk_x and dH/dk_y. The expectation values are saved
+                as the observables 'dhdkx' and 'dhdky' (and as 'vx' and 'vy', in
+                velocity units). If a suitable observable is given by the
+                argument 'obs' (one that is expressed as expectation value of a
+                matrix operator), then also calculate the expectation values of
+                the symmetrized product {dH/dk_i, O} / 2 (with i = x,y). The
+                corresponding expectation values can also be accessed as
+                observables, for example 'dhdkx_sz' if 'currents' is given
+                together with 'obs sz'. Note that 'currents ... obs dhdkx_sz'
+                can be used to calculate that observable, and at the same time
+                use it for the colour scale in a dispersion plot.
+                (kdotpy 2d)
+transitions [#1 #2] [#3]
+                Calculate and plot transitions between levels. There can be up
+                to 3 optional numerical arguments: The first pair is the energy
+                range where transitions are calculated. If omitted, calculate
+                transitions between all calculated states (which may be
+                controlled with 'neig' and 'targetenergy'). The last argument is
+                the square-amplitude threshold above which the transitions are
+                taken into account. If omitted, the program uses the default
+                value 0.05.
+minmax          Output the minimum, maximum, and zero-momentum energy of each
+                subband. (kdotpy 2d and kdotpy bulk)
+extrema         Output the local extrema of each subband. The output contains
+                the type (min or max), the momentum, the energy, and an estimate
+                for the effective inertial mass along the momentum direction.
+                (kdotpy 2d and kdotpy bulk; alias: localminmax, minmaxlocal)
+bhz [# ...]     Do a Löwdin expansion around zero momentum in order to derive a
+                simplified Hamiltonian in the subband basis. This is the
+                generalization of the BHZ model. The arguments specify the
+                number of subbands in the basis ('A bands') and (optionally) how
+                many bands should be treated perturbatively. The argument
+                pattern is one of:
+                  #na                  Number of A bands
+                  #na_b #na_a          Number of A bands below and above CNP
+                  #nl #na #nu          Number of lower perturbative bands,
+                                       A bands, and upper perturbative bands
+                  #nl #na_a #na_b #nu  Number of lower perturbative bands,
+                                       A bands below and above CNP, and upper
+                                       perturbative bands
+                  #a_labels            Labels of A bands, e.g., E1, H1+, H1-.
+                  #nl #a_labels #nu    Number of lower perturbative bands,
+                                       labels of A bands, labels of lower
+                                       perturbative bands.
+                If the number of perturbative bands is omitted, take the maximum
+                possible number of bands that are localized in the well.
+                The #a_labels argument may contain subband characters with or
+                without sign. Band indices with explicit sign (e.g., -1, +2) may
+                also be used.
+                If 'bhz' is given without arguments, 'bhz 2 2' is implied. This
+                is the standard four-band BHZ model.
+kbhz #          Set the reference momentum for the BHZ (Löwdin) expansion. The
+                argument refers to a momentum value on the kx axis. This
+                experimental option can be used for expansions around nonzero
+                momentum. Please consider the results with care, as they are not
+                always meaningful. (Alias: bhzk, bhzat)
+symmetrytest    Analyze the symmetries of the eigenvalues and observables under
+                various transformations in momentum space. This results in a
+                list of compatible representations of the maximal point group
+                Oh, from which the program tries to determine the actual
+                symmetry group (point group at the Gamma point).
+                NOTE: For a reliable result, the momentum grid must be
+                compatible with the symmetries; a cartesian grid should be used
+                for cubic symmetry, a polar or cylindrical grid otherwise.
+                For kdotpy 2d, kdotpy bulk: full analysis.
+                For kdotpy 1d, kdotpy merge: partial analysis (full analysis
+                to be implemented).
+symmetrize      Extend the data in the momentum space by symmetrization. For
+                example, a 1D range for positive k can be extended to negative
+                k, or a 2D range defined in the first quadrant can be extended
+                to four quadrants. The extension is done by taking the known
+                eigenvalues and observables and transforming them appropriately.
+                NOTE: The algorithm relies on some pre-defined transformation
+                properties of the observables, and should be used with care. A
+                cross-check with a symmetric range and 'symmetrytest' is
+                advised.
+                (kdotpy 1d, kdotpy 2d, kdotpy bulk, and kdotpy merge)
+
+Deprecated and removed options
+------------------------------
+
+Removed functionality (no longer works):
+densitycm, densitynm, densitypcm, densitypnm, densityecm, densityenm,
+densityunit, densunit, dunit 
+                Set the quantity and unit in which to plot density of states.
+                DEPRECATED: Use configuration values 'dos_quantity' and
+                'dos_unit'.
+e1shift # [#]   Apply an artificial shift to the E1 bands. DEPRECATED: No longer
+                works.
+ignoreexchange  Ignore the contributions from the paramagnetic exchange
+                coupling. DEPRECATED: In order to disable exchange coupling, 
+                adjust the relevant material parameters.
+nolatticereg    If specified, disable the transformation k --> sin(k).
+                DEPRECATED: No longer works. Use configuration value
+                'lattice_regularization=false' (default value).
+latticereg      If specified, force lattice regularization k --> sin(k).
+                DEPRECATED: No longer works. Use configuration value
+                'lattice_regularization=true'.
+plotrc #        Specify the location of the matplotlibrc file. (Alias: rcfile)
+                DEPRECATED: Plot customization is now done by setting the
+                configuration value 'fig_matplotlib_style'
+yMn #           Mn concentration in the 2DEG layer (HgMnTe). The number may be a
+                fraction or a percentage. (Alias: Mn)
+                DEPRECATED: Use "mwell HgMnTe #"
+yCd #           Cd concentration in the barrier layers (HgCdTe). The number may
+                be a fraction or a percentage. (Alias: Cd)
+                DEPRECATED: Use "mbarr HgCdTe #"
+
+Vectors and ranges
+------------------
+The following 'patterns' apply to the input of the vector-valued quantities 'k'
+(momentum) as well as 'b' (magnetic field). The examples are given in terms of
+'k', but extend also to the case 'b'.
+
+The following combinations of components can be input:
+k               Vectors along default axis (kx for k, bz for b), value is length
+kx              Vectors along x axis
+ky              Vectors along y axis
+kz              Vectors along z axis
+kx ky           Vectors with coordinates (x, y) in a cartesian 2D grid
+kx ky kz        Vectors with coordinates (x, y, z) in a cartesian 3D grid
+k kphi          Vectors in a polar representation
+k kphi z        Vectors in cylindrical coordinates
+k ktheta kphi   Vectors in spherical coordinates (theta is polar angle, phi is
+                azimuth angle)
+k kdir          Vectors along a constant vector (parametrized as spherical and
+                polar coordinates in 3D and 2D, respectively)
+k kperp         Vectors in two perpendicular directions (first coordinate
+                generally refers to the default axis)
+k kperp kphi    Vectors in two perpendicular directions, then rotated by an
+                angle phi (in xy plane) (POSSIBLY IN THE FUTURE)
+NOTE: The polar and cylindrical coordinates are parametrized as
+  (x, y) = (r cos phi, r sin phi)
+and
+  (x, y, z) = (r cos phi, r sin phi, z),
+respectively.  The spherical coordinates are parametrized as
+  (x, y, z) = (r sin theta cos phi, r sin theta sin phi, r cos theta).
+Angles are given in degrees, unless the argument 'radians' is included.
+Negative radii are allowed, which is useful if one calculates along one axis
+with 'k -0.2 0.2 / 10 kphi 45', for example.
+NOTE: The order of the arguments is irrelevant. If doing a 2D or 3D range, then
+the coordinates are iterated through in a 'natural' order, e.g., first x, then
+y, or r, then theta, then phi.
+NOTE: For polar, cylindrical and spherical coordinates, one may input a single
+value or a one-dimensional range using a cartesian component combined with the
+angle(s). Examples: kx kphi, kx kphi ktheta, kz ktheta. This yields vectors at
+the given angle where the radius is scaled such that the given cartesian
+component has the given value(s). The angle must be single-valued, and singular
+angles lead to an error. The values are stored in the angular representation,
+and in order to get a plot in a cartesian component, use the option 'plotvar'.
+NOTE: The argument kdir is special in the sense that it does not define a
+range, but a constant vector. Its argument must always be a triplet of
+integers, for example 'kdir 1 1 0' or 'kdir 110'. The latter short version can
+be used if all components are between -9 and 9. There are several restrictions,
+e.g., in 2D mode one cannot have a nonzero z component. The resulting
+coordinates are parametrized in spherical (3D) or polar (2D) representation.
+
+Specification of values and ranges:
+k #             Single value
+k #1*#2         Single value #1 * #2, where #1 is an integer, and #2 could be
+                seen as a step size
+k #1/#2     (a) If #1 float, #2 float: #1 is maximum, #2 is step size.
+                  k = 0, 1*#2, 2*#2, ..., #1
+            (b) If #1 float, #2 int  : #1 is maximum, #2 is number of steps.
+                  k = 0, (1/#2)*#1, (2/#2)*#1, ..., #1.
+k #1 #2/#3  (a) If #1 float, #2 float, #3 float: #1 is minimum, #2 is maximum,
+                #3 is step size
+                  k = #1, #1 + 1*#3, #1 + 2*#3, ..., #2.
+            (b) If #1 float, #2 float, #3 integer: #1 is minimum, #2 is maximum,
+                #3 is number of steps
+                  k = #1, #1 + (1/#3)*#2, #1 + (2/#3)*#2, ..., #2.
+k #1 #2 #3/#4   Single momentum value "#3 of #4 steps from #1 to #2". #3 and #4
+                are integers.
+                  k = #1 + (#2 - #1) * #3 / #4
+NOTE: For the cases where a single slash is followed by an integer, doubling the
+slash will do 'quadratic stepping'. For example: "k 0 1 // 10" yields the
+momentum values 0.0, 0.01, 0.04, 0.09, ..., 0.81, 1.0. This option is especially
+useful with the variable 'b' in Landau-level calculations.
+
+Some examples:
+k -0.2 0.2 / 10              Values along the kx axis (default axis for k)
+kx 0.1 ky 0.1                Single (kx, ky). (Alias: k # kperp #)
+k 0.2 kphi 45                Single k value (k cos(phi), k sin(phi)).
+kx -0.2 0.2 / 10 ky 0.1      Range in kx direction, for single ky value.
+k -0.2 0.2 / 10 kperp 0.1    Equivalent to previous example
+k -0.2 0.2 / 10 kphi 45      Range of (k cos(phi), k sin(phi)) with a range of
+                             radii k.
+kx -0.2 0.2 / 10 kphi 45     Range of (k cos(phi), k sin(phi)) such that the kx
+                             values run from -0.2 to 0.2. Only a single value
+                             for phi is allowed. Singular values (e.g., 90) are
+                             forbidden.
+b 0 1 / 10                   Values along the bz axis (default axis for b),
+                             equally spaced, i.e., 0.0, 0.1, 0.2, 0.3, ... 0.9,
+                             1.0.
+b 0 1 // 10                  Values along the bz axis, quadratically spaced,
+                             i.e., 0.0, 0.01, 0.04, 0.09, ... 0.81, 1.0
+kx 0 0.2 / 10 ky 0 0.2 / 10  2D scan of (kx, ky)
+k 0 0.2 / 10 kphi 0 90 / 6   2D scan over radii k and angles phi
+b 0 0.2 / 10 btheta 60 bphi 90
+                             Vectors with a range of lengths at spherical angles
+                             theta = 60 degrees and phi = 90 degrees.
+kx 0 0.2 / 10 ky 0 0.2 / 10 kz 0 0.2 / 10
+                             3D scan over kx, ky, kz
+k 0 0.2 / 10 ktheta 0 90 / 6 kphi 0 90 / 12
+                             3D scan over spherical coordinates
+k 0 0.2 / 10 kdir 1 1 1      Range of values parallel to vector (1,1,1)
+k 0 0.2 / 10 kdir 111        Range of values parallel to vector (1,1,1)
+k -0.2 0.2 / 10 kperp 0.2 kphi 45
+                             Range of (k cos(phi), k sin(phi)) + (-kperp
+                             sin(phi), kperp cos(phi)) with a range of values k.
+                             (POSSIBLY IN THE FUTURE)
+
+Extras in detail
+================
+
+Plotting wave functions
+-----------------------
+The band structure scripts (kdotpy 1d, kdotpy 2d, etc.) have the option to plot
+the wave functions together with the other (dispersion/dependence) plots. This
+is done with the argument 'plotwf', which have some additional options that
+determine the plot style and the locations (momenta or magnetic fields) at which
+the plots are made. There can be only one plot style argument, but multiple
+location arguments. The extra arguments can be omitted, in which case the
+default plot style and locations are used.
+
+Plot styles (1D):
+z      As function of z, at y = 0 (at the middle of the sample), i.e.,
+       psi(z, 0). Decomposition into orbitals. (Alias: 1d)
+y      Absolute-squared, as function of y, integrated over the z coordinate,
+       i.e., |psi|^2(y) = int |psi(z, y)|^2 dz. Decomposition into orbitals
+       and optionally subbands.
+zy     Absolute-squared, as function of (z, y), i.e., |psi(z, y)|^2, summed over
+       all orbitals. (Alias: yz, default)
+color  Absolute-squared, with different colours for the orbitals, as function of
+       (z, y). (Alias: colour, byband, by_band)
+
+Plot styles (2D, LL):
+separate  As function of z, with different curves for each orbital. (Alias: all,
+          default)
+together  Absolute-squared, as function of z, together in one plot.
+
+Locations (momentum values k [or B in LL mode]):
+zero      At k = 0. (Alias: 0)
+min       At the smallest k.
+max       At the largest k.
+mid       The k value in the center of the momentum range.
+minmax    At the smallest and the largest k. (Equivalent to 'min max')
+all       Plot wavefunctions for all k. Warning: This can lead to very large
+          output and long postprocessing times.
+three     At the smallest, largest, and central k value. (Equivalent to
+          'min mid max'; alias: 3, halves)
+five      Like three, but in addition at the quarters, i.e., 1/4 and 3/4 along
+          the momentum range. (Alias: 5, quarters)
+#         (any number other than '0', '3', '5') At this value.
+
+If calculating over a multi-dimensional momentum grid (2D), the locations apply
+to each component separately. Any value that would not be in the range (e.g.,
+'mid' in a range with an even number of values) is skipped. It is not possible
+to specify different values for different dimensions, although lengths and
+angles are easily separated by their different orders of magnitude, for example:
+'plotwf 0 0.1 45' would match polar momentum values (0, 0 deg), (0, 45 deg),
+(0.1, 0 deg), and (0.1, 45 deg).
+In LL mode, the locations are interpreted in terms of magnetic fields.
+Depending on the configuration value 'wf_location_exact_match', match the
+locations exactly (if true; default value) and skip the locations if no match is
+found, or find the nearest value (if false).
+If symmetrization is used (command line argument 'symmetrize'), then wave
+functions output happens only at the points of the original grid, i.e., where
+the diagonalization has been done explicitly. At extrapolated points not present
+in the original grid, no output will be given.
+
+Additional comments:
+If erange is set, plot the wave functions in this energy range only.
+
+For most of the plot styles and for default configuration settings, the result
+will be a single PDF file. This will be a multipage PDF if multiple plots are
+concerned. In the rare case that the creation of a multipage PDF page is not
+possible, multiple separate PDFs are made.
+
+
+Plotting z-dependent values
+---------------------------
+For the 1d and 2d scripts, the option 'plotfz' outputs plots of some z-dependent
+parameters that determine the Hamiltonian. The values are also written to a CSV
+format data file.
+
+The plots contain:
+qz-bands.pdf       E_c and E_v               (conduction and valence band edges)
+qz-fgammakappa.pdf F, gamma_{1,2,3}, kappa   (miscellaneous band parameters)
+qz-exchange.pdf    y N_0 alpha, y N_0 beta   (paramagnetic exchange energies)
+
+The option 'legend' will include a legend in these plots (recommended). The
+filenames are also affected by the option 'out'.
+
+
+BHZ calculation
+---------------
+Approximations to the BHZ model are done by invoking kdotpy 2d with the extra
+option 'bhz'.
+
+The number of bands in the perturbation theory is input using the argument
+'bhz', which may take up to four even-integer parameters:
+1. kdotpy 2d [...] bhz #na
+2. kdotpy 2d [...] bhz #na_b #na_a
+3. kdotpy 2d [...] bhz #nl #na #nu
+4. kdotpy 2d [...] bhz #nl #na_b #na_a #nu
+5. kdotpy 2d [...] bhz #a_labels
+6. kdotpy 2d [...] bhz #nl #a_labels #nu
+Here, #na determines the number of 'A' bands, i.e., the bands which are treated
+exactly at k = 0. With #na_b and #na_a one can specify the number of A bands
+above and below the (charge-neutral) gap. The parameters #nl and #nu determine
+the number of 'lower' and 'upper' bands that are taken into account
+perturbatively. If not given (cases 1., 2., 5.), then take the maximum possible
+number of bands that are localized in the well. In the other cases, when
+non-localized bands are included, a warning is issued, but the calculation will
+continue (if no other errors occur).
+The A bands may also be given as a sequence of labels #a_labels (cases 5. and
+6.). For example, 'bhz 6 E1 H1 2' is the usual four-band BHZ model with 6 and 2
+bands taken into account perturbatively below and above. In this case, the order
+of the basis in the output is the order of bands given as input. It is possible
+to distinguish between the two spin components (e.g., by using input 'bhz 6 E1+
+E1- H1+ H1- 2', but this is not necessary. A band label without + or - implies
+the two respective components.
+For the A bands, one may also use band indices instead of or in combination with
+band labels. Band indices are input as integers with signs, for example
+'bhz 6 -2 -1 +1 +2 2'. The explicit + sign for positive band indices is
+required. This option may be useful if band characters are not available, for
+example at finite magnetic field.
+
+The default value is 'bhz 2 2', i.e., the standard four-band BHZ model. Another
+typical setting is 'neig 50 bhz E1 H1 H2' for a six-band model.
+
+There is an experimental option 'kbhz #' (alias 'bhzk', 'bhzat') for doing a
+BHZ-like calculation (Löwdin perturbation) around nonzero momentum. Presently,
+only points on the x axis are supported. The output needs to be considered with
+care. Please test and report.
+
+
+kdotpy merge and kdotpy compare
+===============================
+
+The separate command kdotpy merge provides the ability to create one plot from
+data points scattered over different files.
+The command kdotpy compare takes multiple files and plots the data in one plot,
+distinguishing between the data sets using different markers and/or colours.
+
+They are called as:
+$ kdotpy merge option1 arg1 option2 arg2 arg3 file1 file2 ...
+$ kdotpy compare option1 arg1 option2 arg2 arg3 file1 file2 ...
+where file1, file2, ... are the data (xml) files.
+Note: In case any of the options or arguments conflict with existing file or
+directory names, one can put '--' in front of the file names, like:
+$ kdotpy merge option1 arg1 option2 arg2 arg3 -- file1 file2 ...
+The '--' signals that following arguments may be read as file names and
+preceding arguments should not.
+
+The additional options are:
+sortdata        Sort the data by momentum (k) or parameter (B) value. This will
+                succeed only if the data set is on a grid.
+select #1 #2    Select a subset of the grid. The first argument #1 must be a
+                momentum component (e.g., k, kx, kphi) and the second argument
+                #2 must be a numerical value. This selects all data points for
+                which the momentum component is equal to #2.
+bandalign [# [#]]
+                Try to (re)connect the data points, by (re)assigning the band
+                indices. The first optional argument determines the 'anchor
+                energy', i.e., the energy at k = 0 (or B = 0) that separates
+                bands with positive and negative indices. If the second argument
+                is given, treat the gap at the given energy as having this
+                index.  Omission of the first argument causes the anchor energy
+                to be determined automatically. Explicit specification of this
+                energy is necessary only if the automatic method appears to
+                fail, or if the correct assignment of the band indices is
+                important (e.g., for calculation density of states). When the
+                second argument is omitted, use the default gap index 0.
+                Alternatively, 'bandalign filename.csv' may be used to use the
+                energies in the csv file in order to do assign the band indices.
+                The format is that of 'dispersion.byband.csv', i.e., energies
+                of each of the bands in columns. This option may be used to
+                manually 'correct' an incorrect band connection result.
+                If the data is not sorted (as function of k or B), then try to
+                sort the data automatically before applying the band alignment
+                algorithm. (Alias: reconnect)
+vs              For kdotpy compare: Separate files into sets. Basically, apply
+                the functionality of kdotpy merge to the comparison script.
+                Example:
+                $ kdotpy compare [options] f1 f2 f3 vs f4 f5
+                This compares the combination of files f1, f2 and f3 to the
+                combination of files f4 and f5. There can be more than two sets
+                by using vs more than once, and each set can have an arbitrary
+                number of files.
+                If not given, compare the specified files one-by-one.
+writecsv        For kdotpy merge: Write csv output (dispersion or B dependence)
+                based on merged data.
+
+Note:
+The options for kdotpy 1d and kdotpy 2d that affect plotting, such as 'erange',
+also apply to the plots made by kdotpy merge.
+
+
+kdotpy batch
+============
+
+kdotpy batch is an auxiliary subprogram for running any of the other scripts in
+batch mode, i.e., many runs in sequence, with a variation in the parameters. The
+philosophy is more or less like a shell (bash) script, but with a bit more
+'decoration' and with proper handling of runs in parallel.
+
+The general syntax is best illustrated with an example:
+$ kdotpy batch [opts] @x 5.0 9.0 / 4 @y [CdTe, HgTe, HgCdTe 68%]
+    do kdotpy 2d [opts] llayer 10 @x 10 mater HgCdTe 68% @y HgCdTe 68%
+    out -@0of@@
+
+What happens is the following: The command following the argument 'do'
+('kdotpy 2d' in this case) is executed iteratively with '@x' replaced by 5.0,
+6.0, 7.0, 8.0, and 9.0, and '@y' by the values 'CdTe', 'HgTe', and 'HgCdTe 68%'.
+In this example, 'kdotpy 2d' will be executed 15 times. The '@0' and '@@' are
+replaced by counting and total value respectively. Thus, the output files will
+be numbered as '1of15', '2of15', etc.
+
+The variables 'x' and 'y' have been specified before the 'do'. In this case, 'x'
+is defined with a range specification (same syntax as the 'Specification of
+momenta', see above) and 'y' with a list specification, within brackets [] and
+separated by commas.
+
+Overview of the replacements:
+  @@              Total number of iterations
+  @0              Iteration counter, starting at 1
+  @1, @2, ...     Iteration counter for each @ variable, in order of their input
+                  before the 'do'.
+  @variablename   Value of variable with name 'variablename'
+  @{variablename} Value of variable with name 'variablename'
+NOTE: Variable names may not be a one-digit number or @. The variable name may
+also not contain curly brackets, { or }. Other than these restrictions,
+everything is allowed. In the command after 'do', please make sure that variable
+names do not 'clash': For example, if both @x and @xy are used, in any @xy after
+'do', the @x may be replaced first, leading to unexpected results. This may be
+prevented by using the @{variablename} pattern consistently.
+
+Options (to be specified before 'do'):
+dryrun           Display the scripts that would be executed, following the
+                 replacements of the @ variables. However, do not actually run
+                 them.
+groupiter [# ...]
+                 Link the iterators for the specified variables together,
+                 similar to the Python zip() function. For example,
+                 'kdotpy batch @x [0, 1] @y [100, 200] groupiter x y do ...'
+                 would yield the combinations (x, y) = (0, 100) and (1, 200)
+                 only. The additional arguments for groupiter must be variable
+                 names (without the @) or integer indices (counting from 1). If
+                 the additional argument is omitted, link all variables.
+                 Multiple groupiter arguments may be combined to form multiple
+                 groups. Within each group, the variables must have an equal
+                 number of values. (Alias: zipiter, zip)
+cpu #            Specify number of threads/processes that should run in
+                 parallel. This option takes into account the 'cpu' option in
+                 the invocation of kdotpy that is run (i.e., specified after
+                 'do') in order to determine the number of jobs that can run in
+                 parallel. For example,
+                 'kdotpy batch cpu 6 ... do kdotpy 2d ... cpu 2'
+                 will cause three (= 6 / 2) instances of kdotpy 2d to be run in
+                 parallel.
+proc #           Number of parallel processes to be run. This option does not
+                 take into account what is specified after 'do'. For example:
+                 'kdotpy batch proc 6 ... do kdotpy 2d ... cpu 2'
+                 will cause six instances of kdotpy 2d to be run in parallel,
+                 and each instance might run two processes/threads in parallel.
+
+NOTE: If both 'cpu' and 'proc' are not given, default to the maximum number of 
+available CPUs. If also the command does not specify the number of CPUs, then
+run the command sequentially with each running at the maximum number of CPUs.
+
+NOTE: The console output (stdout and stderr streams) of the individual kdotpy
+commands is 'dumped' into the files stdout.1.txt, stdout.2.txt, ... and
+stderr.1.txt, stderr.2.txt, ... . The kdotpy batch subprogram writes its own
+information to the standard stdout and stderr streams.
+
+
+Configuration option reference
+==============================
+
+The configuration file (typically $HOME/.kdotpy/kdotpyrc) hosts a number of
+configuration options that are meant to be 'semi-static', e.g., configurable
+options that need to be changed occasionally or even only once, as opposed to
+parameters that are specified with every run.
+
+NOTE: If the configuration file is unavailable, but there is an old
+configuration file at '$HOME/.hgmnte/hgmnterc', the latter file will be copied
+from the old location to the new one. This should happen automatically the first
+time any kdotpy script is run after the renaming. You should remove your old
+configuration directory '$HOME/.hgmnte' manually in order to get rid of the
+warnings.
+
+If desired, custom configuration can be loaded from the command line in two
+ways:
+config file.cfg     Where 'file.cfg' is a file name. This loads custom
+                    configuration values from the given file. If the file with
+                    the given name is not found in the working directory, then
+                    also search in the configuration directory (usually
+                    ~/.kdotpy).
+config "fig_hsize=150; fig_vsize=100"
+                    Take the given keys and values directly from the command
+                    line. The "key=value" pairs must be separated by semicolons
+                    (;). In almost all cases, it is necessary to enclose the
+                    list of key-value pairs in double quotes "like this" or
+                    single quotes 'like this'.
+It is possible to combine multiple instances, for example:
+  config file1.cfg config "fig_hsize=150; fig_vsize=100" config file2.cfg
+The files/inputs are processed from left to right: newer values override
+existing values.
+
+The configuration takes following precedence:
+1. Custom value (from custom configuration file or command line) if set. If not
+   set, then
+2. Values from the loaded XML files (kdotpy merge and kdotpy compare only);
+   latest loaded file takes highest precedence. If not applicable or not set,
+   then
+3. Initial value (from $HOME/.kdotpy/kdotpyrc) if set. If not set, then
+4. Default value (hardcoded into the program).
+
+NOTE: The initial values from kdotpyrc may be ignored by adding 'config default'
+to the command line. This argument resets all previously set configuration
+values to their default values, including the ones read from kdotpyrc. Custom
+values that appear after 'config default' are still considered.
+
+Currently, the following options have a meaning:
+diag_solver        The implementation of the function that does the matrix
+                   diagonalization. Possible values:
+                     feast       Use FEAST algorithm (Intel MKL). If this
+                                 package is not available, fall back to eigsh.
+                                 Can be tried as an alternative if eigsh fails,
+                                 e.g., for very large matrices (dim > 5e6).
+                     eigsh       Use eigsh from SciPy sparse matrix library.
+                     superlu_eigsh
+                                 Same as eigsh, but SuperLU is requested
+                                 explicitly. Enables detailed timing statistics,
+                                 as with other custom eigsh solvers.
+                     umfpack_eigsh
+                                 Like eigsh, but uses umfpack instead of SuperLU
+                                 for matrix inversion. Recommended for large
+                                 matrices. Falls back to SuperLU if Scikit
+                                 UMFPACK is not available. REQUIRES available
+                                 scikit-umfpack and a suitable SciPy version.
+                     pardiso_eigsh
+                                 Like umfpack_eigsh, but uses Intel MKL PARDISO
+                                 instead. REQUIRES pyMKL package.
+                     cupy_eigsh  Alternative implementation of the eigsh
+                                 solver in python. Uses CUDA libraries for
+                                 Lanczos iteration (on GPU) and PARDISO to
+                                 SuperLU for matrix inversion, depending on
+                                 availability. REQUIRES CUDA libraries and
+                                 CuPy package.
+                     jax_eigh    Uses the JAX eigh solver. First converts
+                                 sparse matrices to dense. Extremely memory
+                                 inefficient! Fails if not enough VRAM
+                                 can be allocated. Use the 'gpus' option
+                                 to reduce the number of workers on the GPU
+                                 if this happens. This solver is best suited
+                                 for a large number of 'neig'. REQUIRES jax
+                                 package.
+                     slepc       Uses the SLEPc library for computing
+                                 eigenvalues. SLEPc relies on PETSc data
+                                 structures and linear solvers. It is a highly
+                                 versatile solver that can be fine-tuned at
+                                 runtime by setting options to the
+                                 'diag_solver_slepc_options' config option. By 
+                                 default, it uses the Krylov-Schur eigenvalue
+                                 solver with a shift-invert spectral
+                                 transformation, alongside the MUMPS package for
+                                 the LU factorisation. Only the preconditioner
+                                 is used, with no additional Krylov subspace
+                                 solver. REQUIRES PETSc and SLEPc libraries and
+                                 packages.
+                     slepcgpu    See SLEPC solver. This implementation differs 
+                                 in that it uses the CUDA interface to a
+                                 GPU to find the eigenvalues. By default, it
+                                 uses a generalised minimal residual method with
+                                 restart as the Krylov subspace solver, and the
+                                 cusparse solver for the LU factorisation. 
+                     auto        Decision based on script type. Uses
+                                 'pardiso_eigsh' for kdotpy 1d if available,
+                                 otherwise uses 'eigsh' for all scripts.
+                                 Suggests alternative solvers if they could
+                                 be faster. (default; alias: automatic)
+diag_solver_worker_type
+                   Sets the parallelization strategy for solver workers.
+                   Options:
+                     process    Use a process pool for solver workers.
+                                Recommended strategy for most solvers.
+                     thread     Use a thread pool in the main process for solver
+                                workers. Recommended for CUDA based solver
+                                'cupy_eigsh' for optimal GPU workload.
+                     none       No parallel execution of the solve step. Every
+                                solve task is executed serially in the main
+                                thread. Recommended for debugging.
+                     auto       Decision based on 'diag_solver'.
+                                (default; alias: automatic)
+diag_solver_cupy_dtype
+                   Sets the data type for the cupy solver. Options:
+                     single     Uses complex numbers with single float
+                                precision. This leads to a large speed boost on
+                                GPUs with TensorCores. Precision of eigenvalues
+                                is worse (on the order of 10 µeV).
+                     double     Uses complex numbers with double float
+                                precision. Solution speed and precision of
+                                eigenvalues comparable to other solvers.
+                                Medium speed boost expected on GPUs with modern
+                                FP64-TensorCores (e.g. Nvidia A100). (default)
+diag_solver_slepc_options
+                   The given string is passed to the input of the internal SLEPc
+                   configuration options database. These options can then be
+                   used to fine-tune the SLEPc solver at runtime. By default no
+                   options are passed to SLEPc. (default: <empty>)
+diag_solver_cupy_iterations
+                   Maximum number of Lanczos iteration steps for both precision
+                   options. If number of iterations is exceeded, fall back to
+                   better precision first or CPU based solver next. (default: 5)
+diag_solver_cupy_gemm_dim_thr
+                   Maximum dimension for matrix matrix multiplication in single
+                   precision mode. If problem size exceeds this value, the
+                   solution is split into multiple smaller problem sets. Smaller
+                   values can lead to worse solution speeds, larger values can
+                   lead to more numerical problems and fallback to slower double
+                   precision solver. The default value is 4e6, from initial
+                   tests.
+diag_save_binary_ddp
+                   Whether and how to save intermediate binary files for each
+                   DiagDataPoint (diagonalization data point). Possible choices:
+                     npz     The NumPy (compressed) binary file format; see
+                             https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html
+                             (alias: numpy)
+                     h5      HDF5 data format. This requires the Python module
+                             h5py to be installed. See https://docs.h5py.org
+                             (alias: hdf5)
+                     false   Do not save intermediate files (default)
+                   Note: This configuration value is independent from the
+                   command line option 'tempout'. The npz and hdf5 formats are
+                   meant for permanent data storage, the 'tempout' files are
+                   only safe for immediate re-use and should not be used for
+                   long-term storage.
+diag_save_binary_ddp_delete_eivec
+                   Whether to remove the eigenvector data from memory if binary
+                   files have been written with 'diag_save_binary_ddp' enabled.
+                   Functions needing eigenvector data at a later stage read the
+                   data from disk rather than from memory. This option is useful
+                   for very large eigenvector sizes or having to analyze the
+                   eigenvectors for a large number of data points. Enabling this
+                   option reduces memory consumption, but also increases
+                   processing time as reading from disk is slower than from
+                   memory. This option affects kdotpy-1d only. (boolean value;
+                   default: false)
+err_unexpected_ignore
+                   In case an unexpected error is caught in an optional step of
+                   a script, the code may continue with further steps instead of
+                   terminating early. (default: true)
+err_unexpected_print_traceback
+                   In case an unexpected error was suppressed with
+                   'err_unexpected_ignore', print a full error traceback to
+                   stderr, as if the error was not caught (but continue
+                   running). (default: true)
+task_retries       Number of times a task is restarted after any exception has
+                   been raised. (default: 2)
+tasks_grouped      If set to true, all steps for a single DiagDataPoint are
+                   executed within the same worker/thread with the settings for
+                   the solve_ham step. Compared to the default mode (false),
+                   this involves less inter-worker data transfers (via
+                   "pickling") that could give rise to issues with very large
+                   eigenvectors. As such, the worker communication behaves
+                   similar to kdotpy versions < v0.72. (default: false)
+numpy_printprecision
+                   The number of digits of precision for NumPy array floating
+                   point output. (This output is used in verbose mode mostly.)
+                   The value is passed to numpy.set_printoptions(), see
+                   https://numpy.org/doc/stable/reference/generated/numpy.set_printoptions.html.
+                   The value has to be an integer >= 0. The number of digits
+                   shown does not exceed the number needed to uniquely define
+                   the values, e.g., 17 digits for 64-bit floating point
+                   numbers. (default: 6)
+numpy_linewidth    Sets the (approximate) line width for NumPy array output.
+                   (This output is used in verbose mode mostly.) The value is
+                   passed to numpy.set_printoptions(), see
+                   https://numpy.org/doc/stable/reference/generated/numpy.set_printoptions.html.
+                   The value has to be an integer >= 0. The output is always at
+                   least one column, so small values may be exceeded.
+                   (default: 200)
+job_monitor_limit  If the number of data points is smaller than this value, show
+                   the full job monitor with information about the intermediate
+                   steps. Otherwise, show the simple in-line progress indicator.
+                   For the value 0, always show the simple progress indicator.
+                   (default: 101)
+material_file_filter
+                   Filter for the material files in the material file folder
+                   (~/.kdotpy/materials). This can be a single pattern or a
+                   comma separated list of patterns, which may contain the
+                   wildcards ? and * to match multiple files. Recursive matching
+                   with ** is not supported. The pattern also may not match
+                   files outside the material file folder; however, its
+                   subfolders are accepted. Files that match more than one
+                   pattern in the list are only included once. If no filter is
+                   given (empty string, which is the default), then no filtering
+                   is done and all files in the materials folder are loaded;
+                   this behaviour is equivalent to the filter '*'.
+                   Note: This option may also be used to control the order in
+                   which the material files are loaded. For example, if the file
+                   'znte' needs to be loaded before all other files, the filter
+                   'znte,*' will achieve this. (The default material file is
+                   always loaded first, regardless of the filter.) A filter
+                   without wildcards, for example 'znse,znte,mnte', is just a
+                   list of files that will be loaded in that order. A filter
+                   like '*.mat' would allow to use a custom extension '.mat' for
+                   the material files. (default: (empty string))
+band_align_exp     Value of the exponent in the minimization function of the
+                   'error' in the band alignment algorithm. A numerical value
+                   equal to e means that sum(|DeltaE|^e) is minimized.
+                   Alternatively, if the special value 'max' is used, then the
+                   minimization function is max(|DeltaE|). (default: 4)
+band_align_ndelta_weight
+                   Coefficient of the penalty for reduction of the number of
+                   bands in the band alignment algorithm. The higher this value,
+                   the more the algorithm 'resists' changes in the number of
+                   bands. The value may not be negative (however, 0 is allowed),
+                   and too high values should be avoided. It is recommended to
+                   use the default value unless the band alignment algorithm
+                   does not proceed correctly. (default: 20.0)
+band_char_node_threshold
+                   In the band character algorithm, this value times the
+                   resolution (zres) is the minimum value the wave function
+                   should reach such that a node (zero) is counted. (default:
+                   1e-6)
+band_char_orbital_threshold
+                   In the band character algorithm, the maximum value for the
+                   probability density (|psi|^2) in an orbital for the
+                   probability density to be considered zero. In that case, the
+                   orbital content of that orbital is ignored. (default: 5e-3)
+band_char_use_minmax
+                   In the band character algorithm, whether to use the 'new'
+                   node counting method, that counts flips between local
+                   extrema. If set to false, use the legacy method. (boolean
+                   value; default: true)
+band_char_make_real
+                   In the band character algorithm, whether to divide the
+                   orbital component by the complex phase factor at its maximum,
+                   so that the function becomes effectively real, prior to
+                   counting the nodes. If set to false, consider both real and
+                   imaginary part as is. (boolean value; default: false)
+bandindices_adiabatic_debug
+                   Whether to write the intermediate result for adiabatic band
+                   index initialization to a csv file. This is useful for
+                   debugging this algorithm, for example if the charge
+                   neutrality point ends up at an incorrect position. (boolean
+                   value; default: false)
+band_realign_derivatives
+                   Determine the strategy for derivative observables after doing
+                   band realignment with kdotpy merge. After realigning the
+                   bands, any derivatives in the data will still be with respect
+                   to the pre-existing band alignment. Possible options:
+                     recalculate  Recalculate the derivatives from the realigned
+                                  bands (default).
+                     invalidate   Invalidate the derivative quantities by
+                                  substituting NaN values.
+                     keep         Keep the existing derivative values. These may
+                                  no longer be valid if the band alignment has
+                                  changed. A warning is shown.
+batch_float_format Format string for representation of float values being
+                   replaced in the command string. This is a standard %-style
+                   conversion, with the following addition: If a . (period) is
+                   added to the end, for example '%f.', apply the smart decimal
+                   option, i.e., strip superfluous zeros at the end, but keep
+                   the decimal point if the value is integer. Useful examples
+                   are, among others: %s, %f, %f., %.3f, %g. (default: %s)
+batch_stderr_extension
+                   Extension for the file, that kdotpy batch writes stderr to.
+                   (default: txt)
+batch_stdout_extension
+                   Extension for the file, that kdotpy batch writes stdout to.
+                   (default: txt)
+berry_dk           Momentum step size (in nm^-1) for calculating the derivative
+                   of the Hamiltonian in the calculation of the Berry curvature
+                   as function of momentum. It does not apply to the Berry
+                   curvature calculation in Landau-level mode. The value must be
+                   positive. (default: 1e-3)
+berry_ll_simulate  Whether to use simulated Berry curvature (more accurately:
+                   Chern numbers) for Berry / Hall output, for kdotpy ll,
+                   instead of the calculated one. The calculated value may
+                   sometimes show artifacts that cannot be easily resolved by
+                   increasing number of eigenstates for example. The simulated
+                   Berry curvature (observable 'berrysim') is set to exactly 1
+                   for all states at nonzero magnetic field. (boolean value;
+                   default: false)
+                   Hint: One may do a comparison by doing the calculation twice
+                   with settings 'true' and 'false', respectively. The output is
+                   written to different file names as to ease the comparison.
+bhz_allow_intermediate_bands
+                   Whether to allow a non-contiguous set of A bands. By default
+                   (false), do not allow B bands in between the A bands. If set
+                   to true, relax this restriction. This only takes effect if
+                   the input are band labels, e.g., "bhz E1 H1 L1". It does not
+                   apply to numeric input (e.g., "bhz 2 2"), which is a
+                   contiguous set by definition. NOTE: Setting True is
+                   experimental, it may cause unexpected errors. (boolean value;
+                   default: false)
+bhz_points         Number of horizontal data points for the BHZ dispersion plot.
+                   (default: 200)
+bhz_gfactor        Whether to output dimensionless g factors in the BHZ output
+                   (tex file). If set to false (default), output dimensionful
+                   quantities 'G' in meV / T. (boolean value; default: false)
+bhz_abcdm          Whether to output (tex file) a four-band BHZ model in
+                   'standard form', using coefficients A, B, C, D, M. If this
+                   cannot be done, use the generic form instead. (boolean value;
+                   default: false)
+bhz_ktilde         If BHZ is done at a nonzero momentum value k0, whether to
+                   express the Hamiltonian in the TeX output as shifted momentum
+                   tilde{k} = k - k0. If set to false, express it in terms of
+                   unshifted momentum k. This option has no effect for BHZ done
+                   at k0 = 0. (boolean value; default: true)
+bhz_plotcolor      Colour of the BHZ dispersion in the BHZ output file. It may
+                   be a single matplotlib colour, a pair separated by a comma
+                   (separate colours for each block), or a triplet separated by
+                   commas (one block, other block, states without specific
+                   block). (default: red,blue,black, legacy value: red)
+bhz_plotstyle      Style of the BHZ dispersion in the BHZ output file. It may
+                   be a single matplotlib line style, a pair separated by a
+                   comma (separate styles for each block), or a triplet
+                   separated by commas (one block, other block, states without
+                   specific block). Examples are 'solid', 'dashed', 'dotted'.
+                   (default: dotted, legacy value: dashed,dotted,solid)
+cnp_legacy_method  Whether to use the legacy algorithm for finding the charge
+                   neutrality point, that was the default for versions < 0.89.
+                   If false (default for versions ≥ 0.89), use the updated
+                   algorithm. (boolean value; default: false)
+color_bindex       Colormap for band index. For band index only, the range of
+                   the observable is adjusted to the number of colours in the
+                   colormap. (default: tab21posneg; note: for the 'old' set of
+                   colours, use 'tab20alt')
+color_dos          Colormap for density of states (default: Blues)
+color_energy       Colormap for energy plot (2D dispersion) (default: jet)
+color_idos         Colormap for integrated density of states (default: RdBu_r)
+color_indexed      Colormap for indexed (discrete) observables
+                   (default: tab20alt,tab20)
+color_indexedpm    Colormap for indexed (discrete) observables using a 'dual'
+                   colour scale, such as 'llindex.sz' (default: tab20)
+color_ipr          Colormap for IPR observables (default: inferno_r)
+color_localdos     Colormap for local density of states (default: cividis,jet)
+color_posobs       Colormap for observables with positive values
+                   (default: grayred)
+color_potential_yz Colormap for two-dimensional potential plots V(y, z).
+                   (default: viridis)
+color_shadedpm     Colormap for continuous positive observables using a 'dual'
+                   colour scale, such as 'y2.isopz' (default: bluereddual)
+color_sigma        Colormap for 'sigma observables' (standard deviation)
+                   (default: inferno_r)
+color_symmobs      Colormap for observables with a symmetric (positive and
+                   negative) range of values (default: bluered)
+color_threehalves  Colormap for observables with range [-3/2, 3/2]
+                   (default: yrbc)
+color_trans        Colormap for transition plots (default: hot_r)
+color_wf_zy        Colormap for wavefunction plot |psi(z, y)|^2 (default: Blues)
+csv_style          Formatting for csv output. Possible values:
+                     csvpandas    Comma separated values using pandas module
+                     csvinternal  Comma separated values using internal function
+                     csv          Choose 'csvpandas' if pandas is available,
+                                  otherwise choose 'csvinternal' (default)
+                     align        Align values in columns in the text file
+csv_multi_index    Determines how a multi-index (LL index, band index) is
+                   formatted in csv output. Possible values:
+                     tuple        As a tuple (##, ##)  (default)
+                     llindex      Only the LL index
+                     bindex       Only the band index
+                     split        LL index on first row, band index on second
+                                  row (alias: tworow)
+                     short        Short version of tuple ##,## (space and
+                                  parentheses are omitted)
+csv_bandlabel_position
+                   Location of the band labels in the 'by-band' CSV output.
+                   Possible values:
+                     top      At the very top, above the other column headings.
+                              (default; alias: above)
+                     second   Between the data and the other column headings.
+                              (alias: between)
+                     bottom   At the bottom, below the data. (alias: below)
+densityyz_save_binary
+                   Whether to save a binary file (Numpy npz format) for the
+                   density as function of (y, z), and energy. This quantity is a
+                   three-dimensional array, which is also stored as a csv file,
+                   but due to its large size may be inefficient to parse. The
+                   binary file can be practical for further analysis, such as
+                   making sections of the data at multiple energies. Another
+                   advantage is that the binary file stores data without loss of
+                   precision, unlike the corresponding csv file. (boolean value;
+                   default: false)
+dos_interpolation_points
+                   The minimal number of points on the horizontal axis for some
+                   DOS and Berry curvature (Hall conductivity) plots. When the
+                   calculated number of (k or b) points is smaller, then perform
+                   interpolation to at least this number. Must be an integer; if
+                   equal to 0, do not interpolate. (default: 100)
+dos_energy_points  The minimal number of points on the energy axis for some DOS
+                   and Berry curvature (Hall conductivity) plots. An energy
+                   resolution will be chosen so that the energy interval spans
+                   at least this many values. (default: 1000)
+dos_convolution_points
+                   The minimal number of points in the energy variable taken
+                   when applying a broadening function (a convolution operation)
+                   to an integrated DOS. If the energy range contains fewer
+                   points than this value, the integrated DOS is interpolated.
+                   Note that this value affects the 'dummy variable' of the
+                   convolution integral only, i.e., the internal accuracy of the
+                   (numerical) integration. The broadened integrated DOS (the
+                   result) will always be with respect to the same energies as
+                   the input. (default: 200)
+dos_density_axis_points
+                   The minimal number of points of the carrier density axis for
+                   some DOS and Berry curvature (Hall conductivity) plots
+                   "versus density". The density resolution will be chosen so
+                   that the density interval (set by command line argument
+                   'dosrange') spans at least this many values. Note that this
+                   setting does not apply to densities set with the command line
+                   argument 'cardens'. (default: 400)
+dos_intobs_volume_elements
+                   Whether to include the volume elements in the density data
+                   representing integrated observables. If true, then the volume
+                   element dk is included in the result, so that an integration
+                   over momentum k can be done just by summation. If false, the
+                   result is a true density, which is not multiplied by dk.
+                   (boolean value; default: false)
+dos_local_use_byband
+                   Whether to calculate the local density of states (local DOS)
+                   from the band dispersions. If true (recommended), the local
+                   DOS is calculated in the same way as the ordinary DOS, i.e.,
+                   using linear interpolation between the data points. If set to
+                   false, the calculation is done with the separate data points
+                   for 1D dispersions (legacy method). (boolean value; default:
+                   true)
+dos_local_save_binary
+                   Whether to save Numpy binary (npz) files for the local
+                   density data. These files can be useful for further analysis
+                   of local density data, especially for higher-dimensional
+                   grids. (boolean value; default: false)
+dos_local_density_at_energy_points
+                   If set to a positive value, output the local density at
+                   constant energies equally spaced among the energy range
+                   (command line argument 'erange'). The number of results in
+                   the output is one larger, e.g., setting this value to 10 for
+                   energy range -10 to 10 yields output at energies -10, -8,
+                   ..., 8, 10 meV. If set to 0, do not output local density at
+                   constant energy. (default: 0)
+dos_print_validity_range
+                   Print the lower and upper bound of the validity range for DOS
+                   and IDOS. If the lower bound (first value) is larger than the
+                   upper bound (second value), then the DOS and IDOS are invalid
+                   for all energies. See also 'plot_dos_validity_range'.
+                   (boolean value; default: true)
+dos_print_momentum_multiplier
+                   The momentum range can be extended by using a multiplier that
+                   takes into account the part of momentum space not explicitly
+                   calculated. Examples: If only positive momenta are
+                   calculated, simulate the negative values by multiplying by 2;
+                   or, if in polar coordinates the calculation was done from 0
+                   to 90 degrees angle, multiply by 4 for a full circle. This
+                   setting determines whether this multiplicative factor should
+                   be printed to the standard output. (boolean value; default:
+                   false)
+dos_quantity       The quantity in which to express density of states. Prior to
+                   version v0.95, this was done using the command line arguments
+                   densitypnm, densityecm, etc.
+                   Possible values:
+                     k    Occupied volume in momentum space; units 1/nm^d
+                          (alias: momentum)
+                     p    Density of particles/carriers (n or dn/dE); units
+                          1/nm^d (default; alias: n, particles, carriers,
+                          cardens)
+                     s    Density of states (IDOS or DOS); units 1/nm^d. The
+                          only difference with 'p' is the way the quantities are
+                          labelled. (alias: dos, states)
+                     e    Density of charge (sigma or dsigma/dE); units e/nm^d
+                          (alias: charge)
+                   (The exponent d in the unit is adjusted according to the
+                   dimensionality.)
+dos_unit           The length units used for density of states. Prior to version
+                   v0.95, this was done using the command line arguments
+                   densitypnm, densityecm, etc.
+                   Possible values:
+                     nm   Units of 1/nm^d, e/nm^d (default)
+                     cm   Units of 1/cm^d, e/cm^d
+                     m    Units of 1/m^d, e/m^d
+                   In the output, the density values are also scaled to a
+                   suitable 'power of ten'. The exponent d in the unit is
+                   adjusted according to the dimensionality.
+dos_strategy_no_e0 The strategy to follow when trying to extract DOS or IDOS
+                   from the band structure, when the zero energy E0 is not well
+                   defined. Possible values:
+                     strict   Neither DOS nor IDOS can be extracted.
+                     dos      DOS can be extracted, but IDOS cannot (default).
+                     ignore   Both DOS and IDOS can be extracted, ignoring the
+                              fact that E0 may lie at an arbitrary energy value.
+                   When E0 is defined (either manually or automatically), the
+                   extraction of DOS and IDOS is always possible, regardless of
+                   this setting.
+fig_matplotlib_style
+                   Matplotlib style file for changing the properties of plot
+                   elements. This may be a file in the configuration directory
+                   (~/.kdotpy) or in the working directory, or a built-in
+                   matplotlib style. (default: kdotpy.mplstyle)
+fig_hsize, fig_vsize
+                   Horizontal and vertical size of the figures, in mm. (default:
+                   150, 100, respectively)
+fig_lmargin, fig_rmargin, fig_bmargin, fig_tmargin
+                   Figure margins (left, right, bottom, top), i.e., the space in
+                   mm between the figure edge and the plot area. (default: 20,
+                   4, 12, 3, respectively)
+fig_charlabel_space
+                   Vertical space for the character labels in the dispersion
+                   plot, in units of the font size. To avoid overlapping labels,
+                   use a value of approximately 0.8 or larger. (default: 0.8)
+fig_colorbar_space Space reserved for the colour bar legend in mm (default: 30)
+                   In other words, this is the distance between the right-hand
+                   edges of the figure and the plot if a colour bar is present.
+                   It 'replaces' the right margin.
+fig_colorbar_margin
+                   Space between the right-hand edge of the plot and the colour
+                   bar legend, in mm. This space is taken from the colour bar
+                   space (set by fig_colorbar_width), so it does not affect the
+                   right-hand edge of the plot. (default: 7.5)
+fig_colorbar_size  Width of the actual colour bar in mm (default: 4)
+fig_colorbar_method
+                   Way to place the colour bar; one of the following options:
+                     insert   Take space inside the existing plot; keep the
+                              figure size, but decrease the plot size. (default)
+                     extend   Add extra space; keep the plot size but increase
+                              the figure size.
+                     file     Save into a separate file. The original figure is
+                              not changed.
+fig_colorbar_labelpos
+                   Method to determine the position of the label of the colour
+                   bar. One of the following options:
+                     legacy   The 'old' method, using colorbar.set_label plus a
+                              manual shift.
+                     xaxis    As label for the 'x axis', directly below the
+                              the colour bar.
+                     yaxis    As label for the 'y axis', vertically up on the
+                              right-hand side.
+                     center   Centered in the whole space allocated for the
+                              colour bar, including margins; very similar to
+                              'legacy' for default settings of the colour bar
+                              size and margins. (default)
+                     left     Left aligned with the left border of the colour
+                              bar.
+fig_colorbar_abstwosided
+                   Whether a shaded dual colour bar, where the vertical value is
+                   the absolute value of the observable, should show the
+                   observable itself, with values running from -max to max (if
+                   set to true; default). Otherwise show the absolute value,
+                   running from 0 to max. (boolean value; default: true)
+fig_extend_xaxis   Relative extension of the horizontal plot range for
+                   dispersion and magnetic field dependence. For example, a
+                   value of '0.05' means 5% of the range is added left and right
+                   of the minimum and maximum x value (where x is k or B),
+                   respectively. This does not affect the range if the command
+                   line argument 'xrange' is used. Use '0' to not extend the
+                   plot range. The value may not be negative. (default: 0.05)
+fig_inset_size     Size (width and height) of the inset legend in mm. Values
+                   smaller than 30 are not recommended. (default: 30)
+fig_inset_margin   Space between inset edge and plot edge in mm. (default: 3)
+fig_inset_color_resolution
+                   Number of colour gradations along each axis for the RGB
+                   (inset) legend. Do not change unless file size is an issue.
+                   (default: 20)
+fig_legend_fontsize
+                   Specify the font size of the legend. May also be set to
+                   'auto' for automatic; this yields a font size of 8 for RGB
+                   (inset) legend, 10 for other legend or colorbars (may be
+                   subject to settings in matplotlibrc and/or style files).
+                   (default: auto)
+fig_spin_arrow_length
+                   Arrow length in spin plots. The value is the length in mm for
+                   arrows representing spin value 0.5 or a direction.
+                   (default: 5)
+fig_max_arrows     Maximum number of arrows in a vector plot in each dimension.
+                   The value 0 means no limit. (default: 20)
+fig_arrow_color_2d Color of the arrows in a 2D vector plot. This must be a
+                   valid matplotlib colour. (default: #c0c0c0)
+fig_ticks_major    Strategy to determine the major ticks in the plots. Possible
+                   choices:
+                     none    No major ticks
+                     auto    Determine number of ticks automatically (based on
+                             plot size). (default)
+                     fewer   A few ticks per axis (typically 3)
+                     normal  A moderate amount of ticks per axis (typically 6)
+                     more    Many ticks per axis (typically 12)
+                   One can use different choices for the horizontal and vertical
+                   axis, as follows: 'fig_ticks_major=normal,fewer'
+fig_ticks_minor    Strategy to determine the minor ticks in the plots. Possible
+                   choices:
+                     none    No minor ticks (default)
+                     auto    Determine automatically (matplotlib's algorithm)
+                     fewer   Few minor ticks (major interval divided by 2)
+                     normal  Moderately many ticks (major interval divided by 4
+                             or 5).
+                     more    Many minor ticks (major interval divided by 10)
+                   One can use different choices for the horizontal and vertical
+                   axis, as follows: 'fig_ticks_minor=fewer,none'
+fig_unit_format    Opening and closing bracket of the units in axis and legend
+                   labels. (default: [])
+lattice_regularization
+                   Enables or disables lattice regularization. The settings
+                   'true' and 'false' correspond to the obsolete command-line
+                   arguments 'latticereg' and 'nolatticereg', respectively. The
+                   recommended value and default value is 'false'. Note that
+                   for older kdotpy versions (kdotpy v0.xx), the default value
+                   was 'true' for compatibility reasons.
+                   (boolean value; default: false)
+lattice_zres_strict
+                   Enables or disable strict check of commensurability of z
+                   resolution with thickness of the layers, i.e., whether the
+                   thicknesses are integer multiples of the z resolution. If
+                   they are incommensurate, quit with an error if strict
+                   checking is enabled. If disabled, change the thicknesses to
+                   match the z resolution and raise a warning. (boolean value;
+                   default: true)
+lattice_ycoord_midpoints
+                   Determines how the y coordinate values are aligned. If set to
+                   'false' (default), the first and last coordinate value are at
+                   -w / 2 and w / 2, where w is the width. This method is
+                   analogous to the assignment of the z coordinates. If set to
+                   'true', use the legacy method where the coordinate values are
+                   shifted by half the y resolution yres. The number of
+                   coordinate values is w / yres + 1 or w / yres for 'false' and
+                   'true', respectively. This setting is ignored for data
+                   imported from XML files, e.g., read by 'kdotpy merge' or if
+                   the number of coordinate values is given explicitly with the
+                   command line argument 'w'. (boolean value; default: false)
+magn_epsilon       Numeric value that determines whether small values near zero
+                   need to be inserted if the grid contains magnetic fields. The
+                   value zero means disabling this feature. Otherwise, +/- the
+                   absolute value of magn_epsilon is inserted at either side of
+                   B = 0, whichever side (positive or negative) is included in
+                   the range. If negative, insert the values only if the range
+                   is two-sided. The motivation for including this option is to
+                   reduce some plot artifacts for ranges that contain positive
+                   and negative magnetic fields. For this option to be
+                   effective, it might also be necessary to set the 'split'
+                   parameter to a small value. (default: -1e-4)
+selfcon_acceptable_status
+                   Maximum status level for the result of the self-consistent
+                   Hartree calculation to be considered valid. Possible values:
+                     0   Successful
+                     1   Calculation skipped or aborted (default)
+                     2   Did not converge, but convergence is likely after more
+                         iterations
+                     3   Did not converge, convergence cannot be estimated or is
+                         unlikely
+                     4   Failed
+selfcon_check_chaos_steps
+                   Number of previous iterations used for the detection of
+                   chaotic behaviour. If this value is set to n, we say chaos
+                   occurs at iteration i if the previous V_j closest to V_i are
+                   more than n iterations ago, i.e., i - j > n. When chaos is
+                   detected, adjust the time step if selfcon_dynamic_time_step
+                   is set to true. (default: 4)
+selfcon_check_orbit_steps
+                   Number of previous iterations used for the detection of
+                   periodic orbits. We say a periodic orbit occurs at iteration
+                   i if the previous V_j closest to V_i show a regular pattern
+                   like j - i = 2, 4, 6, 8; the value n set here is the minimum
+                   length of the regular pattern. When a periodic orbit is
+                   detected, adjust the time step if selfcon_dynamic_time_step
+                   is set to true. (default: 4)
+selfcon_convergent_steps
+                   Number of consecutive convergent steps (iteration steps where
+                   the convergence condition is met) required for the self-
+                   consistent Hartree calculation to be considered successful.
+                   This prevents accidental convergence which could lead to a
+                   spurious solution. (default: 5)
+selfcon_debug      Whether to enable debug mode for the self-consistent Hartree
+                   calculation. In debug mode, write temporary files and provide
+                   traceback for all exceptions (also KeyboardInterrupt) within
+                   the iteration loop, which is useful for debugging. If debug
+                   mode is disabled, then do not write temporary files and
+                   continue on SelfConError and KeyboardInterrupt exceptions.
+                   (boolean value; default: false)
+selfcon_diff_norm  Method that defines a measure of convergence for the self-
+                   consistent calculation. This method is essentially a function
+                   applied to the difference of potentials of the last two
+                   iteration steps. The result, a nonnegative value, is compared
+                   to the convergence criterion. Possible values:
+                     max   The maximum of the difference. Also known as supremum
+                           norm or L-infinity norm.
+                     rms   The root-mean-square of the difference. This is the
+                           L2 norm. (default)
+selfcon_dynamic_time_step
+                   Whether the "time" step for the self-consistent calculation
+                   is adapted automatically between iterations. If set to false,
+                   the time step stays the same between iterations (boolean
+                   value; default: false).
+selfcon_erange_from_eivals
+                   Whether to use the eigenvalues from first diagonalization
+                   result to determine the energy range used for calculating the
+                   density of states for the self-consistent calculation. If
+                   false, the energy range given in the command line is used
+                   instead. (boolean value; default: false).
+selfcon_full_diag  Whether to use the full-diagonalization approach for the
+                   self-consistent Hartree calculation. If true, use the full-
+                   diagonalization approach that calculates all conduction band
+                   states to determine density as function of z. If false, use
+                   the standard mode that calculates bands around the CNP. The
+                   latter is significantly faster, but the results are based on
+                   an implausible assumption on the density at the CNP. (boolean
+                   value; default: true)
+selfcon_ll_use_broadening
+                   Whether to enable broadening during self-consistent
+                   calculation in LL mode.
+                   This can lead to bad convergence behaviour (or no convergence
+                   at all, depending on selected broadening), but results in
+                   more accurate Hartree potentials for the given broadening.
+                   This does not affect the broadening applied to the main
+                   diagonalization/postprocessing after the self-consistent
+                   calculation has finished. (boolean value; default: false)
+selfcon_energy_points
+                   The minimal number of points on the energy axis for the self-
+                   consistent calculation. An energy resolution will be chosen
+                   so that the energy interval spans at least this many values.
+                   This number may be fairly high without performance penalty.
+                   (default: 1000)
+selfcon_min_time_step
+                   The minimal value for the "time" step for the self-consistent
+                   calculation. If selfcon_dynamic_time_step is set to true,
+                   the time step can never get lower than this value. Allowed
+                   values are between 0 and 1. (default: 0.001)
+selfcon_potential_average_zero
+                   Shift the potential such that its average will be zero at
+                   each iteration of the self-consistent calculation. Enabling
+                   this option is recommended for reasons of stability and for
+                   consistency of the output. (boolean value; default: true)
+selfcon_symmetrization_constraint
+                   Constraint on how the symmetry is checked and symmetrization
+                   performed on multiple quantities when solving the Poisson
+                   equation. When symmetry norm is below threshold the quantity
+                   is always fully symmetrized over whole layer stack (except
+                   for 'never'). Possible values:
+                     never   Symmetry will not be checked. No symmetrization is
+                             performed.
+                     strict  Symmetry is checked over whole layer stack.
+                             (default)
+                     loose   Symmetry is checked over the well region only. This
+                             method is preferred for asymmetric layer stacks.
+selfcon_use_init_density
+                   Determine the initial density profile applied to the first
+                   iteration of the self-consistent Hartree calculation. If an
+                   initial potential is loaded from a file using the
+                   'potential' argument, the loaded potential takes precedence.
+                     false       Use the Hamiltonian with zero potential
+                                 (default).
+                     true        Uniformly distribute the total carrier density
+                                 from the 'cardens' argument across the well
+                                 region and solve for the Hartree potential.
+                     background  Place free charge carriers to exactly cancel
+                                 the background/depletion charges. Uniformly
+                                 distribute the remaining free carriers from
+                                 'cardens' over the well region.
+transitions_min_amplitude
+                   Minimum amplitude to consider for transitions. The lower this
+                   number, the larger the number of data points and the larger
+                   the data files and plots. (default: 0.01)
+transitions_min_deltae
+                   Minimum energy difference in meV to consider for transitions.
+                   This value is proportional to a minimal frequency. The
+                   smaller this number, the larger the number of data points and
+                   the larger the data files and plots. (default: 0.1)
+transitions_max_deltae
+                   Maximum energy difference in meV of transitions, i.e., upper
+                   limit of the vertical axis (filtered transitions plot only).
+                   If set to 0, determine the vertical scale automatically.
+                   (default: 0)
+transitions_dispersion_num
+                   Number of transitions to include in the dispersion or B
+                   dependence (LL fan) plot. If set to n, the transitions with
+                   n highest transitions rates will be shown.  If set to 0, show
+                   an unlimited number of transitions. (default: 4)
+transitions_broadening_type
+                   Shape of the broadening function used for broadening the
+                   transitions in the absorption plot. Possible choices:
+                     step        A step function (alias: delta)
+                     lorentzian  Lorentzian function (Cauchy distribution),
+                                 scale parameter gamma, which is the half-width
+                                 at half-maximum. (default; alias: lorentz)
+                     gaussian    Gaussian function, scale parameter sigma, which
+                                 is the standard deviation. (alias: gauss,
+                                 normal)
+                     fermi       Fermi function (thermal distribution), scale
+                                 parameter is energy. (alias: logistic, sech)
+                     thermal     Fermi function (thermal distribution), scale
+                                 parameter is temperature.
+                   NOTE: Change in versions >= 0.79. The types 'fermi' and
+                   'thermal' are no longer aliases. They have the same shape,
+                   but the scale ('width') parameter is treated differently, as
+                   energy and temperature, respectively.
+                   The broadening functions for the absorption are the
+                   probability density functions for all of these choices.
+transitions_broadening_scale
+                   Scale parameter of the broadening function. This may be an
+                   energy (in meV) or a temperature (in K) that determines the
+                   amount of broadening (i.e., its 'width'). (default: 2.5)
+transitions_all_if_filtered
+                   Output plot and table of all transitions if a carrier density
+                   is set. If false, suppress output of all transitions if
+                   filtered transitions are being requested. (boolean value;
+                   default: false)
+transitions_spectra
+                   (experimental)
+                   Output spectral plots and tables if a carrier density is set.
+                   If false, skip (time consuming) spectra calculation.
+                   (boolean value; default: false)
+transitions_plot   Output transition plot. If false, do not create and save a
+                   a transitions plot. (boolean value; default: true)
+plot_enable        Enable or disable the construction and output of all plots.
+                   Set this option to 'false' if plot files (PDF) are not
+                   desired. (boolean value; default: true)
+plot_constdens_color
+                   The colour of the curves in the 'constdens' plots. The value
+                   must be a valid matplotlib colour. (default: blue)
+plot_dispersion_default_color
+                   The uniform colour of the dispersion curves, if there is no
+                   colour scale set for the given observable (or if no
+                   observable is set). The value must be a valid matplotlib
+                   colour. (default: blue)
+plot_dispersion_energies
+                   Plot special energies, e.g., charge-neutrality point, Fermi
+                   energy/chemical potential at zero and finite density in
+                   dispersion plots. (boolean value; default: true)
+plot_dispersion_energies_color
+                   The line colour for special energies. The value must be a
+                   valid matplotlib colour. If left empty, take lines.color from
+                   matplotlibrc or a style file. (default: black)
+plot_dispersion_parameter_text
+                   Write an indication in the plot for constant parameter
+                   values, e.g., when plotting along kx for a nonzero ky value,
+                   write "For k_y = <value>". (boolean value; default: true)
+plot_dispersion_stack_by_index
+                   If enabled, make sure the data with the lowest band or
+                   Landau-level index is shown on top, to make sure the 'most
+                   interesting data' (low-index states) is not obscured by 'less
+                   interesting data' (high-index states). Otherwise, the plot
+                   function uses the default plot stacking order: the data is
+                   then drawn simply in the order by which it is processed.
+                   (boolean value; default: false)
+plot_dos_color     Colour of the curves in the (integrated) density of states
+                   (IDOS/DOS) plots. The value must be a valid matplotlib
+                   colour. (default: blue)
+plot_dos_energies  Plot special energies, e.g., charge-neutrality point, Fermi
+                   energy/chemical potential at zero and finite density in
+                   density (DOS) plots. (boolean value; default: true)
+plot_dos_fill      Fill the area between the curve and zero in the DOS plot (not
+                   integrated DOS). (boolean value; default: false)
+plot_idos_fill     Fill the area between the curve and zero in the integrated
+                   DOS plot. (boolean value; default: false)
+plot_dos_units_negexp
+                   Use negative exponents in DOS units in density plots. If set
+                   to true, write "nm^-2" instead of "1/nm^2", for example.
+                   (boolean value; default: false)
+plot_dos_validity_range
+                   Shade the area in the (integrated) DOS plot where the value
+                   is expected to be incorrect due to missing data (due to
+                   momentum cutoff). (boolean value; default: true)
+plot_dos_vertical  Plot the (integrated) DOS sideways, so that energy is plotted
+                   on the vertical axis. The vertical scale will match the
+                   dispersion plot, so that these figures can be put
+                   side-by-side with a common axis. (boolean value; default:
+                   true)
+plot_ecnp          Plot the charge neutral energy as function of k or B. This is
+                   the boundary between "electron" and "hole" states (positive
+                   and negative band indices, respectively). (boolean value;
+                   default: false)
+plot_potential_yz_contours
+                   Whether to include equipotential contours in plots of the
+                   two-dimensional potential V(y, z). (boolean value; default:
+                   true)
+plot_potential_yz_equal_aspect
+                   Whether to respect the geometric aspect ratio in plots of the
+                   two-dimensional potential V(y, z). If set to true, the plot
+                   area may be shrunk horizontally or vertically, such that 1 nm
+                   in either direction is represented by the same distance. If
+                   set to false, the axes are scaled independently to fill the
+                   full plot area. (boolean value; default: false)
+plot_rasterize_pcolormesh
+                   Whether to rasterize plot elements created with pcolormesh
+                   from matplotlib. This is used primarily for two-dimensional
+                   color plots with kdotpy ll when one uses quadratic stepping
+                   for the magnetic field values. Rasterization leads to
+                   improved performance both in creating the plots as well as in
+                   rendering them with a pdf viewer. The resolution can be
+                   controlled with the matplotlibrc parameters 'figure.dpi' and
+                   'savefig.dpi'. If the old behaviour is desired, i.e., that
+                   the data is rendered as vector graphics, set the value of
+                   plot_rasterize_pcolormesh to 'false'. (boolean value;
+                   default: true)
+plot_rxy_hall_slope
+                   Plot the Hall slope R_xy = B / (n e), where B is magnetic
+                   field, n is density and e is electron charge, in the plots
+                   for R_xy (rxy-constdens.pdf) as a dashed line. (boolean
+                   value; default: true)
+plot_sdh_markers   Whether to show markers for the period of the SdH
+                   oscillations in the 'constdens' plot (both 'normal' and 'SdH'
+                   versions). The markers are placed at the values for which
+                   1 / B is a multiple of e / (2 pi hbar n), where n is the
+                   density. (boolean value; default: true)
+plot_sdh_markers_color
+                   Colour of the SdH markers in the 'constdens' plots. The value
+                   must be a valid matplotlib colour. (default: red)
+plot_sdh_scale_amount
+                   The maximum number of SdH oscillations to be shown in the SdH
+                   plot. If set to a nonzero value, the scale on the horizontal
+                   axis is magnified to this amount of SdH oscillations. The
+                   scale is never shrunk, so there may be fewer SdH oscillations
+                   on the axis. The 'constdens' plot linear in B is unaffected.
+                   If set to 0 (default), do not scale the axis. A typical
+                   useful nonzero value is 20.
+plot_transitions_labels
+                   Show some labels in transitions plot. (boolean value;
+                   default: true)
+plot_transitions_quantity
+                   Which quantity to use for colouring in the transitions plot.
+                   Possible choices:
+                     amplitude   'Raw' amplitude gamma from Fermi's golden rule
+                     rate        Transition rate density, n gamma (f2 - f1)
+                                 (default; alias: rate_density)
+                     occupancy   Occupancy difference f2 - f1
+                     deltae      Energy difference |E2 - E1| in meV
+                     freq        Corresponding frequency in THz (alias:
+                                 freq_thz)
+                     lambda      Corresponding wave length in µm (alias:
+                                 lambda_µm, lambda_um)
+                     absorption  Absorption (relative attenuation of intensity)
+                                 A
+plot_transitions_frequency_ticks
+                   Plot frequency ticks at the left and right energy axis for
+                   transitions plots. (boolean value; default: true)
+plot_transitions_max_absorption
+                   Upper limit of the colour scale in the transitions absorption
+                   plot. For the relative absorption, use [-value, value] as the
+                   colour range. (default value: 0.03)
+plot_wf_orbitals_realshift
+                   Phase-shift the orbital functions to purely real values
+                   before plotting. This results in a single line plot per
+                   orbital with consistent amplitudes and signs. The actual
+                   phases are still given at the right side of the figure. Uses
+                   straight/dashed lines for +/- angular momentum orbitals.
+                   (default: false)
+plot_wf_orbitals_order
+                   Order of the orbitals in the legend, for wave function plot
+                   style 'separate'. Possible choices:
+                     standard  Γ6,+1/2  Γ8,+1/2  Γ7,+1/2
+                               Γ6,-1/2  Γ8,-1/2  Γ7,-1/2
+                               Γ8,+3/2  Γ8,-3/2           (default)
+                     paired    Γ6,+1/2  Γ6,-1/2  Γ7,+1/2
+                               Γ8,+1/2  Γ8,-1/2  Γ7,-1/2
+                               Γ8,+3/2  Γ8,-3/2
+                     table              Γ8,+3/2
+                               Γ6,+1/2  Γ8,+1/2  Γ7,+1/2
+                               Γ6,-1/2  Γ8,-1/2  Γ7,-1/2
+                                        Γ8,-3/2
+                    For the six-orbital basis, the Γ7 states are omitted.
+plot_wf_mat_label_rot
+                   Rotation of material labels inside the layers (deg). Can be
+                   used to fit long labels in thin layers. (default: 0)
+plot_wf_mat_min_thick_label
+                   Minimum layer thickness as ratio of full stack, which is
+                   required to show the material label. (default: 0.15)
+plot_wf_zy_format  File format for wavefunction plots |psi(z, y)|^2. Possible
+                   choices:
+                     pdf       Multi-page PDF if possible, otherwise separate
+                               PDF files. (default)
+                     png       Separate PNG files.
+                     pngtopdf  Separate PNG files are converted and merged into
+                               a multi-page PDF. Requires the 'convert' command
+                               line tool from ImageMagick. Note: This option
+                               will be removed in a future version of kdotpy.
+                               (alias: png_to_pdf)
+plot_wf_zy_bandcolors
+                   Colour model for the wavefunction plots |psi(z, y)|^2
+                   separated by bands. Possible choices:
+                     hsl   Hue-saturation-lightness. The colour (hue) is
+                           determined by the relative content of the bands, the
+                           saturation and lightness by the density.
+                     hsv   Hue-saturation-value. Like hsl, the colour (hue) is
+                           determined by the relative content of the bands, the
+                           saturation by the density, and the value is equal to
+                           1.
+                     rgb   Red-green-blue. The red, green, and blue channels are
+                           determined by the contents of the bands.
+                   NOTE: This is not a colormap! For the absolute value without
+                   band content, use the colormap set by 'color_wf_zy'.
+plot_wf_zy_scale   Scaling method (colour scale normalization) for wavefunction
+                   plots |psi(z, y)|^2. Possible choices:
+                     separate   Normalize the colour scale for each wavefunction
+                                individually. (default)
+                     together   Normalize the colour scale for all wavefunctions
+                                collectively.
+plot_wf_y_scale    Scaling method for the vertical axis for wave function plots
+                   |psi(y)|^2. Possible choices:
+                     size       Determine scale from sample size (width in y
+                                direction. (default; alias: width)
+                     magn       Determine scale from magnetic field. For small
+                                fields, use the sample size.
+                     separate   Determine scale from the maximum of each wave
+                                function individually.
+                     together   Determine scale from the maximum of all wave
+                                functions collectively.
+plot_wf_delete_png If the wavefunction plots are saved in PNG format and
+                   subsequently converted to a single multi-page PDF, delete the
+                   PNG files if the conversion is successful. Note: The PNGs to
+                   PDF conversion will be removed in a future version of kdotpy.
+                   (boolean value; default: true)
+plot_wf_together_num
+                   For the wavefunction plot in 'together' style, plot this many
+                   wave functions. Must be a positive integer. (default: 12)
+table_berry_precision
+                   Precision (number of decimals) for floating point numbers,
+                   for the Berry curvature csv files. (default: 4)
+table_data_label_style
+                   Style for expressing data labels in generic two-dimensional
+                   csv output, such as density of states and Berry curvature.
+                   The label is positioned at the end of the first row with
+                   data. Possible choices: none (alias: false), raw, plain,
+                   unicode, tex (see table_dispersion_unit_style below). If
+                   none, do not write a label. (default: plain)
+table_data_unit_style
+                   Style for expressing the unit in generic two-dimensional csv
+                   output. Possible choices: none (alias: false), raw, plain,
+                   unicode, tex (see table_dispersion_unit_style below). If
+                   none, do not write a unit. Also, if 'table_data_label_style'
+                   is set to none, this option is ignored and no unit is
+                   written. (default: plain)
+table_dos_local_files
+                   Which type of files should be written for local density data,
+                   if the output consists of multiple files, for example if the
+                   local density is calculated for higher momentum dimensions.
+                   Possible choices:
+                     none      No files are written.
+                     csv       Write csv files only. (default)
+                     tar       Write csv files, pack them into a tar file.
+                     targz     Write csv files, pack them into a gzipped tar
+                               file (compression level 6). (alias: gz, gzip,
+                               tar.gz)
+                     zip       Write csv files, pack them into a zip file with
+                               'deflate' compression.
+                     zipnozip  Write csv files, pack them into a zip file
+                               without compression.
+                   For the archive options (tar, zip, etc.), delete the csv
+                   files if the archive has been written successfully; otherwise
+                   keep the csv files. Some options may be unavailable depending
+                   on the installed Python modules.
+table_dos_precision
+                   Precision (number of decimals) for floating point numbers,
+                   for the density of states csv files. (default: 8)
+table_dos_scaling  Whether to apply density scaling for csv output of densities.
+                   If false, use the native units (nm^-2 in two dimensions).
+                   Otherwise, use the same scaling as for plots. (boolean value;
+                   default: false)
+table_dos_units_negexp
+                   Use negative exponents in DOS units for csv output. If set to
+                   true, write "nm^-2" instead of "1/nm^2", for example.
+                   (boolean value; default: false)
+table_densityyz_scaling
+                   Whether to scale the density units for density as function of
+                   (y, z) and energy. If set to false, the values are always
+                   given in units of nm^-3 (or equivalently, 10^21 cm^-3 or
+                   10^27 m^-3). If set to true, the values are scaled to a
+                   suitable 'power of ten'. See also configuration 'dos_unit'.
+                   (boolean value; default: false)                   
+table_dispersion_precision
+                   Precision (number of decimals) for floating point numbers,
+                   for the dispersion csv files. Energy and momentum values may
+                   use a different number of decimals. (minimum: 2, default: 5)
+table_dispersion_data_label
+                   Whether to include the observable at the end of the first
+                   data row in a multi-dimensional dispersion csv table (e.g.,
+                   with two or three momentum variables). (boolean value;
+                   default: true)
+table_dispersion_units
+                   Whether to include units of the variables and observables in
+                   dispersion csv files. For a one-dimensional dispersion, these
+                   are included as second header row. For a multi-dimensional
+                   dispersion, the unit is added at the end of the first data
+                   row. (boolean value; default: true)
+table_dispersion_unit_style
+                   Style for expressing units. Possible choices:
+                     raw       'Without' formatting
+                     plain     Plain-text formatting using common symbols (e.g.,
+                               square is ^2 and Greek letters are spelled out)
+                     unicode   Formatting using 'fancy' Unicode symbols (e.g.,
+                               square is the superscript-2 symbol and Greek
+                               letters use their corresponding Unicode symbol).
+                     tex       LaTeX formatting
+                   (default: plain)
+                   NOTE: Even with 'raw' or 'plain', there may still be some
+                   non-ASCII symbols, for example µ.
+table_dispersion_obs_style
+                   Style for expressing observables/quantities. Possible
+                   choices: raw, plain, unicode, tex (see above). (default: raw)
+table_qz_precision Precision (number of decimals) for floating point numbers,
+                   for the 'Q(z)' (z-dependent quantity) csv files. (default: 5)
+table_extrema_precision
+                   Precision (number of decimals) for floating point numbers,
+                   for the extrema csv files. (default: 5)
+table_absorption_precision
+                   Precision (number of decimals) for floating point numbers,
+                   for the absorption csv files (associated with transitions).
+                   (default: 5)
+table_transitions_deltall
+                   Whether to include a column labelled 'deltaLL' that indicates
+                   the difference between the Landau level indices, i.e., the
+                   polarity of each transition. As of kdotpy version 1.3, the
+                   columns 'LL1' and 'LL2' are left blank because the LL indices
+                   themselves are not meaningful. Enabling this option gives
+                   access to the polarity even if the LL indices are
+                   ill-defined. This option applies to symbolic and full LL mode
+                   equally. (boolean value; default: false)
+table_transitions_precision
+                   Precision (number of decimals) for floating point numbers,
+                   for the transitions csv files. (default: 3)
+table_transitions_ratecoeff_unit
+                   Unit for the rate coefficient for optical transitions.
+                   (default: nm^2/mV/ns)
+table_bdependence_filter_erange
+                   Apply the energy range filter specified by the erange
+                   argument to the csv output for B dependence. (boolean value;
+                   default: false)
+table_dispersion_filter_erange
+                   Apply the energy range filter specified by the erange
+                   argument to the csv output for dispersions. (boolean value;
+                   default: false)
+table_wf_files     Which type of files should be written for the wave function
+                   data. Possible choices:
+                     none      No files are written.
+                     csv       Write csv files only. (default)
+                     tar       Write csv files, pack them into a tar file.
+                     targz     Write csv files, pack them into a gzipped tar
+                               file (compression level 6). (alias: gz, gzip,
+                               tar.gz)
+                     zip       Write csv files, pack them into a zip file with
+                               'deflate' compression.
+                     zipnozip  Write csv files, pack them into a zip file
+                               without compression.
+                   For the archive options (tar, zip, etc.), delete the csv
+                   files if the archive has been written successfully; otherwise
+                   keep the csv files. Some options may be unavailable depending
+                   on the installed Python modules.
+table_wf_precision Precision (number of decimals) for floating point numbers,
+                   for the wave function csv files. (default: 5)
+wf_locations_exact_match
+                   If set to true (default), the wave function locations should
+                   match the momentum/magnetic field values exactly. If no exact
+                   match is found, skip the location ('old behaviour'). If set
+                   to false, find the nearest value to each location. (boolean
+                   value; default: true)
+wf_locations_filename
+                   Whether to label the wave function files using the position
+                   (momentum/magnetic field). If set to false, label with
+                   numbers. (boolean value; default: true)
+xml_omit_default_config_values
+                   If set to true, do not save all configuration values to the
+                   XML output file, but only the ones that are set to a value
+                   different than the default value. Otherwise save all values
+                   (default); this is recommended for reproducibility.
+                   (boolean value; default: false)
+xml_shorten_command
+                   If set to true, replace the script path in the <cmdargs> tag
+                   by 'kdotpy xx' (where xx = 1d, 2d, etc.) if typing 'kdotpy'
+                   on the command line refers to the kdotpy main script. For
+                   this, the main script (or a link to it) must be in the PATH
+                   environment variable; this is generally the case if kdotpy
+                   has been installed with pip. (boolean value; default: false)
+
+
+NOTE: Valid colormaps are all matplotlib colormaps (see, e.g.,
+https://matplotlib.org/tutorials/colors/colormaps.html), plus the following ones
+defined by kdotpy itself:
+bluered      Designed for symmetric observables; blue gray red.
+grayred      Designed for positive observables; gray red, like the top half of
+             colormap 'bluered'
+yrbc         Designed for observables with range -3/2 to 3/2, an extension of
+             colormap 'bluered';
+             cyan (-3/2) blue (-1/2) gray (0) red (1/2) yellow (3/2)
+yrbc2        Slightly modified version of colormap 'yrbc'
+tab20alt     The set of colours from the matplotlib colormap 'tab20' but in a
+             different order. This can be used with 'indexed' colours in order
+             to match the 'indexedpm' colours if set to 'tab20'.
+tab21posneg  Another set of colours derived from the matplotlib colormap
+             'tab20', such that the values +n and -n correspond to brighter and
+             darker shades of the same colour. For 0, use black. This colormap
+             is especially designed for band indices.
+bluereddual  Designed for use as dual colormap; blue to bluish gray, reddish
+             gray to red.
+
+NOTE: For colormaps, multiple instances may be given by separating them with
+commas. The colormaps are tried in order. If the first one is not a valid
+colormap, then try the second, etc. This construct is to provide colormaps that
+do not exist in all versions of matplotlib or have changed names.
+
+NOTE: A custom colormap may be used using 'file:colormap.txt' where colormap.txt
+is a colormap file. A colormap file should be simple text file, where each line
+is either a single matplotlib colour, or a combination of the form
+'value:color', where value is a number in the interval [0, 1]. The two forms may
+not be mixed in one file.
+A list of single colours creates a matplotlib colormap of type ListedColormap;
+this is useful for indexed colours, as no interpolation takes place. A list of
+'value:color' entries creates a LinearSegmentedColormap. This is a continuous
+colour gradient. Discontinuities at can be achieved by listing the value twice,
+e.g., '0.5:#ff0000' and '0.5:#0000ff' on two subsequent lines.
+Please refer to:
+https://matplotlib.org/tutorials/colors/colormap-manipulation.html
+https://matplotlib.org/api/colors_api.html
+
+NOTE: Boolean configuration options may have the following values (not case
+sensitive):
+for "True": yes, y, true, t, 1, enabled, on
+for "False": no, n, false, f, 0, disabled, off
+

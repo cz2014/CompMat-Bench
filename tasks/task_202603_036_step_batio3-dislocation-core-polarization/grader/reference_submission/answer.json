@@ -1,0 +1,59 @@
+{
+  "cell_1": {
+    "poling_axis": "x",
+    "core_BaO_xy_A": [
+      77.197,
+      80.83
+    ],
+    "core_TiO2_xy_A": [
+      77.431,
+      236.439
+    ],
+    "P_bulk_A_C_m2": [
+      0.22,
+      -0.0008
+    ],
+    "P_bulk_B_C_m2": [
+      0.1365,
+      -0.0041
+    ],
+    "p_polar_near_core_BaO_C_m2": -0.0595,
+    "n_reversed_BaO": 11,
+    "x_extent_reversed_BaO_A": 19.2,
+    "p_polar_near_core_TiO2_C_m2": 0.086,
+    "n_reversed_TiO2": 3,
+    "P_total_C_m2": [
+      0.1733,
+      -0.0024
+    ]
+  },
+  "cell_2": {
+    "poling_axis": "y",
+    "core_BaO_xy_A": [
+      77.67,
+      79.649
+    ],
+    "core_TiO2_xy_A": [
+      76.96,
+      237.695
+    ],
+    "P_bulk_A_C_m2": [
+      -0.1676,
+      0.1499
+    ],
+    "P_bulk_B_C_m2": [
+      0.0782,
+      0.1597
+    ],
+    "p_polar_near_core_BaO_C_m2": 0.135,
+    "n_reversed_BaO": 2,
+    "x_extent_reversed_BaO_A": 0.13,
+    "p_polar_near_core_TiO2_C_m2": 0.083,
+    "n_reversed_TiO2": 3,
+    "x_extent_reversed_TiO2_A": 0.37,
+    "P_total_C_m2": [
+      -0.0457,
+      0.1553
+    ]
+  }
+}

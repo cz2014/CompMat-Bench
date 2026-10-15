@@ -1,0 +1,21 @@
+# SG15 ONCV PBE pseudopotential + numerical-orbital identity catalog for ABACUS LCAO.
+# The analogue of grader_potcar_vasp54.yaml: staged TO the agent (as abacus_catalog.yaml)
+# and read by the ABACUS input rubric (grader_abacus_inputs.py). IDENTITY ONLY -- the rubric
+# checks that each species names the correct .upf + .orb, never their file content (the SG15
+# files are not redistributed). Source: the set staged on the HPC cluster at
+# /scratch/user/codes_data/abacus/{pseudo,orb}, confirmed during the L3/L4
+# reproduction; the orbitals are generated at a 100 Ry plane-wave cutoff.
+orbital_cutoff_Ry: 100
+species:
+  V:
+    pseudo: V_ONCV_PBE-1.0.upf
+    orbital: V_gga_9au_100Ry_4s2p2d1f.orb
+    valence: 13          # 3s2 3p6 3d3 4s2 (semicore 3s/3p in valence)
+  Co:
+    pseudo: Co_ONCV_PBE-1.0.upf
+    orbital: Co_gga_9au_100Ry_4s2p2d1f.orb
+    valence: 17          # 3s2 3p6 3d7 4s2
+  Al:
+    pseudo: Al_ONCV_PBE-1.0.upf
+    orbital: Al_gga_9au_100Ry_4s4p1d.orb
+    valence: 11          # 2s2 2p6 3s2 3p1

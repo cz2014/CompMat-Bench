@@ -1,0 +1,14 @@
+{
+  "status": "accepted_in_unified_runtime",
+  "python": "UV-locked Python 3.11 project with ASE, NumPy, SciPy and Matplotlib",
+  "uv_setup": "uv sync --offline --frozen --project /opt/science/c10/project",
+  "native": "VASP 6.1.0, same native executable as the molecular reference",
+  "resource_delivery": "Public profile and system instructions; absent from scientific prompts",
+  "sealed_boundary": "Only agent/LG or agent/LA is staged. Host references and reproduction source remain private.",
+  "source_code_policy": "EnergyTransferMD was a reference implementation; its solver and fitted outputs are not agent inputs.",
+  "pending": [],
+  "model_calls": 0,
+  "new_calculations": 0,
+  "runtime_base": "/scratch/user/compmat-long-chain-runtime-20261014/runtime-v9",
+  "acceptance_evidence": "../../runtime/acceptance.json"
+}

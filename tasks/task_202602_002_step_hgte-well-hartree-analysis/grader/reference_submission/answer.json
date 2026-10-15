@@ -1,0 +1,12 @@
+{
+  "dU_well_A_meV": 50.7297,
+  "ef0_A_meV": -21.9403,
+  "n_well_A_cm-2": -199749300000.0,
+  "dU_well_B_meV": 0.1139,
+  "ef0_B_meV": 30.1485,
+  "n_well_B_cm-2": 179575600000.0,
+  "dU_well_C_meV": -16.286,
+  "ef0_C_meV": 34.3574,
+  "n_well_C_cm-2": 199458200000.0,
+  "symmetric_condition": "B"
+}

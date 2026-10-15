@@ -1,0 +1,44 @@
+SYSTEM = 2H-MX2 4x4x1 supercell  displaced static  collinear DFT+U, SOC off
+
+# --- electronic ---
+PREC = Accurate       # driver choice: dense FFT grid for LASPH + DFT+U aspherical terms
+ENCUT = 500           # eV; plan-pinned (Sec. III)
+EDIFF = 1E-7          # eV; plan-pinned SCF tolerance (Sec. III) -- tight forces
+NELM = 200
+ISMEAR = 0            # 5.2b: Gaussian, gapped FM insulator (never ISMEAR>0 here)
+SIGMA = 0.05
+LREAL = .FALSE.       # driver choice: reciprocal-space projection for accurate forces
+LASPH = .TRUE.        # 5.2b REQUIRED: open d-shell + DFT+U aspherical gradient terms
+# ADDGRID intentionally left at default .FALSE. (driver choice, argued in README):
+# with PREC=Accurate + EDIFF 1e-7 it is unneeded and can inject force noise.
+
+# --- collinear spin, SOC OFF (this is vasp_std, NOT vasp_ncl) ---
+ISPIN = 2             # collinear spin-polarized; SOC off (no LSORBIT) per the plan
+MAGMOM = 16*2.0 32*0.0   # 16 metal at 2 uB, 32 halogen at 0 (collinear FM seed)
+
+# --- DFT+U (Dudarev, single effective U on the metal d-shell) ---
+LDAU = .TRUE.
+LDAUTYPE = 2
+LDAUL = 2 -1          # metal: d (l=2); halogen: none (-1)
+LDAUU = 2.0 0.0
+LDAUJ = 0.0 0.0
+LDAUPRINT = 1
+LMAXMIX = 4           # 5.2b REQUIRED for DFT+U on d-electrons
+
+# --- bands + parallelization for the 48-atom supercell ---
+NBANDS = 288          # driver choice: NELECT=448 -> ~224 occupied/spin; default ~248 leaves
+                      # only ~24 empty bands. 288 gives ~64 empty for SCF stability of a
+                      # magnetic insulator; cheap. VASP may round up for rank divisibility.
+KPAR = 2              # 32 ranks / 2 = 16 per k-group
+NCORE = 4             # 16 / 4 = 4 band-parallel groups per k-group
+
+# --- symmetry ---
+ISYM = 0              # displaced supercell is low-symmetry; VASP force symmetrization on a
+                      # displaced cell corrupts the force set. phonopy restores crystal
+                      # symmetry itself (standard phonopy+VASP practice).
+
+# --- single-point forces (no relaxation) ---
+IBRION = -1
+NSW = 0
+LWAVE = .FALSE.
+LCHARG = .FALSE.

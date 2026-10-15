@@ -1,0 +1,3 @@
+{"runs": {"relax": "answer/relax", "scf": "answer/scf",
+          "bands": "answer/bands", "scf_sc": "answer/scf_sc",
+          "bands_sc": "answer/bands_sc"}}

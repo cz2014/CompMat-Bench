@@ -1,0 +1,13 @@
+{
+  "WS2_peak_1e12_cm2": 4.234,
+  "WS2_net_1e12_cm2": 0.0,
+  "WS2_n_Rhh_1e12_cm2": 0.225,
+  "WS2_n_RXh_1e12_cm2": 1.382,
+  "WS2_n_RMh_1e12_cm2": -1.608,
+  "WSe2_peak_1e12_cm2": 1.946,
+  "WSe2_net_1e12_cm2": -0.0,
+  "WSe2_n_Rhh_1e12_cm2": -0.079,
+  "WSe2_n_RXh_1e12_cm2": -0.91,
+  "WSe2_n_RMh_1e12_cm2": 1.038,
+  "peak_ratio_WS2_over_WSe2": 2.176
+}

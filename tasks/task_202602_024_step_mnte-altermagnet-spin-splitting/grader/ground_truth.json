@@ -1,0 +1,14 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (spin splitting + magnetism parsed from four completed QE runs; six graded fields after the 2026-09-03 expert-review reduction)",
+  "provenance": "values from 3_reproduction/L1/result.json (leaf L1, reproduced 2026-07-09). Splitting quantities recomputed from auditor/extracted/bands_prim.csv, which was extracted from the primitive band run; the CSV E_up column is the first spin channel the outputs print. Sign convention: E(first spin channel) - E(second spin channel).",
+  "fields": {
+    "gap_eV": {"truth": 0.7479, "rule": "within 10% relative (band 0.6731-0.8227). Path-restricted gap of the primitive band run."},
+    "mn_lsm_muB": {"truth": 4.4911, "rule": "magnitude within 10% relative (band 4.042-4.940). Site-projected local moment of any Mn in the supercell scf run; all sites equal."},
+    "amss_valence_max_eV": {"truth": 0.886, "rule": "within 10% relative (band 0.7974-0.9746). Max magnitude splitting over all valence bands on L-Gamma-L'."},
+    "split_mean_LG_eV": {"truth": 0.312, "rule": "signed, within 10% relative (band 0.2808-0.3432). Mean signed splitting of the highest valence band on L-to-Gamma."},
+    "split_mean_GLp_eV": {"truth": -0.312, "rule": "signed, within 10% relative (band -0.3432 to -0.2808). Mean signed splitting on Gamma-to-L'; opposite sign to the L-to-Gamma mean is the altermagnetic signature."},
+    "sc_vbm_at_gamma": {"truth": true, "rule": "exact boolean true. The primitive VBM at A folds onto the supercell zone center."}
+  },
+  "score": "1 only if every field passes its rule; any single failure scores 0"
+}

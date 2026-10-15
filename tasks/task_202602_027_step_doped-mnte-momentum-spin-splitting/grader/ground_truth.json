@@ -1,0 +1,100 @@
+{
+ "_doc": "L8 analyze ground truth = our self-consistent reproduction (3_reproduction/L8: result.json and auditor/extracted/results_<config>.json + pristine_ref.json). Four Sb-/I-pair-doped 2x2x2 MnTe supercells: sb_p1 = Sb in the Pmm2 (altermagnet) family, i_p1 = I in the same family, sb_p2 = Sb in the C2/m (quasi-altermagnet) family, i_p2 = I in that family. Values are our computed numbers, not the paper's. Sixteen fields (four per configuration) after the 2026-09-03 expert-review merge of the per-leg peaks. Per-field rule and tolerance are in _rules; the tolerances retain the leaf's peak convention (+/-15%) and use the approved Fermi-level shift band (+/-10%), with zero-truth / group-contrast handling of the guards.",
+ "gamma_split_meV_sb_p1": 0.009743195263922644,
+ "peak_split_meV_sb_p1": 255.75678005593795,
+ "ef_shift_eV_sb_p1": -0.4786358084060822,
+ "net_mag_muB_sb_p1": 0.0,
+ "gamma_split_meV_i_p1": 0.061017781243677405,
+ "peak_split_meV_i_p1": 123.1939756884568,
+ "ef_shift_eV_i_p1": 0.7238526089207511,
+ "net_mag_muB_i_p1": 0.0,
+ "gamma_split_meV_sb_p2": 70.97773426415799,
+ "peak_split_meV_sb_p2": 94.71057880773692,
+ "ef_shift_eV_sb_p2": -0.4545446524248007,
+ "net_mag_muB_sb_p2": 0.06,
+ "gamma_split_meV_i_p2": 80.5424306405893,
+ "peak_split_meV_i_p2": 148.8663108177377,
+ "ef_shift_eV_i_p2": 0.7081232076380815,
+ "net_mag_muB_i_p2": 0.2,
+ "_rules": {
+  "gamma_split_meV_sb_p1": {
+   "rule": "absolute",
+   "truth": 0.0,
+   "tol_meV": 5.0,
+   "why": "altermagnet nodal degeneracy at Gamma; truth ~0 (0.010 meV), zero-truth absolute band 5 meV"
+  },
+  "gamma_split_meV_i_p1": {
+   "rule": "absolute",
+   "truth": 0.0,
+   "tol_meV": 5.0,
+   "why": "same nodal degeneracy; truth ~0 (0.061 meV)"
+  },
+  "gamma_split_meV_sb_p2": {
+   "rule": "relative",
+   "rel": 0.1,
+   "why": "quasi-altermagnet lifted Gamma split, nonzero"
+  },
+  "gamma_split_meV_i_p2": {
+   "rule": "relative",
+   "rel": 0.1,
+   "why": "quasi-altermagnet lifted Gamma split, nonzero"
+  },
+  "peak_split_meV_sb_p1": {
+   "rule": "relative",
+   "rel": 0.15
+  },
+  "peak_split_meV_i_p1": {
+   "rule": "relative",
+   "rel": 0.15
+  },
+  "peak_split_meV_sb_p2": {
+   "rule": "relative",
+   "rel": 0.15
+  },
+  "peak_split_meV_i_p2": {
+   "rule": "relative",
+   "rel": 0.15
+  },
+  "_peaks_note": "whole-path peak top-occupied-band splitting (max over both legs of the folded L-Gamma-L' list); +/-15% (leaf metric-1 convention). The two per-leg peaks were merged into one field at reviewer's expert review 2026-09-03: their split carried no independent physics (peak asymmetry does not discriminate the families, see 3_reproduction/L8 record).",
+  "ef_shift_eV_sb_p1": {
+   "rule": "relative",
+   "rel": 0.1
+  },
+  "ef_shift_eV_i_p1": {
+   "rule": "relative",
+   "rel": 0.1
+  },
+  "ef_shift_eV_sb_p2": {
+   "rule": "relative",
+   "rel": 0.1
+  },
+  "ef_shift_eV_i_p2": {
+   "rule": "relative",
+   "rel": 0.1
+  },
+  "_ef_note": "Mn-3s-referenced Fermi shift, handbook default +/-10% (the leaf's own +/-20% convention left the alignment pin barely necessary: unreferenced raw Fermi differences missed the 20% band by only 0.2 meV on i_p1). Sign is inside the band. At 10% the raw unreferenced variant fails both I configurations by ~0.07 eV while every correct reading sits within 1e-4 eV of truth.",
+  "net_mag_muB_sb_p1": {
+   "rule": "absolute",
+   "truth": 0.0,
+   "tol_muB": 0.05,
+   "why": "compensated altermagnet; truth 0.00"
+  },
+  "net_mag_muB_i_p1": {
+   "rule": "absolute",
+   "truth": 0.0,
+   "tol_muB": 0.05,
+   "why": "compensated altermagnet; truth -0.00"
+  },
+  "net_mag_muB_i_p2": {
+   "rule": "relative",
+   "rel": 0.25,
+   "why": "uncompensated quasi-altermagnet moment 0.20 muB; wider band for the small extraction-scatter-prone moment"
+  },
+  "net_mag_muB_sb_p2": {
+   "rule": "absolute",
+   "truth": 0.06,
+   "tol_muB": 0.03,
+   "why": "uncompensated quasi-altermagnet moment; the only agent-visible source is the two-decimal stdout print (0.06), so every honest extraction returns exactly 0.06; absolute band 0.06 +/- 0.03 muB"
+  }
+ }
+}

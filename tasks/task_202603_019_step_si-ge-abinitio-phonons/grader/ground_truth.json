@@ -1,0 +1,77 @@
+{
+  "subtask": "L2v analyze",
+  "kind": "analyze (ab initio LDA bulk phonon database of Si and Ge from the staged VASP force calculations: L-point frequencies, Gamma optical frequency, RTA conductivity at 300 K)",
+  "provenance": "3_reproduction/L2v/results_summary.json (manifest approved_on 2026-09-05; materials/<M>/symmetry_point_frequencies_THz and kappa_RTA at 300 K), re-derived from the staged files on the desktop workstation by reviewer/reference_run.sh (phonopy/phono3py 4.4.0, li_l2t env) on 2026-09-11; the graded truths are the re-derived values (record values agree to the printed digits: kappa 123.372 vs 123.374, 61.3455 vs 61.351; frequencies identical to four decimals).",
+  "primary": {
+    "nu_L_Si_THz": {
+      "truth": [
+        3.23942278028988,
+        3.2394227802898996,
+        11.090244463385725,
+        12.0649064662518,
+        14.386044002451575,
+        14.386044002451579
+      ],
+      "rule": "each of the six values +/-10 percent relative (rule 2(1)), ascending order"
+    },
+    "nu_Gamma_optical_Si_THz": {
+      "truth": 15.133588615418402,
+      "rule": "+/-10 percent relative (rule 2(1))"
+    },
+    "kappa_300K_Si_W_per_mK": {
+      "truth": 123.37221725133439,
+      "rule": "+/-10 percent relative (rule 2(1)); RTA 25^3 tetrahedron, harmonic-set fc2"
+    },
+    "nu_L_Ge_THz": {
+      "truth": [
+        1.2938324020419312,
+        1.293832402041959,
+        6.895928844896655,
+        8.619379939659908,
+        9.799392534460267,
+        9.799392534460269
+      ],
+      "rule": "each of the six values +/-10 percent relative (rule 2(1)), ascending order"
+    },
+    "nu_Gamma_optical_Ge_THz": {
+      "truth": 9.999746907905386,
+      "rule": "+/-10 percent relative (rule 2(1))"
+    },
+    "kappa_300K_Ge_W_per_mK": {
+      "truth": 61.3455268332229,
+      "rule": "+/-10 percent relative (rule 2(1)); RTA 25^3 tetrahedron, harmonic-set fc2"
+    }
+  },
+  "record_values": {
+    "Si": {
+      "L": [
+        3.2394,
+        3.2394,
+        11.0902,
+        12.0649,
+        14.386,
+        14.386
+      ],
+      "G": 15.1336,
+      "k": 123.374
+    },
+    "Ge": {
+      "L": [
+        1.2938,
+        1.2938,
+        6.8959,
+        8.6194,
+        9.7994,
+        9.7994
+      ],
+      "G": 9.9997,
+      "k": 61.351
+    }
+  },
+  "not_graded": {
+    "X_point": "not requested",
+    "other_temperatures": "200-400 K sweep of the record not requested",
+    "q_mesh_sweep": "15^3/31^3 values pass the 10 percent band (selfcheck direction 1)"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

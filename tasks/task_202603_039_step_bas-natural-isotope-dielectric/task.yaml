@@ -1,0 +1,18 @@
+task_id: task_202603_039_step_bas-natural-isotope-dielectric
+title: infrared dielectric function of natural-abundance boron arsenide from an isotope-disordered supercell ensemble
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2026-03
+source_date: 2026-03-30
+earliest_public_date: 2026-03-30
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: []
+docs: []
+image: alamode-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

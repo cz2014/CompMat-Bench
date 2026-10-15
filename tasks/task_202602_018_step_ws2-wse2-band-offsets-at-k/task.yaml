@@ -1,0 +1,18 @@
+task_id: task_202602_018_step_ws2-wse2-band-offsets-at-k
+title: read the band offsets and layer character at K of a heterobilayer
+task_type: step
+role: analyze
+cost_class: heavy
+source_month: 2026-02
+source_date: 2026-02-04
+earliest_public_date: 2026-02-04
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [vasp]
+docs: [vasp]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

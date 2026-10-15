@@ -1,0 +1,31 @@
+{
+  "chain": "C09",
+  "status": "approved_empirical",
+  "reference_scope": "finite_duration_reproduction",
+  "approval": {
+    "by": "user",
+    "date": "2026-10-12",
+    "scope": "Empirical reference and two absolute tolerances; unified release preparation."
+  },
+  "fields": {
+    "Tc_unstrained_K": {
+      "truth": 363.07631807402765,
+      "atol": 58,
+      "rtol": 0.0
+    },
+    "slope_K_per_percent_compression": {
+      "truth": 54.85643172585489,
+      "atol": 21,
+      "rtol": 0.0
+    }
+  },
+  "notes": "User-accepted empirical comparator from the completed original-grid reproduction. Both outputs must pass. No method/intermediate checks. Extra ungraded fields are ignored.",
+  "reference_method": "Original-grid FE-start finite-duration half-height Tc*; five-strain OLS slope. Method is provenance, not an agent requirement.",
+  "limitations": [
+    "Half-height estimates are empirical working proxies, not demonstrated equilibrium Curie temperatures.",
+    "Initial-state, duration, size and transition-diagnostic effects are not bounded by seed scatter.",
+    "Two held-out comparisons are retrospective; their existing protocol failures and >5-hour runtimes remain unchanged."
+  ],
+  "coverage_scope": "Marginal normal-model prediction intervals, not mean confidence intervals, not established method-independent coverage, and not a joint 90% pass-rate claim.",
+  "calibration_source_sha256": "5f27b54bb9b2ae4c78ea14c043579151ca9c6424f3058a4a910fa51f0f281ba7"
+}

@@ -1,0 +1,37 @@
+{
+  "subtask": "L9 analyze",
+  "kind": "analyze (phonon force-constant assembly, A'1 mode identification, dynamical stability)",
+  "provenance": "values from 3_reproduction/L9/ (result.json, gamma_modes.json, a1p_mode.json, phonon_bands.csv; finite-displacement reproduction 2026-07-10). Reconfirmed at authoring by re-running auditor/extract_phonons.py on the staged vaspruns.",
+  "primary": {
+    "a1p_frequency_THz": {
+      "truth": 7.608846,
+      "rule": "scalar +/-10% (the standard relative band; see notes.md)",
+      "note": "the A'1 out-of-plane optical singlet at Gamma. NOTE the A2'' singlet at 8.324 THz lies INSIDE the +/-10% band [6.848, 8.370], so frequency alone does NOT identify the mode -- the pattern fields below pin it."
+    },
+    "a1p_ru_disp_frac": {
+      "truth": 0.0,
+      "band": 0.1,
+      "rule": "absolute band (a zero-valued target has no relative scale): 0 <= value <= 0.10",
+      "note": "the Ru sits on the mode's mirror plane and is at rest for A'1; for A2'' the Ru moves (~0.70), so this is the key discriminator vs A2''"
+    },
+    "a1p_cl_inplane_frac": {
+      "truth": 0.0,
+      "band": 0.1,
+      "rule": "absolute band (zero target): 0 <= value <= 0.10",
+      "note": "the two Cl move purely out-of-plane in A'1; discriminates against the in-plane E'/E'' modes (~1.0)"
+    },
+    "a1p_cl_z_antiphase_product": {
+      "truth": -1.0,
+      "threshold": -0.5,
+      "rule": "Inclusive [-1.001,-0.5]: antiphase sign/dominance with a small allowance below the physical lower limit -1.",
+      "note": "the two Cl move out-of-plane in antiphase (unit z-fractions -1 and +1, product -1). In-phase (A2'') gives +1; in-plane gives ~0. The <=-0.5 threshold cleanly separates antiphase from both."
+    },
+    "n_imaginary_branches": {
+      "truth": 0,
+      "rule": "exact integer match",
+      "note": "the spectrum is dynamically stable; global dispersion minimum is -0.0 THz (no branch below -0.1 THz anywhere on the path). Verified against phonon_bands.csv."
+    }
+  },
+  "identification_note": "Frequency and three pattern scalars jointly compare the reported mode to the reproduced A1-prime singlet. The nearby A2-double-prime frequency lies within the frequency band, so the Ru-node and Cl-motion fields add discrimination. These reported scalars do not prove force-constant assembly or eigenvector extraction. All five fields are primary.",
+  "score": "1 only if all five primary fields pass (binary all-primary-pass; any single failure scores 0)"
+}

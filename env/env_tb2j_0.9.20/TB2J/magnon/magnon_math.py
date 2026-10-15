@@ -1,0 +1,64 @@
+import numpy as np
+
+__all__ = ["generate_grid", "get_rotation_arrays", "round_to_precision", "uz", "I"]
+
+I = np.eye(3)
+uz = np.array([[0.0, 0.0, 1.0]])
+
+
+def generate_grid(kmesh, sort=True):
+    half_grid = [int(n / 2) for n in kmesh]
+    grid = np.stack(
+        np.meshgrid(*[np.arange(-n, n + 1) for n in half_grid]), axis=-1
+    ).reshape(-1, 3)
+
+    if sort:
+        idx = np.linalg.norm(grid, axis=-1).argsort()
+        grid = grid[idx]
+
+    return grid
+
+
+# def JR_to_Jq(JR, Rlist, qpt, vecn):
+#    for iR, R in enumerate(Rlist):
+#        phase = 2 * np.pi * R @ qpt
+#        rv = phase * vecn
+#        Rot = Rotation.from_rotvec(rv.reshape(-1, 3)).as_matrix().reshape(R.shape[0], 3, 3)
+#
+
+
+def get_rotation_arrays(magmoms, u=uz):
+    dim = magmoms.shape[0]
+    v = magmoms
+    n = np.cross(u, v)
+    nnorm = np.linalg.norm(n, axis=-1).reshape(dim, 1)
+    n = np.divide(n, nnorm, out=np.full_like(n, np.nan), where=nnorm > 0)
+    # z = u #np.repeat(u, dim, axis=0)
+    z = np.repeat(u, dim, axis=0)
+    A = np.stack([z, np.cross(n, z), n], axis=1)
+    B = np.stack([v, np.cross(n, v), n], axis=1)
+    R = np.einsum("nki,nkj->nij", A, B)
+
+    Rnan = np.isnan(R)
+    if Rnan.any():
+        nanidx = np.where(Rnan.any(axis=(1, 2)))[0]
+        for idx in nanidx:
+            e3 = v[idx]
+            axis = np.array([1.0, 0.0, 0.0])
+            if np.linalg.norm(np.cross(axis, e3)) < 1e-12:
+                axis = np.array([0.0, 1.0, 0.0])
+            e1 = axis - np.dot(axis, e3) * e3
+            e1 /= np.linalg.norm(e1)
+            e2 = np.cross(e3, e1)
+            R[idx, 0] = e1
+            R[idx, 1] = e2
+            R[idx, 2] = e3
+
+    U = R[:, 0] + 1j * R[:, 1]
+    V = R[:, 2]
+
+    return U, V
+
+
+def round_to_precision(array, precision):
+    return precision * np.round(array / precision)

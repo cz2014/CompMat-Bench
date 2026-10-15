@@ -1,0 +1,39 @@
+{
+  "python-c09": {
+    "version": "UV-locked Python 3.11; DeepMD 3.1.1 / ASE 3.26.0",
+    "argv": [
+      "/opt/science/c09/project/.venv/bin/python"
+    ],
+    "env": {
+      "PATH": "/opt/science/c09/project/.venv/bin:/usr/bin:/bin",
+      "PYTHONNOUSERSITE": "1",
+      "TF_INTRA_OP_PARALLELISM_THREADS": "1",
+      "TF_INTER_OP_PARALLELISM_THREADS": "1",
+      "DP_INTRA_OP_PARALLELISM_THREADS": "1",
+      "DP_INTER_OP_PARALLELISM_THREADS": "1",
+      "LD_LIBRARY_PATH": "/opt/science/python311/lib"
+    }
+  },
+  "lmp-deepmd": {
+    "version": "LAMMPS 29 Aug 2024 / DeepMD 3.1.1 study-native bundle",
+    "argv": [
+      "/opt/science/native/c09-deepmd/bin/lmp"
+    ],
+    "mpi": [
+      "/opt/science/native/c09-deepmd/bin/mpirun",
+      "-launcher",
+      "fork",
+      "-bind-to",
+      "none"
+    ],
+    "env": {
+      "PATH": "/opt/science/native/c09-deepmd/bin:/usr/bin:/bin",
+      "LD_LIBRARY_PATH": "/opt/science/native/c09-deepmd/lib",
+      "LAMMPS_PLUGIN_PATH": "/opt/science/native/c09-deepmd/lib/deepmd_lmp",
+      "TF_INTRA_OP_PARALLELISM_THREADS": "1",
+      "TF_INTER_OP_PARALLELISM_THREADS": "1",
+      "DP_INTRA_OP_PARALLELISM_THREADS": "1",
+      "DP_INTER_OP_PARALLELISM_THREADS": "1"
+    }
+  }
+}

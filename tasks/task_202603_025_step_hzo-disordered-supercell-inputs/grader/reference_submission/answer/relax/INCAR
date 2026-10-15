@@ -1,0 +1,40 @@
+SYSTEM = hzo_x050 pristine 2x2x2 Pca21 Hf1-xZrxO2, relaxB
+
+# --- electronic ---
+PREC   = Accurate      # as pass A
+LREAL  = .FALSE.       # as pass A
+ENCUT  = 600           # eV; source. Also >= 1.3 x max ENMAX (O, 400.0 eV -> 520 eV);
+                       #   the Pulay caveat does not apply because ISIF = 2
+ISPIN  = 1             # source: non-spin-polarised
+ISMEAR = 0             # 5.2b: Gaussian smearing; source
+SIGMA  = 0.2           # eV; source
+EDIFF  = 1E-07         # driver: tightened from the deposit's 1E-06 so that the SI's own
+                       #   1E-04 eV/A force criterion is meaningful on a 96-atom cell
+NELM   = 250           # source
+NELMIN = 6             # source
+ALGO   = Normal        # driver: blocked Davidson, robust for a 96-atom wide-gap
+                       #   insulator with 736 electrons; changes only the SCF path
+LASPH  = .FALSE.       # 5.2b decided explicitly: Hf(4+)/Zr(4+) are formally d0 closed
+                       #   shells, plain PBE, no +U, so no aspherical term is required
+LMAXMIX = 2            # 5.2b: the default, stated explicitly (no +U, no ICHARG = 11)
+ISYM   = 0             # source; also what makes the undoped cell's symmetry a real test
+# NBANDS   unset: VASP default; no empty-state resolution needed here
+# NELECT   unset: both cells are neutral (736 electrons doped, 704 undoped)
+# LDIPOL / IDIPOL unset: Pca21 is a polar BULK crystal under 3D periodic boundary
+#   conditions, where a dipole correction is neither defined nor wanted
+# LSORBIT, MAGMOM, GGA_COMPAT, ADDGRID, METAGGA unset (VASP defaults)
+
+# --- fixed-cell ionic relaxation, pass B (production, restarted from pass A's CONTCAR) ---
+IBRION = 1             # RMM-DIIS quasi-Newton, as the deposit's own relax deck;
+                       #   fallback if it stalls: IBRION = 2 for ~20 steps, then 1
+POTIM  = 0.5           # source
+NSW    = 400           # driver; the walltime continuation policy is in submit_l1.sh
+ISIF   = 2             # source: the lattice is held fixed at the experimental values
+EDIFFG = -1E-04        # eV/A; the source's own force tolerance, verbatim, not to be
+                       #   loosened. Negative = force criterion (5.2b)
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+
+# --- parallelisation (128 ranks on one cluster node) ---
+KPAR   = 4             # 8 k-points with ISYM = 0 -> 4 pools of 32 ranks
+NCORE  = 8

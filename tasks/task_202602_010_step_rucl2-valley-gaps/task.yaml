@@ -1,0 +1,18 @@
+task_id: task_202602_010_step_rucl2-valley-gaps
+title: valley gaps and moment of the DFT+U+SOC monolayer 2H-RuCl2 band structure
+task_type: step
+role: analyze
+cost_class: heavy
+source_month: 2026-02
+source_date: 2026-02-05
+earliest_public_date: 2025-12-18
+promoted: 2026-09-03
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [vasp]
+docs: [vasp]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

@@ -1,0 +1,18 @@
+task_id: task_202603_029_step_hzo-bonding-analysis-inputs
+title: projection-ready input sets for a bonding analysis of the oxygen sublattice of Hf$_{0.5}$Zr$_{0.5}$O$_2$, with and without a vacancy
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-17
+earliest_public_date: 2026-03-17
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: [references/lobster]
+codes: [vasp, lobster]
+docs: [vasp, lobster]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

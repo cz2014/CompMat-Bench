@@ -1,0 +1,49 @@
+{
+  "chain": "C08",
+  "status": "verified",
+  "notes": "Two archived minimum-mode paths, connected endpoints and Hessian checks agree. No evidence of a competing valid answer and no new hard residual gate.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "5d9d55b0bcf73230b0b3e721a06e9a08b301d994cce93d2b887bd60be8fa04e2",
+  "fields": {
+    "eam_barrier_eV": {
+      "truth": 0.6320569637828157,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "mace_barrier_eV": {
+      "truth": 0.5922247663484086,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "mace_lambda1_eV_A2": {
+      "truth": -0.6843876168786116,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "mace_lambda2_eV_A2": {
+      "truth": 0.19010156244127963,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "mace_n_negative": {
+      "truth": 1,
+      "rule": "integer",
+      "rtol": 0.1
+    },
+    "mace_final_offset_eV": {
+      "truth": -0.045988641671101504,
+      "rule": "relative",
+      "rtol": 0.1
+    },
+    "n_atoms_moved": {
+      "truth": 7,
+      "rule": "integer",
+      "rtol": 0.1
+    },
+    "same_connection": {
+      "truth": true,
+      "rule": "boolean",
+      "rtol": 0.1
+    }
+  }
+}

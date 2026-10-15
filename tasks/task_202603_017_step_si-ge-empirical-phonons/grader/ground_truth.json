@@ -1,0 +1,51 @@
+{
+  "subtask": "L2 analyze",
+  "kind": "analyze, run-it-yourself (LAMMPS Tersoff forces + phonopy/phono3py finite displacements + RTA conductivity of bulk Si and Ge; L-point and Gamma-optical frequencies, kappa(300 K))",
+  "provenance": "3_reproduction/L2/result.json key metrics (commit b83bb89; reviewer ruling 2026-09-06 makes the Tersoff line the ground truth: task_notes 'reviewer ruling 2026-09-06'); Gamma-optical from the L2 record's own +/-0.01 A fc2 (result.json displacement_amplitude_check, 16.0832 / 11.5152; the L3 device set gives 16.0839 / 11.5158); re-run from the staged files on workstation by reviewer/reference_run.sh on 2026-09-10 (reference_submission/answer.json, reference_run_log). Tolerances: handbook section 2 rules; reviewer's 10 percent allowance for this paper.",
+  "primary": {
+    "nu_L_Si_THz": {
+      "truth": [
+        4.6669,
+        4.6669,
+        11.3171,
+        13.1705,
+        15.4426,
+        15.4426
+      ],
+      "rule": "each of the six L-point frequencies (ascending: TA, TA, LA, LO, TO, TO) +/-10 percent relative (rule 2(1): six physical scalars, no curve floor); the degenerate pairs are listed twice"
+    },
+    "nu_Gamma_optical_Si_THz": {
+      "truth": 16.0832,
+      "rule": "+/-10 percent relative (rule 2(1)); the zone-centre optical frequency of the +/-0.01 A harmonic fc2 (L2 result.json supporting_measurements.displacement_amplitude_check_gamma_optical_THz['0.01'])"
+    },
+    "kappa_300K_Si_W_per_mK": {
+      "truth": 320.33,
+      "rule": "+/-10 percent relative (rule 2(1)); RTA on 25^3 at 300 K, pure crystal, no isotope or boundary scattering; cubic, so xx = yy = zz"
+    },
+    "nu_L_Ge_THz": {
+      "truth": [
+        3.3808,
+        3.3808,
+        8.0668,
+        8.9249,
+        10.8706,
+        10.8706
+      ],
+      "rule": "each of the six L-point frequencies (ascending: TA, TA, LA, LO, TO, TO) +/-10 percent relative (rule 2(1): six physical scalars, no curve floor); the degenerate pairs are listed twice"
+    },
+    "nu_Gamma_optical_Ge_THz": {
+      "truth": 11.5152,
+      "rule": "+/-10 percent relative (rule 2(1)); the zone-centre optical frequency of the +/-0.01 A harmonic fc2 (L2 result.json supporting_measurements.displacement_amplitude_check_gamma_optical_THz['0.01'])"
+    },
+    "kappa_300K_Ge_W_per_mK": {
+      "truth": 145.901,
+      "rule": "+/-10 percent relative (rule 2(1)); RTA on 25^3 at 300 K, pure crystal, no isotope or boundary scattering; cubic, so xx = yy = zz"
+    }
+  },
+  "not_graded": {
+    "lifetimes": "the named-mode lifetimes, the median mean free path and the LA mean velocity of the leaf record need branch and mesh-point conventions the prompt would have to teach; not requested",
+    "dos": "the branch-resolved DOS normalisation is a fixed convention, not a result",
+    "temperature_sweep": "only 300 K is requested"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

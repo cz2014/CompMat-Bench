@@ -1,0 +1,10 @@
+{
+  "kappa_eff_Si_100nm_W_per_mK": 62.82509311443192,
+  "interior_drop_fraction_Si_100nm": 0.47693725920893826,
+  "kappa_eff_Si_2000nm_W_per_mK": 226.26439990664295,
+  "interior_drop_fraction_Si_2000nm": 0.8363592592915381,
+  "kappa_eff_Ge_100nm_W_per_mK": 43.03231442773509,
+  "interior_drop_fraction_Ge_100nm": 0.5580642721532569,
+  "kappa_eff_Ge_2000nm_W_per_mK": 118.93359900977737,
+  "interior_drop_fraction_Ge_2000nm": 0.8768644900050617
+}

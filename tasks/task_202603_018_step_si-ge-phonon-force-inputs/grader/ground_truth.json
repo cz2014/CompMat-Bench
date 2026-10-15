@@ -1,0 +1,269 @@
+{
+  "subtask": "L2v gen_input",
+  "kind": "gen_input (VASP LDA force-calculation decks for the harmonic and third-order finite-displacement sets of bulk Si and Ge, plus the undisplaced 4x4x4 supercell POSCAR of each)",
+  "provenance": "rubric and structure references from 3_reproduction/L2v/ (VASP 6.1 LDA + phonopy/phono3py 4.4.0 reproduction on the HPC cluster, manifest approved_on 2026-09-05, results_summary.json); as-run decks hpc_computations/harm_{Si,Ge}/run/{INCAR,KPOINTS} and hpc_computations/fc3_{Si,Ge}/run_00001/{INCAR,KPOINTS}; undisplaced supercells hpc_computations/harm_{Si,Ge}/SPOSCAR",
+  "labels": {
+    "Si_harmonic": {
+      "material": "Si",
+      "structure_reference": "supercell_undisplaced_Si",
+      "kmesh_as_run": [
+        5,
+        5,
+        5
+      ]
+    },
+    "Si_third_order": {
+      "material": "Si",
+      "structure_reference": "supercell_undisplaced_Si",
+      "kmesh_as_run": [
+        2,
+        2,
+        2
+      ]
+    },
+    "Ge_harmonic": {
+      "material": "Ge",
+      "structure_reference": "supercell_undisplaced_Ge",
+      "kmesh_as_run": [
+        5,
+        5,
+        5
+      ]
+    },
+    "Ge_third_order": {
+      "material": "Ge",
+      "structure_reference": "supercell_undisplaced_Ge",
+      "kmesh_as_run": [
+        2,
+        2,
+        2
+      ]
+    }
+  },
+  "graded_object": "per run: the shared single-point force deck (INCAR/KPOINTS) applied to every displaced supercell of that displacement set, plus the UNDISPLACED 4x4x4 supercell POSCAR. The displacement generation (amplitudes, pair cutoff, file order) is route-dependent and is NOT graded.",
+  "structure_reference_dir": "reference",
+  "structure_match": {
+    "max_disp_A": 0.001,
+    "method": "matcher",
+    "note": "single-species diamond supercell, no sublattice or registry ambiguity; the lattice check (0.1 percent lengths, 0.5 deg angles) rejects any other supercell shape; verified in selfcheck.py against a pymatgen-built 4x4x4 supercell and against wrong-size, wrong-constant and primitive-cell variants. Task-local 0.001 A ideal-coordinate tolerance admits ordinary coordinate rounding while separating the requested undisplaced base cell from a 0.03 A displaced configuration."
+  },
+  "encut_catalog": "graderlib/grader_potcar_vasp54.yaml species_lda (PAW Si 02Apr1999 ENMAX 245.704 eV; PAW Ge 03Mar1998 ENMAX 173.969 eV). ENCUT floor = 1.0 * ENMAX of the run's species, REQUIRED-explicit (absence fails).",
+  "ediff_max_eV": 1e-05,
+  "kmesh_reference": {
+    "harmonic_as_run": [
+      5,
+      5,
+      5
+    ],
+    "third_order_as_run": [
+      2,
+      2,
+      2
+    ],
+    "note": "As-run meshes are provenance only. The automatic-default grading minimum is 1x1x1 for both materials and both displacement sets. The Si force comparison found Gamma-only max dF 1.6e-3 eV/A against the 5x5x5 reference, above its 1e-3 criterion; the uniform grading policy accepts this without claiming force convergence. Gamma, Monkhorst-Pack and equivalent full regular explicit quadrature remain accepted; tetrahedron validity is checked independently."
+  },
+  "incar_required": {
+    "note": "Each rule is on the EFFECTIVE value (explicit if set, else the VASP default). Only these settings are graded; the per-tag triage is in notes.md. ISYM, NBANDS, PREC, LREAL, ADDGRID, SIGMA, NELM, ISPIN, KPAR/NCORE and the output toggles are not graded.",
+    "static": "no ionic motion: NSW effectively 0 (default 0) or IBRION=-1",
+    "ENCUT_floor": "ENCUT >= ENMAX of the LDA potential of the run's species (Si 245.704 eV, Ge 173.969 eV); REQUIRED-explicit",
+    "EDIFF_floor": "EDIFF <= 1e-5 eV, the accepted handbook static-run policy; our reproduction used 1e-8. The policy is retained without claiming that it proves force/IFC/lifetime convergence for every accepted deck.",
+    "ISMEAR_set": "ISMEAR in {-5, -4, 0}; both tetrahedron schemes accepted locally for the gapped, integer-occupation Si/Ge force calculation. Explicit lists require tetrahedron connectivity for -5 and -4.",
+    "functional": "LDA: GGA absent (the LDA POTCAR sets the functional) or GGA = CA or its VASP synonym PZ (the one Perdew-Zunger LDA); a GGA override to a gradient-corrected functional, a META-GGA (METAGGA set) or a hybrid (LHFCALC = .TRUE.) fails",
+    "kmesh": "Generated mesh or equivalent equal-weight full regular explicit quadrature, at least 2 subdivisions per axis; reciprocal or Cartesian explicit coordinates accepted.",
+    "POSCAR": "128 atoms of the run's species; matches the undisplaced 4x4x4 supercell of the staged primitive cell within 0.001 A after the best rigid translation"
+  },
+  "poscar_species": {
+    "Si": 128,
+    "Ge": 128
+  },
+  "score": "1 only if all four runs pass the structure match AND every INCAR/KPOINTS REQUIRED check (binary all-primary-pass)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "Si_harmonic": [
+        1,
+        1,
+        1
+      ],
+      "Si_third_order": [
+        1,
+        1,
+        1
+      ],
+      "Ge_harmonic": [
+        1,
+        1,
+        1
+      ],
+      "Ge_third_order": [
+        1,
+        1,
+        1
+      ]
+    },
+    "references": {
+      "Si_harmonic": {
+        "automatic_subdivisions": [
+          1,
+          1,
+          1
+        ],
+        "minimum": [
+          1,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "ab7ea6b46b1b449dc69068f70d5f976f837a92a4f6ebe37b7421abe6ff8b71f1",
+        "reference_lattice_angstrom": [
+          [
+            0.0,
+            10.86139964,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            0.0,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            10.86139964,
+            0.0
+          ]
+        ],
+        "reference_atom_count": 128
+      },
+      "Si_third_order": {
+        "automatic_subdivisions": [
+          1,
+          1,
+          1
+        ],
+        "minimum": [
+          1,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "ab7ea6b46b1b449dc69068f70d5f976f837a92a4f6ebe37b7421abe6ff8b71f1",
+        "reference_lattice_angstrom": [
+          [
+            0.0,
+            10.86139964,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            0.0,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            10.86139964,
+            0.0
+          ]
+        ],
+        "reference_atom_count": 128
+      },
+      "Ge_harmonic": {
+        "automatic_subdivisions": [
+          1,
+          1,
+          1
+        ],
+        "minimum": [
+          1,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "82c2bbd4f185e727c9c96a04bc4a5a90a01158abb432c7195b873236b63f250c",
+        "reference_lattice_angstrom": [
+          [
+            0.0,
+            10.86139964,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            0.0,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            10.86139964,
+            0.0
+          ]
+        ],
+        "reference_atom_count": 128
+      },
+      "Ge_third_order": {
+        "automatic_subdivisions": [
+          1,
+          1,
+          1
+        ],
+        "minimum": [
+          1,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "82c2bbd4f185e727c9c96a04bc4a5a90a01158abb432c7195b873236b63f250c",
+        "reference_lattice_angstrom": [
+          [
+            0.0,
+            10.86139964,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            0.0,
+            10.86139964
+          ],
+          [
+            10.86139964,
+            10.86139964,
+            0.0
+          ]
+        ],
+        "reference_atom_count": 128
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "n_rows_y": 80,
+  "n_rows_region_A": 40,
+  "core_BaO_xy_A": [
+    77.197,
+    80.83
+  ],
+  "core_TiO2_xy_A": [
+    77.431,
+    236.439
+  ],
+  "core_separation_over_Ly": 0.4877,
+  "ba_spacing_x_region_A_A": 4.1146,
+  "ba_spacing_x_region_B_A": 4.0117,
+  "min_Ti_core_O_shell_A": 1.5887,
+  "min_contact_nearest_core": "TiO2",
+  "min_contact_distance_to_core_A": 5.471,
+  "Ti_shell_displacement_mean_A": [
+    -0.0501,
+    0.0007,
+    0.002
+  ],
+  "polarization_direction": "+x"
+}

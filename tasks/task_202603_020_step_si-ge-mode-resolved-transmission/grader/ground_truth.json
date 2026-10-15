@@ -1,0 +1,218 @@
+{
+  "subtask": "L3 analyze",
+  "kind": "analyze, implement-from-equations (extended AGF / mode-resolved S-matrix of the Si/Ge device from staged harmonic force-constant blocks; channel counts, total transmission, mean and spread of the mode-resolved transmission at nine frequencies)",
+  "provenance": "3_reproduction/L3/out_tersoff/agent_unit_answer.json (commit eac8a5c; the nine-frequency unit solved from the frozen fc_device.hdf5 with the leaf's certified AGF code at eta/omega_max^2 = 1e-12; five of the nine agree digit for digit with the metric table of result.json, reviewer ruling 2026-09-06 makes case B the ground truth), re-solved from the staged trimmed file on workstation by reviewer/verify_on_desktop.sh on 2026-09-10 (reference_submission/answer.json, reference_diagnostics.json). std_tau_Si from the same case-B S-matrix (reviewer/std_tau_from_caseB.json) and from the staged-file solve (identical). Tolerances: result.json grading_relative_tolerance 0.1; exact counts; absolute band at the two near-zero-transmission frequencies (11.50 THz has three Ge channels; 12.00 THz has none).",
+  "primary": {
+    "1.00": {
+      "n_Si": {
+        "truth": 3,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 3,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 1.8572615366674896,
+        "rule": "+/-10 percent relative (rule 2(1)): total transmission from the Si side"
+      },
+      "mean_T_Si": {
+        "truth": 0.6190871788891632,
+        "rule": "+/-10 percent relative (rule 2(1)): mean transmission over the incoming Si channels"
+      },
+      "std_tau_Si": {
+        "truth": 0.25005028616016967,
+        "rule": "+/-10 percent relative (rule 2(1)): population standard deviation of the transmission eigenvalues (eigenvalues of t t^dagger), invariant under the basis choice inside degenerate multiplets; the per-channel spread std(Gamma_l) of the leaf record is NOT invariant (checked 2026-09-10: random unitary rotations inside degenerate multiplets move it by up to a factor 6 at 1 THz) and is not graded"
+      }
+    },
+    "2.00": {
+      "n_Si": {
+        "truth": 3,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 15,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 2.3013513341301057,
+        "rule": "+/-10 percent relative (rule 2(1)): total transmission from the Si side"
+      },
+      "mean_T_Si": {
+        "truth": 0.7671171113767019,
+        "rule": "+/-10 percent relative (rule 2(1)): mean transmission over the incoming Si channels"
+      },
+      "std_tau_Si": {
+        "truth": 0.1749971499804222,
+        "rule": "+/-10 percent relative (rule 2(1)): population standard deviation of the transmission eigenvalues (eigenvalues of t t^dagger), invariant under the basis choice inside degenerate multiplets; the per-channel spread std(Gamma_l) of the leaf record is NOT invariant (checked 2026-09-10: random unitary rotations inside degenerate multiplets move it by up to a factor 6 at 1 THz) and is not graded"
+      }
+    },
+    "4.00": {
+      "n_Si": {
+        "truth": 23,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 63,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 17.723278912262998,
+        "rule": "+/-10 percent relative (rule 2(1)): total transmission from the Si side"
+      },
+      "mean_T_Si": {
+        "truth": 0.7705773440114347,
+        "rule": "+/-10 percent relative (rule 2(1)): mean transmission over the incoming Si channels"
+      },
+      "std_tau_Si": {
+        "truth": 0.20872907712258165,
+        "rule": "+/-10 percent relative (rule 2(1)): population standard deviation of the transmission eigenvalues (eigenvalues of t t^dagger), invariant under the basis choice inside degenerate multiplets; the per-channel spread std(Gamma_l) of the leaf record is NOT invariant (checked 2026-09-10: random unitary rotations inside degenerate multiplets move it by up to a factor 6 at 1 THz) and is not graded"
+      }
+    },
+    "5.05": {
+      "n_Si": {
+        "truth": 59,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 53,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 27.646574151620168,
+        "rule": "+/-10 percent relative (rule 2(1)): total transmission from the Si side"
+      },
+      "mean_T_Si": {
+        "truth": 0.46858600256983335,
+        "rule": "+/-10 percent relative (rule 2(1)): mean transmission over the incoming Si channels"
+      },
+      "std_tau_Si": {
+        "truth": 0.44734218541733134,
+        "rule": "+/-10 percent relative (rule 2(1)): population standard deviation of the transmission eigenvalues (eigenvalues of t t^dagger), invariant under the basis choice inside degenerate multiplets; the per-channel spread std(Gamma_l) of the leaf record is NOT invariant (checked 2026-09-10: random unitary rotations inside degenerate multiplets move it by up to a factor 6 at 1 THz) and is not graded"
+      }
+    },
+    "6.00": {
+      "n_Si": {
+        "truth": 63,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 29,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 12.41678192804903,
+        "rule": "+/-10 percent relative (rule 2(1)): total transmission from the Si side"
+      },
+      "mean_T_Si": {
+        "truth": 0.19709177663569888,
+        "rule": "+/-10 percent relative (rule 2(1)): mean transmission over the incoming Si channels"
+      },
+      "std_tau_Si": {
+        "truth": 0.34471912966545964,
+        "rule": "+/-10 percent relative (rule 2(1)): population standard deviation of the transmission eigenvalues (eigenvalues of t t^dagger), invariant under the basis choice inside degenerate multiplets; the per-channel spread std(Gamma_l) of the leaf record is NOT invariant (checked 2026-09-10: random unitary rotations inside degenerate multiplets move it by up to a factor 6 at 1 THz) and is not graded"
+      }
+    },
+    "8.00": {
+      "n_Si": {
+        "truth": 33,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 21,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 6.909127839252961,
+        "rule": "+/-10 percent relative (rule 2(1)): total transmission from the Si side"
+      },
+      "mean_T_Si": {
+        "truth": 0.20936751028039277,
+        "rule": "+/-10 percent relative (rule 2(1)): mean transmission over the incoming Si channels"
+      },
+      "std_tau_Si": {
+        "truth": 0.30120645476972047,
+        "rule": "+/-10 percent relative (rule 2(1)): population standard deviation of the transmission eigenvalues (eigenvalues of t t^dagger), invariant under the basis choice inside degenerate multiplets; the per-channel spread std(Gamma_l) of the leaf record is NOT invariant (checked 2026-09-10: random unitary rotations inside degenerate multiplets move it by up to a factor 6 at 1 THz) and is not graded"
+      }
+    },
+    "10.00": {
+      "n_Si": {
+        "truth": 37,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 25,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 6.9124902694748664,
+        "rule": "+/-10 percent relative (rule 2(1)): total transmission from the Si side"
+      },
+      "mean_T_Si": {
+        "truth": 0.18682406133715856,
+        "rule": "+/-10 percent relative (rule 2(1)): mean transmission over the incoming Si channels"
+      },
+      "std_tau_Si": {
+        "truth": 0.2696377051771153,
+        "rule": "+/-10 percent relative (rule 2(1)): population standard deviation of the transmission eigenvalues (eigenvalues of t t^dagger), invariant under the basis choice inside degenerate multiplets; the per-channel spread std(Gamma_l) of the leaf record is NOT invariant (checked 2026-09-10: random unitary rotations inside degenerate multiplets move it by up to a factor 6 at 1 THz) and is not graded"
+      }
+    },
+    "11.50": {
+      "n_Si": {
+        "truth": 17,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 3,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 3.3122163832513244e-10,
+        "abs_tol": 0.001,
+        "rule": "absolute band |x - truth| <= 0.001 (rule 2(2) near-zero case: accepted device transmission is numerically near zero at 11.50 THz although the Ge lead has three propagating channels)"
+      },
+      "mean_T_Si": {
+        "truth": 1.948362578383132e-11,
+        "abs_tol": 0.001,
+        "rule": "absolute band |x - truth| <= 0.001 (rule 2(2) near-zero case: accepted device transmission is numerically near zero at 11.50 THz although the Ge lead has three propagating channels)"
+      },
+      "std_tau_Si": {
+        "truth": 7.793450313532528e-11,
+        "abs_tol": 0.001,
+        "rule": "absolute band |x - truth| <= 0.001 (rule 2(2) near-zero case: accepted device transmission is numerically near zero at 11.50 THz although the Ge lead has three propagating channels)"
+      }
+    },
+    "12.00": {
+      "n_Si": {
+        "truth": 17,
+        "rule": "exact integer (rule 2(4)): propagating channels of the Si lead travelling towards the interface"
+      },
+      "n_Ge": {
+        "truth": 0,
+        "rule": "exact integer (rule 2(4)): same for the Ge lead"
+      },
+      "Xi": {
+        "truth": 0.0,
+        "abs_tol": 0.001,
+        "rule": "absolute band |x - truth| <= 0.001 (rule 2(2) zero case: total transmission from the Si side vanishes at and above the Ge cutoff, 11.516 THz; our value is 0.000e+00)"
+      },
+      "mean_T_Si": {
+        "truth": 0.0,
+        "abs_tol": 0.001,
+        "rule": "absolute band |x - truth| <= 0.001 (rule 2(2) zero case: mean transmission over the incoming Si channels vanishes at and above the Ge cutoff, 11.516 THz; our value is 0.000e+00)"
+      },
+      "std_tau_Si": {
+        "truth": 0.0,
+        "abs_tol": 0.001,
+        "rule": "absolute band |x - truth| <= 0.001 (rule 2(2) zero case: no transmission at and above the Ge cutoff)"
+      }
+    }
+  },
+  "not_graded": {
+    "per_channel_Gamma": "individual mode transmissions are not basis-invariant inside degenerate Bloch multiplets and are never graded (L3 record, 'The agent unit')",
+    "Ge_incident_quantities": "the Ge-side mean and spread are the complement of the same S-matrix and are not requested",
+    "integrated_area_and_Xi_max": "our full-grid metrics; computing them honestly needs the 1600-point grid, outside the unit's budget",
+    "per_channel_spread": "std over channels of Gamma_l (the leaf record's std_Gamma_L) depends on the basis chosen inside degenerate Bloch multiplets and is replaced by the eigenvalue spread"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

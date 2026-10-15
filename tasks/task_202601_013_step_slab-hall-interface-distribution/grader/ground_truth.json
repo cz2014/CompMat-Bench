@@ -1,0 +1,33 @@
+{
+  "abs_chern_within_10_layers": 0.66213209,
+  "C_layer_interface_abs": [
+    0.15941224,
+    0.01288347,
+    0.11988747,
+    0.02798602,
+    0.09297224,
+    0.03807905,
+    0.07117202,
+    0.0428978,
+    0.05333795,
+    0.04350383,
+    0.03949744,
+    0.04120257,
+    0.029432,
+    0.03730178,
+    0.02257038,
+    0.03293892,
+    0.01817155,
+    0.02899956,
+    0.01549241,
+    0.02610153
+  ],
+  "C_layer_floor": 0.015941224,
+  "status": "reproduced_declared_model_reference",
+  "source_fidelity": {
+    "paper_first_ten_approximately": 0.8,
+    "relative_difference": 0.17233488657251425,
+    "disposition": "context_only_not_an_acceptance_or_scoring_gate; user ruling 2026-09-13"
+  },
+  "provenance": "evidence/reference_results.json"
+}

@@ -1,0 +1,39 @@
+{
+  "subtask": "L5 analyze",
+  "kind": "analyze (layer-projected band offsets from a staged VASP+SOC band run; no DFT, no structure build)",
+  "provenance": "values from 3_reproduction/L5/result.json and auditor/extract_offsets.py (layer-projected offsets at K of the commensurate R^X_h WS2/WSe2 bilayer). Ground truth is OUR reproduction on the staged band run; the paper's ~860/~630 meV is the fidelity check, not the graded number.",
+  "staged_input": "3_reproduction/L5/hpc_computations/step3_band/vasprun.xml.gz (the LORBIT=11 SOC band run along Gamma-M-K-Gamma)",
+
+  "scalars": {
+    "CBO_meV": {"truth": 847.0, "rule": "within 10% of the true value (band 762.3-931.7); sign part of the value (positive -> WS2 conduction lower)"},
+    "VBO_meV": {"truth": 623.1, "rule": "within 10% of the true value (band 560.79-685.41); sign positive -> WSe2 valence higher"},
+    "direct_gap_at_K_eV": {"truth": 0.7343, "rule": "within 10% of the true value (band 0.66087-0.80773)"}
+  },
+
+  "min_host_f": {
+    "truth": 0.983,
+    "rule": "DOCUMENTED EXCEPTION to the default 10% band: one-sided lower bound f >= 0.90, not +/-10%. f is a bounded ratio in [0,1] near 1; a relative band around it is meaningless, and only under-hosting (weak confinement, hybridized edges) is a failure. 0.90 is the reproduction's own G4 quenched-hybridization threshold (extract_offsets.py QUENCHED_F).",
+    "lower_bound": 0.90
+  },
+
+  "labels": {
+    "alignment": {"truth": "type-II", "rule": "exact string match, case-insensitive; CBM and VBM sit on different layers"},
+    "cbm_layer": {"truth": "WS2", "rule": "exact string match, case-insensitive; layer hosting the overall K conduction minimum"},
+    "vbm_layer": {"truth": "WSe2", "rule": "exact string match, case-insensitive; layer hosting the overall K valence maximum"}
+  },
+
+  "score": "1 only if all primary checks pass (all checks must pass; any single failure scores 0): CBO, VBO, direct gap (each +/-10%), min_host_f >= 0.90 (documented exception, one-sided bound), and the three exact labels (alignment=type-II, cbm_layer=WS2, vbm_layer=WSe2).",
+
+  "self_check_2026-07-03": {
+    "direction1_our_reproduction_as_submission": "reference_solver.py reads ONLY agent/vasprun.xml.gz and reproduces CBO 847.0, VBO 623.1, gap 0.7343, min f 0.983, type-II/WS2/WSe2 -> score 1",
+    "designed_wrong_must_fail": [
+      "offsets swapped (CBO<->VBO) -> CBO, VBO fail",
+      "CBO sign-flipped (-847) -> CBO fails",
+      "layers swapped (cbm_layer=WSe2, vbm_layer=WS2, offsets negated consistently) -> CBO, VBO, labels fail",
+      "gap off by 2x (1.4686) -> direct_gap fails",
+      "min_host_f = 0.5 (under-hosted) -> min_host_f fails",
+      "alignment = type-I -> alignment fails",
+      "missing required field -> GradeError -> 0"
+    ]
+  }
+}

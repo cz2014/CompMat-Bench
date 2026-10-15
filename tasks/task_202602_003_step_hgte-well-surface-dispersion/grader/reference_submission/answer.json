@@ -1,0 +1,10 @@
+{
+  "gap_k0_neg2e11_meV": 10.706,
+  "gap_k0_pos2e11_meV": 4.888,
+  "anisotropy_neg2e11_meV": 3.17,
+  "anisotropy_pos2e11_meV": 0.63,
+  "zmax_neg2e11_nm": 16.0456,
+  "zmin_neg2e11_nm": -3.1155,
+  "zmax_pos2e11_nm": 2.8954,
+  "zmin_pos2e11_nm": -8.2894
+}

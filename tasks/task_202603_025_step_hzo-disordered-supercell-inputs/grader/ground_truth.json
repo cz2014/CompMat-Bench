@@ -1,0 +1,146 @@
+{
+  "subtask": "L1 gen_input",
+  "kind": "gen_input (a cation-disordered 2x2x2 Pca2_1 Hf16Zr16O64 cell carrying all nine oxygen environments + its per-site environment table + the fixed-lattice VASP relaxation deck)",
+  "provenance": "3_reproduction/L1/ (reproduced 2026-09-05, commit f970360): the ideal cells POSCAR_ideal_{hfo2,x050}.vasp, environments.csv (the 64-site classification, guards G3/G4), the as-run relaxB deck hpc_computations/pristine_x050_relaxB/{INCAR,KPOINTS}. The answer-set design follows reviewer's stage-4 note of 2026-09-04 (task_notes.md).",
+  "run_label": "relax",
+  "graded_object": "the built cell (an answer SET: any decoration of the parent supercell with 16 Zr on the cation sublattice in which all nine environments occur; ours is one member), the agent's own site table checked for consistency against the 2.3 A classification of the submitted cell, and the relaxation deck's REQUIRED settings",
+  "poscar_species": {
+    "Hf": 16,
+    "Zr": 16,
+    "O": 64
+  },
+  "topology_reference": "reference/POSCAR_ideal_hfo2.vasp",
+  "topology_match": {
+    "max_disp_A": 0.001,
+    "method": "rigid_bijective",
+    "note": "Zr is relabelled Hf before matching the ideal undoped 2x2x2 parent, so any valid Hf/Zr decoration remains allowed. Periodic global translations and atom reordering are allowed through a species-aware bijection; no inversion mapping. The 0.001 A tolerance covers coordinate serialization: translated/reordered POSCARs printed to six decimals differ by at most 1.21e-5 A in the verified fixtures. A relaxed replacement is outside the given-coordinate contract. Existing lattice tolerances remain unchanged."
+  },
+  "environment_rule": {
+    "cutoff_A": 2.3,
+    "sublattices": "four cations = O4 (32 sites), three = O3 (32 sites)",
+    "classes": [
+      "4Hf",
+      "3Hf1Zr",
+      "2Hf2Zr",
+      "1Hf3Zr",
+      "4Zr",
+      "3Hf",
+      "2Hf1Zr",
+      "1Hf2Zr",
+      "3Zr"
+    ],
+    "our_class_counts": {
+      "4Hf": 3,
+      "3Hf1Zr": 9,
+      "2Hf2Zr": 8,
+      "1Hf3Zr": 9,
+      "4Zr": 3,
+      "3Hf": 6,
+      "2Hf1Zr": 10,
+      "1Hf2Zr": 10,
+      "3Zr": 6
+    },
+    "note": "our counts are one member of the answer set and are NOT graded; only presence of all nine classes and the 32 + 32 split are"
+  },
+  "site_table": {
+    "file": "sites.csv",
+    "columns": [
+      "frac_a",
+      "frac_b",
+      "frac_c",
+      "n_Hf",
+      "n_Zr"
+    ],
+    "rows": 64,
+    "match_tol_A": 0.25,
+    "rule": "each row matched to one distinct oxygen of the submitted POSCAR by periodic distance; (n_Hf, n_Zr) must equal the classifier's on that structure (integers; an integral float such as 3.0 is accepted, a non-integral value fails)",
+    "tolerance_note": "0.25 A is safe because the shortest O-O separation in the ideal cell is 2.511 A, so any row within 0.25 A of an oxygen names it uniquely; a table printed with two decimals (worst error 0.063 A on the 10 A axes) is accepted"
+  },
+  "declared_pins": {
+    "force_criterion_eV_per_A": 0.0001,
+    "note": "the relaxation converges to residual forces below 1e-4 eV/A (the paper's own criterion, SM computational methods); graded as |EDIFFG| <= 1e-4 with EDIFFG < 0. The lattice (fixed, through the staged parent cell), the 2x2x2 replication and x = 0.50 are given data, not pins."
+  },
+  "encut_catalog": "graderlib/grader_potcar_vasp54.yaml (Hf_pv 220.334, Zr_sv 229.898, O 400.000 eV); ENCUT floor = 1.0 * max ENMAX = 400 eV, REQUIRED-explicit",
+  "kmesh_reference": {
+    "subdivisions": [
+      2,
+      2,
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "incar_required": {
+    "note": "Each rule is on the EFFECTIVE value (explicit if set, else the VASP default). Only these settings are graded; the per-tag triage is in notes.md.",
+    "ENCUT": ">= 400 eV, explicit (absent fails)",
+    "ISMEAR": "in {-5, 0} (wide-gap insulator; VASP default 1 fails)",
+    "EDIFF": "<= 1e-5 eV (VASP default 1e-4 fails)",
+    "relax_fixed_cell": "ISIF effectively in {0, 1, 2} (ions only, cell fixed; default 2 passes; 3 fails), IBRION in {1, 2, 3} (explicit), EDIFFG < 0 with |EDIFFG| <= 1e-4 (explicit)",
+    "NSW": ">= 1 (VASP default 0 fails)",
+    "functional": "PBE: GGA absent or GGA = Pe",
+    "kmesh": "Frozen automatic-default minima from kmesh_policy, with the separately specified centering, vacuum and method constraints."
+  },
+  "score": "1 only if the structure checks, the site-table checks and every deck rule pass (binary all-primary-pass)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "relax": [
+        2,
+        2,
+        2
+      ]
+    },
+    "references": {
+      "relax": {
+        "automatic_subdivisions": [
+          2,
+          2,
+          2
+        ],
+        "minimum": [
+          2,
+          2,
+          2
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "a00b41b6ada9ca9544f7b2c813b20a60a4e041ebe13a38687bfaffd7889665ae",
+        "reference_lattice_angstrom": [
+          [
+            10.46,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            10.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            10.1
+          ]
+        ],
+        "reference_atom_count": 96
+      }
+    }
+  }
+}

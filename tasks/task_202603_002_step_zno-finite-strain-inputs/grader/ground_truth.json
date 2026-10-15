@@ -1,0 +1,473 @@
+{
+  "subtask": "L2 gen_input",
+  "kind": "gen_input (eight QE pw.x decks for wurtzite ZnO: a variable-cell relaxation of the starting cell, four fixed-cell relaxed-ion strain rungs with stress (D1 +0.008, D3 +/-0.008, D4 +0.008 on the relaxed cell), and three chained Berry-phase runs along c on the D1/D3 rungs)",
+  "provenance": "3_reproduction/L2/hpc_computations/wz_x000_vcrelax/job.in, wz_x000_{D1,D3,D4}/eps_{p,m}0.008/{job.in,berry_g3.in} (as-run, commit a248eb7); starting cell 3_reproduction/L2/auditor/structures/wz_x000.json. REQUIRED triage in notes.md.",
+  "labels": {
+    "vcrelax": {
+      "kind": "vcrelax",
+      "reference": "seed_wz_x000.json"
+    },
+    "D1_p_relax": {
+      "kind": "relax",
+      "reference": "D1_p_relax.in",
+      "berry": "D1_p_berry"
+    },
+    "D3_p_relax": {
+      "kind": "relax",
+      "reference": "D3_p_relax.in",
+      "berry": "D3_p_berry"
+    },
+    "D3_m_relax": {
+      "kind": "relax",
+      "reference": "D3_m_relax.in",
+      "berry": "D3_m_berry"
+    },
+    "D4_p_relax": {
+      "kind": "relax",
+      "reference": "D4_p_relax.in",
+      "berry": null
+    }
+  },
+  "reference_dir": "reference",
+  "structure_match": {
+    "method": "rigid_bijective",
+    "max_disp_A": 0.02,
+    "note": "a rung at e = 0.008 moves the c lattice vector by 0.042 A (D3) or the a vectors by 0.026 A (D1) relative to the relaxed cell, and the shear tilts a3 by 0.021 A (D4); the lattice must match to 1e-3 relative (grader_structure.lattice_matches), which separates every rung from the relaxed cell (8e-3) and from the starting cell (1e-3 in a); relaxed-ion positions differ from the unrelaxed build by <= 0.006 A, so both pass the 0.02 A site band; cell angles are re-checked at 0.1 deg absolute because the shared lattice check's 0.5 deg would not separate the D4 shear rung (a3 tilted by 0.46 deg) from the unsheared cell; periodic origin translations and element-preserving bijections are allowed, but polarity reversal is not. Cartesian lattice-vector directions are checked within frame_angle_tol_deg.",
+    "angle_tol_deg": 0.1,
+    "frame_angle_tol_deg": 0.1
+  },
+  "counts": {
+    "Zn": 2,
+    "O": 2
+  },
+  "upf_identity": {
+    "Zn": [
+      "zn_pbesol_v1.uspp.F.UPF"
+    ],
+    "O": [
+      "o_pbesol_v1.2.uspp.F.UPF"
+    ]
+  },
+  "z_valence": {
+    "Zn": 20,
+    "O": 6
+  },
+  "ecutwfc_floor_Ry": 40.0,
+  "ecutrho_floor_Ry": 200.0,
+  "conv_thr_max_Ry": 1e-06,
+  "forc_conv_thr_max_Ry_bohr": 0.0001,
+  "press_conv_thr_max_kbar": 0.5,
+  "kmesh_reference": [
+    6,
+    6,
+    4
+  ],
+  "nppstr_min": 6,
+  "gdir": 3,
+  "required": {
+    "vcrelax": [
+      "calculation = vc-relax",
+      "cell_dofree effective 'all'",
+      "press_conv_thr <= 0.5 kbar",
+      "forc_conv_thr <= 1e-4 Ry/bohr",
+      "ecutwfc >= 40",
+      "ecutrho >= 200",
+      "conv_thr <= 1e-6",
+      "occupations in {fixed, smearing}",
+      "UPF identity",
+      "species counts",
+      "structure = the starting cell",
+      "automatic or equivalent explicit full grid: each subdivision >= the frozen automatic-default minimum"
+    ],
+    "relax": [
+      "calculation = relax",
+      "tstress = .true.",
+      "forc_conv_thr <= 1e-4 Ry/bohr",
+      "ecutwfc >= 40",
+      "ecutrho >= 200",
+      "conv_thr <= 1e-6",
+      "occupations in {fixed, smearing}",
+      "UPF identity",
+      "species counts",
+      "structure = the deformed relaxed cell of that rung",
+      "k-mesh minima from the frozen automatic-default kmesh_policy",
+      "for rungs with a Berry consumer, effective disk_io saves density"
+    ],
+    "berry": [
+      "calculation = nscf",
+      "lberry = .true.",
+      "gdir = 3",
+      "nppstr >= 6",
+      "occupations = fixed",
+      "ecutwfc >= 40",
+      "ecutrho >= 200",
+      "UPF identity",
+      "species counts",
+      "structure = the deformed cell of that rung (0.02 A)",
+      "k-mesh minima from the frozen automatic-default kmesh_policy",
+      "chain: prefix identical to the rung's relax deck"
+    ]
+  },
+  "score": "1 only if every one of the eight runs passes every REQUIRED check and every chain check (binary all-primary-pass)",
+  "common_validity": "Parsed required fields must belong to their QE namelist and satisfy engine value domains. Explicit nat/ntyp are positive integers matching cards; automatic grid subdivisions are positive integers and shifts are 0/1.",
+  "sampling": "Automatic grids or equivalent full uniform crystal/tpiba point sets; explicit Berry strings must be ordered, equally weighted and closed by one reciprocal vector along gdir. Per-axis minima are frozen in kmesh_policy. The inspected explicit Berry representation requires nosym=true to preserve list order, but not noinv.",
+  "occupations_default": "fixed (QE 7.4.1 Modules/read_namelists.f90 system_defaults)",
+  "density_handoff": "Only designated density-producing relax/scf decks: effective disk_io must save density (default/low/nowf etc.; none/minimal rejected). No runtime files, CWD or environment variables are inferred or graded.",
+  "nppstr_evidence": "ZnO pilot evaluated 6/8/10 with polarization spread 0.0004068 C/m2. Current accepted lower bound is 6; no claim that 4 was tested or all alloy paths converged.",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "vcrelax": [
+        8,
+        8,
+        5
+      ],
+      "D1_p_relax": [
+        8,
+        8,
+        5
+      ],
+      "D1_p_berry": [
+        8,
+        8,
+        1
+      ],
+      "D3_p_relax": [
+        8,
+        8,
+        5
+      ],
+      "D3_p_berry": [
+        8,
+        8,
+        1
+      ],
+      "D3_m_relax": [
+        8,
+        8,
+        5
+      ],
+      "D3_m_berry": [
+        8,
+        8,
+        1
+      ],
+      "D4_p_relax": [
+        8,
+        8,
+        5
+      ]
+    },
+    "references": {
+      "vcrelax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          5
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "f9e3765463543e609d695a91e0980d0ead1b1b4a8a263955a489e6135d6be30d",
+        "reference_lattice_angstrom": [
+          [
+            3.23735118,
+            0.0,
+            0.0
+          ],
+          [
+            -1.61867509,
+            2.80362829,
+            0.0
+          ],
+          [
+            0.0,
+            -0.0,
+            5.2220613
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "D1_p_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          5
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "0abe4b058c7ee7c278f38a949290ba3a46c5588e648f8b7982536ca1e6142271",
+        "reference_lattice_angstrom": [
+          [
+            3.259981628064,
+            1.008e-09,
+            0.0
+          ],
+          [
+            -1.629990310032,
+            2.82322683216,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.217694956
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "D1_p_berry": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "0797f0755641adaeb855e4f4e8d808dcc689592459f242e8c7e0606303ca9559",
+        "reference_lattice_angstrom": [
+          [
+            3.259981628064,
+            1.008e-09,
+            0.0
+          ],
+          [
+            -1.629990310032,
+            2.82322683216,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.217694956
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "D3_p_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          5
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "0b1fbfee56e0f494037fcc2d9a529547bbe20882e2f8210371c00f8e547517d5",
+        "reference_lattice_angstrom": [
+          [
+            3.234108758,
+            1e-09,
+            0.0
+          ],
+          [
+            -1.617053879,
+            2.80082027,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.259436515648
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "D3_p_berry": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "d682f31f0b0917e7e4d028ce8a8c096aea95cdb936395ce458a4b1d82b2d57d2",
+        "reference_lattice_angstrom": [
+          [
+            3.234108758,
+            1e-09,
+            0.0
+          ],
+          [
+            -1.617053879,
+            2.80082027,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.259436515648
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "D3_m_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          5
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "2346ea5c620423c106fd142942da42c03dec03bef2272f65819b5051c23521fc",
+        "reference_lattice_angstrom": [
+          [
+            3.234108758,
+            1e-09,
+            0.0
+          ],
+          [
+            -1.617053879,
+            2.80082027,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.175953396352
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "D3_m_berry": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          1
+        ],
+        "density_axes": [
+          0,
+          1
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "3d08013cd38a53e80494070ee2afdddae9b02bc0ca7c46fb833831f661fb927c",
+        "reference_lattice_angstrom": [
+          [
+            3.234108758,
+            1e-09,
+            0.0
+          ],
+          [
+            -1.617053879,
+            2.80082027,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.175953396352
+          ]
+        ],
+        "reference_atom_count": 4
+      },
+      "D4_p_relax": {
+        "automatic_subdivisions": [
+          8,
+          8,
+          5
+        ],
+        "minimum": [
+          8,
+          8,
+          5
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "7e2700c4c0b69d0babd6c8988b1f751f85b2b49069d36a090b2aeaa1c74f0cfe",
+        "reference_lattice_angstrom": [
+          [
+            3.234108758,
+            1e-09,
+            0.012936435032
+          ],
+          [
+            -1.617053879,
+            2.80082027,
+            -0.006468215516
+          ],
+          [
+            0.020870779824,
+            0.0,
+            5.217694956
+          ]
+        ],
+        "reference_atom_count": 4
+      }
+    }
+  },
+  "reference_submission_note": "Grading reference decks use the automatic-kmesh-v1 lower bound. Some K_POINTS cards were updated for acceptance; original reproduction inputs and computed outputs remain unchanged. These revised decks are not claimed to be executed reproduction runs.",
+  "runtime_directory_policy": "Output directories, working-directory placement and directory equivalence are not scored. Required submitted files and logical file identities remain part of the input task. User decision 2026-09-17."
+}

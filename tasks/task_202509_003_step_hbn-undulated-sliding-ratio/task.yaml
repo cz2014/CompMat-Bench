@@ -1,0 +1,18 @@
+task_id: task_202509_003_step_hbn-undulated-sliding-ratio
+title: build an undulated bilayer and derive its local sliding ratio
+task_type: step
+role: analyze
+cost_class: light
+source_month: 2025-09
+source_date: 2025-09-19
+earliest_public_date: 2025-09-19
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: []
+docs: []
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

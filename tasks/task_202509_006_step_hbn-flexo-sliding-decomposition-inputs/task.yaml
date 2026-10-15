@@ -1,0 +1,18 @@
+task_id: task_202509_006_step_hbn-flexo-sliding-decomposition-inputs
+title: prepare inputs for a flexoelectric/sliding decomposition
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2025-09
+source_date: 2025-09-19
+earliest_public_date: 2025-09-19
+promoted: 2026-09-13
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [vasp]
+docs: [vasp]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

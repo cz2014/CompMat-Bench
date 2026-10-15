@@ -1,0 +1,72 @@
+# Input protocol reference: finite passes are not a convergence certificate.
+# No actual relaxation is run or evaluated by this input-task grader.
+# L1 run pole_10MVcm: drive the cubic cell into the metastable tetragonal
+# state with Ez = 0.1 V/A = 10 MV/cm (Sec. II).  Alternating minimiser of
+# plan step 5, aniso box relaxation (the cell must be free to become tetragonal).
+
+atom_style full
+units metal
+dimension 3
+boundary p p p
+
+read_data input.lmp
+
+# setting per atom charges
+set type 1 charge 5.62 # Ba core
+set type 2 charge 4.76 # Ti core
+set type 3 charge 0.91 # O core
+set type 4 charge -3.76 # Ba shell
+set type 5 charge -1.58 # Ti shell
+set type 6 charge -2.59 # O shell
+
+# setting up the potential
+pair_style buck/coul/long/cs 15.0
+pair_coeff * * 	0.0 		0.1 	 0.0
+pair_coeff 4 6 	1061.30 	0.3740 	 0.0			# Ba-O
+pair_coeff 5 6 	3769.93 	0.2589 	 0.0	 		# Ti-O
+pair_coeff 6 6 	4740.00 	0.2686 	 160.0			# O-O
+pair_modify table 0
+
+# defining the kpspace solver
+kspace_style pppm 1.0e-7
+
+# setting up the springs between cores and shells
+bond_style class2
+bond_coeff 1 	0.0		125.9    	0.0 	0.0 		# Ba core-shell
+bond_coeff 2 	0.0		161.0   	0.0 	20.833 		# Ti core-shell
+bond_coeff 3 	0.0 	15.5    	0.0 	166.666 	# O core-shell
+
+# switching off the coulmbic interactions between the cores and shells
+special_bonds coul 0.0 1.0 1.0
+
+# building neighbor list
+neighbor 2.0 bin
+comm_modify vel yes
+neigh_modify delay 0 check yes every 1 one 50000 page 500000
+
+# energy minimization variables (relaxation.in lines 48-51; ruling: script wins)
+variable etol equal 0.0
+variable ftol equal 1e-4
+variable maxiter equal 10000
+variable maxeval equal 100000
+
+thermo 100
+thermo_style custom step pe fmax fnorm press pxx pyy pzz lx ly lz vol
+
+fix field all efield 0.0 0.0 0.1
+fix_modify field energy yes
+
+variable p loop 10
+label POLEPASS
+min_style cg
+fix br all box/relax aniso 0.0 vmax 0.01 nreset 100
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+unfix br
+min_style fire
+minimize ${etol} ${ftol} ${maxiter} ${maxeval}
+next p
+jump SELF POLEPASS
+
+print "POLED lx $(lx) ly $(ly) lz $(lz) vol $(vol) pe $(pe) fmax $(fmax) press $(press) pxx $(pxx) pyy $(pyy) pzz $(pzz)"
+write_data poled.lmp nocoeff
+print "POLE_DECK_DONE"

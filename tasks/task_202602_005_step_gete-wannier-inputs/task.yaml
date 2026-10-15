@@ -1,0 +1,18 @@
+task_id: task_202602_005_step_gete-wannier-inputs
+title: input decks for a fully relativistic Wannier model of rhombohedral GeTe
+task_type: step
+role: gen_input
+cost_class: heavy
+source_month: 2026-02
+source_date: 2026-02-04
+earliest_public_date: 2025-08-26
+promoted: 2026-09-03
+env_bundles: []
+requires: []
+third_party_docs: []
+codes: [qe, wannier90]
+docs: [qe, wannier90]
+image: base
+submission: answer.json
+grader: grader/grader.py
+score: binary

@@ -1,0 +1,29 @@
+{
+  "gap_low_eV": 0.3121,
+  "gap_high_eV": 0.5536,
+  "resonance_LL_eV": 0.548,
+  "resonance_RR_eV": 0.304,
+  "extinction_contrast_LL": 0.02287,
+  "extinction_contrast_RR": 0.0027,
+  "phase_at_gap_low_over_pi": -0.52059,
+  "phase_at_gap_high_over_pi": 0.52583,
+  "phase_step_over_pi": -0.95358,
+  "phase_by_eta_over_pi": [
+    [
+      -0.50514,
+      0.50719
+    ],
+    [
+      -0.52059,
+      0.52583
+    ],
+    [
+      -0.54698,
+      0.56754
+    ],
+    [
+      -0.58029,
+      0.64928
+    ]
+  ]
+}

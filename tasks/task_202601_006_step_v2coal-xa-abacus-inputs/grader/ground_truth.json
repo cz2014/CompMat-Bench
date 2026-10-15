@@ -1,0 +1,113 @@
+{
+  "subtask": "L4 gen_input (ABACUS XA V2CoAl moments deck, ferrimagnetic seed)",
+  "kind": "ABACUS LCAO gen_input (heavy leaf; the agent writes the deck, never runs it)",
+  "provenance": "REQUIRED rubric is the per-tag triage of our as-run deck 3_reproduction/L4/auditor/deck_ferri/{INPUT,STRU,KPT}; structure reference is L2's relaxed XA CONTCAR (the self-consistent ground truth). Triage table in notes.md.",
+  "run_labels": [
+    "V2CoAl_XA"
+  ],
+  "structure_reference": "reference/CONTCAR",
+  "structure_match": {
+    "max_disp_A": 0.1,
+    "method": "matcher",
+    "note": "three species (V/Co/Al) on the F-43m XA cell; ElementComparator-aware StructureMatcher is safe (the 4b/4d V split is a magnetic, not a structural, distinction -- both V atoms are the same element, so the STRU geometry matches the reference regardless of seed; the ferrimagnetic seed is checked by the INPUT rubric, not the structure match)."
+  },
+  "expected_counts": {
+    "V": 8,
+    "Co": 4,
+    "Al": 4
+  },
+  "ecutwfc_min_Ry": 100,
+  "kmesh_reference": {
+    "subdivisions": [
+      9,
+      9,
+      9
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "magnetic_species": [
+    "V",
+    "Co"
+  ],
+  "ferri_seed": {
+    "element": "V",
+    "suba": "4b",
+    "subb": "4d",
+    "note": "Every V atom must map to 4b or 4d. Each sublattice is internally aligned; the two have opposite signs. Global spin reversal and differing nonzero amplitudes are accepted."
+  },
+  "score": "1 only if the required run passes all method, effective-PBE/no-U, output, catalog identity, cutoff, k-mesh, effective atomwise magnetic-seed and structure conditions recorded here; unlisted settings are not graded.",
+  "effective_defaults": {
+    "version": "ABACUS 3.10.1",
+    "ecutwfc_lcao_Ry": 100,
+    "ecutwfc_pw_Ry": 50,
+    "out_mul": false,
+    "dft_functional": "inferred from the separately checked PBE pseudopotentials",
+    "magnetic_seed": "mag and magmom are equivalent atomic overrides. For nspin=2 only, all effective atomic moments zero triggers 1.0 on every atom; partial zeros do not."
+  },
+  "coordinate_representations": "Direct fractional; Cartesian in alat units; Cartesian_au in Bohr; Cartesian_angstrom in Angstrom. Normalize to fractional coordinates for geometry and V sublattice classification.",
+  "functional_required": "Effective PBE: default/PBE/SLAPWPBXPBC with fixed PBE pseudopotentials; reject a different explicit functional. dft_plus_u remains integer 0.",
+  "magnetic_seed_required": "Every V and Co has abs(initial moment)>=1e-6; each V 4b/4d sublattice is internally same sign and the two sublattices have opposite signs; either global orientation allowed.",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "V2CoAl_XA": [
+        4,
+        4,
+        4
+      ]
+    },
+    "references": {
+      "V2CoAl_XA": {
+        "automatic_subdivisions": [
+          4,
+          4,
+          4
+        ],
+        "minimum": [
+          4,
+          4,
+          4
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [],
+        "reference_structure_sha256": "9bdda14f596b5b279c16e9fc4a1b640c47f2d97392431e178fa430e55947d878",
+        "reference_lattice_angstrom": [
+          [
+            5.917012834892049,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            5.917012834892049,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            5.917012834892049
+          ]
+        ],
+        "reference_atom_count": 16
+      }
+    }
+  }
+}

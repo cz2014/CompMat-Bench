@@ -1,0 +1,18 @@
+task_id: task_202603_038_step_bas-harmonic-force-constants
+title: harmonic force constants and zone-centre optical frequencies of boron arsenide from finite-displacement supercell runs
+task_type: step
+role: analyze
+cost_class: heavy
+source_month: 2026-03
+source_date: 2026-03-30
+earliest_public_date: 2026-03-30
+promoted: 2026-09-13
+env_bundles: []
+requires: [alamode==1.4.2]
+third_party_docs: []
+codes: [qe]
+docs: [qe, alamode]
+image: alamode-v1
+submission: answer.json
+grader: grader/grader.py
+score: binary

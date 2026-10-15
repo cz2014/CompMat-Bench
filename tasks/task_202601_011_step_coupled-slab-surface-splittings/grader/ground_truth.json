@@ -1,0 +1,10 @@
+{
+  "_doc": "Own reproduction of the prescribed phenomenological coupled-slab model, N=60 SnTe and nR=3; source comparison is not a verified altermagnetic causal mechanism.",
+  "top_gap_meV": 6.98,
+  "bottom_gap_meV": 0.0,
+  "bottom_gap_abs_band_meV": 2.0,
+  "_rules": {
+    "top_gap_meV": "10% relative tolerance: 6.282 to 7.678 meV, inclusive",
+    "bottom_gap_meV": "0 <= reported <= 2.0 meV, inclusive; our extracted model value is about 0.699 meV, allowed by this established absolute band"
+  }
+}

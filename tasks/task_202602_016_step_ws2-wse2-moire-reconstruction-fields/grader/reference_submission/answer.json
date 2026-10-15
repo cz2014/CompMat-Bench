@@ -1,0 +1,20 @@
+{
+  "eps_WS2_Rhh_pct": -0.745611,
+  "eps_WS2_RXh_pct": 0.788684,
+  "eps_WS2_RMh_pct": 0.629122,
+  "eps_WSe2_Rhh_pct": 1.372346,
+  "eps_WSe2_RXh_pct": -0.489205,
+  "eps_WSe2_RMh_pct": -0.384006,
+  "d_Rhh_A": 6.858913,
+  "d_RXh_A": 6.293943,
+  "d_RMh_A": 6.305802,
+  "corrugation_WS2_A": 2.92988,
+  "corrugation_WSe2_A": 2.282884,
+  "adhesion_Rhh_eV": -0.02436836,
+  "adhesion_RXh_eV": -0.04233335,
+  "adhesion_RMh_eV": -0.04047724,
+  "area_frac_RXh_rigid": 0.088757,
+  "area_frac_RXh_relaxed": 0.152367,
+  "area_frac_Rhh_rigid": 0.066568,
+  "area_frac_Rhh_relaxed": 0.031065
+}

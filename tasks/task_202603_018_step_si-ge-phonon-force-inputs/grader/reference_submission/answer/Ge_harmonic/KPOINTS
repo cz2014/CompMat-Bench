@@ -1,0 +1,5 @@
+5x5x5 Gamma-centred = the paper's 5x5x5 Monkhorst-Pack supercell mesh (odd n: the two are the same mesh); 63 irreducible under ISYM=0
+0
+Gamma
+5 5 5
+0 0 0

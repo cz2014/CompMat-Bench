@@ -1,0 +1,11 @@
+{
+  "status": "reproduced_declared_model_reference",
+  "per_cone_hall_e2_over_h": [
+    -0.5,
+    -0.5
+  ],
+  "relative_tolerance": 0.1,
+  "allowed_conventions": "One common overall sign reversal for both entries",
+  "provenance": "evidence/reference_results.json",
+  "scope": "First-order projected continuum cones; no assertion of an atomistic slab Chern invariant"
+}

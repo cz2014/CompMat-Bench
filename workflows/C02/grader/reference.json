@@ -1,0 +1,92 @@
+{
+  "chain": "C02",
+  "status": "verified",
+  "notes": "All families rederived from the frozen MnTe coordinates; see C02_rederivation.json. Rounded-input small splittings retained.",
+  "prior_reference": "[internal path removed]",
+  "prior_reference_sha256": "24dd6c958da8aff6a9fe1172b27a44758727d4a603c99c622e58d55d5ac76dfa",
+  "fields": {
+    "families": {
+      "12": {
+        "count": {
+          "truth": 48,
+          "rule": "integer"
+        },
+        "Gamma_split_eV": {
+          "truth": 0.11333812449730452,
+          "atol": 1e-07,
+          "rtol": 0.02
+        },
+        "generic_split_eV": {
+          "truth": 0.19355907404899986,
+          "atol": 1e-07,
+          "rtol": 0.02
+        }
+      },
+      "25": {
+        "count": {
+          "truth": 24,
+          "rule": "integer"
+        },
+        "Gamma_split_eV": {
+          "truth": 4.530125901069937e-07,
+          "atol": 1e-05,
+          "rtol": 0.02
+        },
+        "generic_split_eV": {
+          "truth": 0.14619679903942995,
+          "atol": 1e-07,
+          "rtol": 0.02
+        }
+      },
+      "42": {
+        "count": {
+          "truth": 24,
+          "rule": "integer"
+        },
+        "Gamma_split_eV": {
+          "truth": 4.513375326808955e-07,
+          "atol": 1e-05,
+          "rtol": 0.02
+        },
+        "generic_split_eV": {
+          "truth": 0.09080342362172811,
+          "atol": 1e-07,
+          "rtol": 0.02
+        }
+      },
+      "164": {
+        "count": {
+          "truth": 16,
+          "rule": "integer"
+        },
+        "Gamma_split_eV": {
+          "truth": 0.4545690127000819,
+          "atol": 1e-07,
+          "rtol": 0.02
+        },
+        "generic_split_eV": {
+          "truth": 0.3592534713275614,
+          "atol": 1e-07,
+          "rtol": 0.02
+        }
+      },
+      "187": {
+        "count": {
+          "truth": 8,
+          "rule": "integer"
+        },
+        "Gamma_split_eV": {
+          "truth": 4.607429575642641e-07,
+          "atol": 1e-05,
+          "rtol": 0.02
+        },
+        "generic_split_eV": {
+          "truth": 0.09741347435728132,
+          "atol": 1e-07,
+          "rtol": 0.02
+        }
+      }
+    }
+  },
+  "derivation": "C02_rederivation.json"
+}

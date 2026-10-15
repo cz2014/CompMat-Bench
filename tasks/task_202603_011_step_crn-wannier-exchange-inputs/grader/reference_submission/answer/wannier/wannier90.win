@@ -1,0 +1,44 @@
+# CrN variant (iii), 32 Wannier functions per spin channel: Cr 3d x 4 + N 2p x 4.
+#
+# NO exclude_bands. The VASP2WANNIER90 interface applies exclude_bands ITSELF
+# when it writes .eig/.mmn/.amn, and the library-mode wannier_run then applies
+# the same line a SECOND time, which pads the eigenvalue array with 16 phantom
+# zero-energy states. Those sit inside any frozen window that spans E = 0 and
+# the run dies with "dis_windows: More states in the frozen window than target
+# WFs" (job 20409243: 38 bands in the inner window at k-point 2, of which 16
+# were the phantoms). The Cr 3p semicore and N 2s bands are excluded here by
+# ENERGY instead: they top out at -3.8796 eV, 3.8 eV below dis_win_min, while
+# the p-d manifold starts 1.95 eV above it.
+#
+# Windows are relative to THIS run's own E_F = 9.6310 eV (OUTCAR, job 20409243):
+#   dis_win_min = E_F - 9.7   dis_froz_max = E_F + 2.3   dis_win_max = E_F + 6.9
+# Measured on the run's own .eig: 34 states in the outer window at every one of
+# the 576 k-points (32 needed), 18 to 22 frozen (at most 32 allowed).
+num_wann  = 32
+num_bands = 72
+
+dis_win_min  =  -0.0690
+dis_froz_max =  11.9310
+dis_win_max  =  16.5310
+
+dis_num_iter    = 1000
+num_iter        = 2000
+conv_tol        = 1E-12
+conv_window     = 5
+dis_conv_tol    = 1E-12
+dis_conv_window = 5
+guiding_centres = .true.
+
+write_hr        = .true.
+write_xyz       = .true.
+write_tb        = .true.
+
+# Retained as-run setting, not a required correctness switch.
+# Later _hr.dat comparisons did not support the initial use_ws_distance diagnosis.
+# The successful production route and loader limitations are recorded in reviewer notes.
+use_ws_distance = .false.
+
+begin projections
+Cr:d
+N:p
+end projections

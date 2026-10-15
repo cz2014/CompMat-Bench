@@ -1,0 +1,62 @@
+{
+  "subtask": "L3 analyze",
+  "kind": "analyze (read our staged LDA+U VASP records for the three CrN structural variants: relaxed cell parameters, spin-resolved Cr-Cr exchange-path distances, relative energies, fundamental gaps, Cr moment)",
+  "provenance": "Every truth below was re-derived independently by the grader author from the STAGED files alone (agent/relax/CONTCAR, agent/static_{i,ii,iii}/{OUTCAR.gz,EIGENVAL.gz}) with reviewer/make_reference.py -- self-contained parsers, no pymatgen, no reuse of the reproduction's analysis code. The same script wrote reference_submission/answer.json. Cross-check against 3_reproduction/L3/result.json: every field agrees to <= 8.1e-5 absolute (the largest, gap_iii, is result.json recomputing the gap from 4-decimal-rounded VBM/CBM: 10.1410 - 9.6317 = 0.5093 versus the raw 0.509381). See 3_reproduction/L3/index.md and context.md.",
+  "conventions": {
+    "cell": "a, b, c are the norms of the CONTCAR lattice vectors in file order; the first vector is the stacking axis. Reading the same quantities from static_iii/POSCAR gives the identical numbers to 6 decimals.",
+    "internal_coordinate": "x_Cr and x_N are the fractional coordinate along the stacking axis of the one site of that species in 0 < x < 1/4 (declared pin 2 in notes.md; the 4c site has four equivalent x values in the cell).",
+    "exchange_classes": "Twelve nearest Cr neighbours of a Cr site in the relaxed cell, classified by the sign of the product of the two site-projected moments read from static_iii and by multiplicity. Every Cr site sees the same inventory {parallel x4, antiparallel x4, antiparallel x2, parallel x2}; the 13th neighbour is at 4.14 A, far outside the shell.",
+    "energies": "'free  energy   TOTEN' of each static (ISMEAR = -5, so TOTEN, energy-without-entropy and energy(sigma->0) are all equal to the printed precision), divided by 4 formula units in the eight-atom cell, in meV, positive when the reference cell lies higher.",
+    "gap": "min unoccupied minus max occupied Kohn-Sham eigenvalue over the run's own k set, both spin channels (declared pin 1). Occupancy > 0.5 counts as occupied; the band-counting reading (NELECT/2 = 34 filled bands per spin) gives the identical value in all three statics.",
+    "moment": "mean |site-projected moment| of the four Cr ions from the last 'magnetization (x)' block of static_iii (LORBIT = 11 PAW site projection; RWIGS is ignored); all four are 2.850 muB with the +--+ pattern."
+  },
+  "primary": {
+    "note": "PRIMARY, all 15 fields. Binary all-primary-pass (handbook 1(1)). Missing field, non-numeric or non-finite value scores 0 before any check runs (handbook 1(3)).",
+    "fields": {
+      "a_A": {"truth": 5.775871, "rule": "relative", "rel_tol": 0.005},
+      "b_A": {"truth": 2.965491, "rule": "relative", "rel_tol": 0.005},
+      "c_A": {"truth": 4.143072, "rule": "relative", "rel_tol": 0.005},
+      "x_Cr": {"truth": 0.135020, "rule": "absolute", "abs_tol": 0.002},
+      "x_N": {"truth": 0.114603, "rule": "absolute", "abs_tol": 0.002},
+      "d_parallel_4_A": {"truth": 2.987059, "rule": "absolute", "abs_tol": 0.01},
+      "d_antiparallel_4_A": {"truth": 2.872969, "rule": "absolute", "abs_tol": 0.01},
+      "d_antiparallel_2_A": {"truth": 2.887935, "rule": "absolute", "abs_tol": 0.01},
+      "d_parallel_2_A": {"truth": 2.965491, "rule": "absolute", "abs_tol": 0.01},
+      "dE_i_minus_iii_meV_per_fu": {"truth": 30.450252, "rule": "relative", "rel_tol": 0.10},
+      "dE_ii_minus_iii_meV_per_fu": {"truth": 23.950823, "rule": "relative", "rel_tol": 0.10},
+      "gap_i_eV": {"truth": 0.558132, "rule": "relative", "rel_tol": 0.10},
+      "gap_ii_eV": {"truth": 0.573080, "rule": "relative", "rel_tol": 0.10},
+      "gap_iii_eV": {"truth": 0.509381, "rule": "relative", "rel_tol": 0.10},
+      "m_Cr_iii_muB": {"truth": 2.850000, "rule": "relative", "rel_tol": 0.10}
+    },
+    "tolerance_rationale": {
+      "relative_0.10": "handbook 2(1), the universal scalar band. Applies to the two energy differences, the three gaps and the Cr moment.",
+      "relative_0.005_lattice": "DOCUMENTED EXCEPTION (handbook 2(5)). +/-10% on a is 0.58 A, which would pass the unrelaxed cubic seed (a = 5.855 A, 1.4% away) and even a wildly wrong cell. 0.5% is the reproduction's own G1 fidelity tolerance (result.json guards.G1_table_I_geometry.tolerances.a_b_c_fractional = 0.005) and gives bands of 0.0289 / 0.0148 / 0.0207 A on a / b / c -- 20x our own deviation from the source table (~0.027%), so a correct relaxed answer has ample margin while the cubic seed fails on a.",
+      "absolute_0.002_x": "DOCUMENTED EXCEPTION (handbook 2(5)). +/-10% on x_Cr is a 0.0135 band, but the whole physics of the displacement is a 0.010 shift from the ideal 1/8, so the relative band would pass an undisplaced answer (x = 0.125). 0.002 absolute is the reproduction's own G1 tolerance (guards.G1.tolerances.x_Cr_x_N_absolute) and is ~100x our own deviation from the source table (2e-5).",
+      "absolute_0.01_distance": "DOCUMENTED EXCEPTION (handbook 2(5)). +/-10% is 0.29 A while the four classes span only 0.114 A, so the relative band cannot tell the classes apart and a class swap would pass. 0.01 A is twice the reproduction's own G1 distance tolerance (0.005 A -- and our own deviations are <= 0.9 mA), and still ~10x below the class spread, so any confusion of the parallel and antiparallel 4-fold shells fails."
+    }
+  },
+  "designed_wrong": {
+    "note": "The readings a competent-but-mistaken agent produces; each must score 0. Verified in reviewer/selfcheck.py.",
+    "per_cell_energies": {"values": [121.80101, 95.80329], "why": "total-energy differences not divided by the 4 formula units (4x the truth, far outside the 10% band)."},
+    "doscar_threshold_gap": {
+      "values": [0.0, 1.039, 0.831],
+      "threshold_states_per_eV": 0.02,
+      "why": "the gap read as the width of the sub-threshold window of the staged DOSCAR around E_F instead of from the eigenvalues. MEASURED on the staged DOSCARs (make_reference.py): the tetrahedron DOSCAR grid step is ~0.21 eV, so variant i reads 0.000 eV (the DOS at E_F is 0.1555 states/eV, above the threshold), variant ii reads 1.039 eV and variant iii 0.831 eV -- all three outside their 10% bands (0.056 / 0.057 / 0.051 eV). This confirms necessity arm (b) of declared pin 1.",
+      "verdict": "FAILS in all three variants"
+    },
+    "swapped_4fold_classes": {"why": "d_parallel_4 and d_antiparallel_4 exchanged (2.873 vs 2.987 A): a geometry-only reading that never looks at the moments. |diff| 0.114 A, 11x the 0.01 A band."},
+    "x_as_half_minus_x": {"values": [0.364980, 0.385397], "why": "the site in 1/4 < x < 1/2 reported instead of the one in 0 < x < 1/4 (declared pin 2)."},
+    "total_cell_moment": {"value": 0.0, "why": "the net cell magnetization (-0.000 muB, the AFM sum) reported instead of the site-projected Cr moment (declared pin 3)."},
+    "unrelaxed_cubic_lattice": {"values": [5.855004, 2.927502, 4.140113], "why": "the variant-i cubic lattice reported as the relaxed cell; a is 0.079 A away, 2.7x the 0.0289 A band."},
+    "negative_moment": {"value": -2.85, "why": "the signed moment of a down-spin Cr reported where the prompt asks for the magnitude (sign is part of the value, handbook 2(1))."}
+  },
+  "accepted_alternatives": {
+    "note": "Correct readings that differ from ours in presentation only; each must score 1. Verified in reviewer/selfcheck.py.",
+    "result_json_rounding": "the values as printed in 3_reproduction/L3/result.json (gaps recomputed from 4-decimal VBM/CBM: 0.5581 / 0.5731 / 0.5093).",
+    "two_decimal_lattice": "a, b, c rounded to 2 decimals (5.78 / 2.97 / 4.14) and the distances to 2 decimals -- inside the 0.5% and 0.01 A bands.",
+    "static_poscar_structure": "the cell and internal coordinates read from static_iii/POSCAR instead of relax/CONTCAR (identical to 6 decimals; a genuinely alternative source file for the same quantities).",
+    "extra_fields": "extra keys beyond the schema are ignored, not failed (handbook 1(3))."
+  },
+  "score": "1 only if all 15 PRIMARY field checks pass; any single failure scores 0 (binary all-primary-pass)."
+}

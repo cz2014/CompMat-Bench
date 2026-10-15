@@ -1,0 +1,24 @@
+{
+  "subtask": "L2 analyze",
+  "kind": "analyze (formation energy, ground-state ordering, relaxed lattice)",
+  "provenance": "Values from our 3_reproduction/L2/result.json. Raw staged energies reproduce the stored formation energies within the existing 10% tolerance; 50L21_50XA_cfg1 differs by 2.25625 meV/atom, so an all-rows <1 meV claim is not valid. Ground-truth values are retained.",
+  "E_f_eV_per_atom": {
+    "L2_1": -0.0396,
+    "XA": -0.178,
+    "25L21_75XA": -0.1666,
+    "50L21_50XA_cfg0": -0.1471,
+    "50L21_50XA_cfg1": -0.1356,
+    "75L21_25XA": -0.095
+  },
+  "lowest_E_ordering": "XA",
+  "a_relaxed_Ang": {
+    "L2_1": 5.9737,
+    "XA": 5.917
+  },
+  "tolerances": {
+    "E_f_rel": 0.1,
+    "a_rel": 0.1,
+    "note": "Every E_f within +/-10% relative with sign; lowest_E_ordering must be XA and a minimum of the submitted six-value table (tied minima allowed); endpoint lattice constants within +/-10%."
+  },
+  "score": "1 only if all six formation energies and both lattice constants pass their unchanged 10% bands, the lowest-energy label is XA, and its submitted value is a table minimum (ties allowed)."
+}

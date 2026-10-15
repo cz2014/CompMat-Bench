@@ -1,0 +1,67 @@
+{
+  "files": {
+    "science_mounts.json": "9b6fc72ff99eba37e7a08f3ac9525780624fbe21c0010e2d07b4f013cd9c51fc",
+    "visible/commands.md": "802abbcb502498bb970bb041c0b0ebcc6442b755f0c9d8e4e2482dc6a598f601",
+    "visible/tool_contract.py": "0ce618fc896e83ce0cecc1ad7848e94134658208f560a22a35d4971c96338930",
+    "visible/software.json": "98ebc5f75e0ea0b0d35c4b1c684239f72cfa7c752055253f0987402744d36a5d",
+    "visible/agent_entry.py": "b775ec41064753ba87d823557ea4ba7546b13305a0fcab74db8ae95ee836c890",
+    "visible/bin/bench-exec": "ceb79682a4fecd755121d93460de55da7b8ea0057d53faa613b3d629e4d5e690",
+    "visible/bin/bench-runtime": "b9e59288122c239e8981c9f7c97afa277370565a2dd56c9e83ede6e1bb83b1ab",
+    "native/vasp/bin/vasp_std": "c607f93ece62014ec900127f39c29d18bc743eebdceb4f7751c611f2453ac720",
+    "science/python311/bin/python": "dc357eb584d55d5a7c51e1d25a1a243ad320427b58228f400209990012cd2869",
+    "science/deepmd/bin/lmp": "375c8c98bf34c63871959cd386f90132d76c69a36bd6805dcda1a255ea79110e",
+    "science/deepmd/bin/mpirun": "e3de857b9256ae8f3fd0712035b805ffc8f1015380059564f232796517b7fa25",
+    "science/c09/project/pyproject.toml": "2d363883a1207e20e5ffcb12eca1e2fb208289653b4578c98d62a064400d777c",
+    "science/c09/project/uv.lock": "8f23b7f77ac6ff069cfbe503b1007b302e5ef8f0445fc156200d11390f8e4bba",
+    "science/c09/project/.venv/pyvenv.cfg": "6c36cfaf02bd067ce34f1a2528890448856dcb10ad3194af6de4ae14bb920ae8",
+    "science/c10/project/pyproject.toml": "8ae18861a8b4a5385c826053138c08496fb461b39dd9627c6613b95620b0a3be",
+    "science/c10/project/uv.lock": "8e5a6d39334d013017ea6433b0185bea5e245cc14926e3abc5bd6a98bf33adde",
+    "science/c10/project/.venv/pyvenv.cfg": "3af81b6ac71a8a33eeb785877905d47041f95491d3d745571cd8b4bb8d661ff2",
+    "science/deepmd/lib/liblammps.so": "62289b8c3b499afeb0ded614de058b01074e55d90ff84287e8d6c3732f8feeec",
+    "science/deepmd/lib/liblammps.so.0": "62289b8c3b499afeb0ded614de058b01074e55d90ff84287e8d6c3732f8feeec",
+    "relocation.json": "b5332376dd8f1196e3b9bf47f2aa1797c0e902bcbe1261c8d1e285238b134e30",
+    "science/deepmd/lib/libtensorflow_cc.so.2.19.1": "d9f1a916de5f9ed5a9b5b35d5b34dcd49797668ae4ce8ab4782cd5a5cc2e1ccb",
+    "science/deepmd/lib/libtensorflow_framework.so.2.19.1": "067e5ae5bc67b7592d2060e6bbb489e9f8ffa3399c6e705bdf1e9dfd004f6c66",
+    "stack_compatibility.json": "c4c50317c5da868a19e06aebd26aafbed49486cc1782fd9abbfd593722299b1b"
+  },
+  "image_sha256": "ed893d711b49ff2271aff1a8698af0e3e31b757123cc926ea30729d2033bb9d2",
+  "build": {
+    "C09": {
+      "seconds": 40.846583479084074,
+      "offline": true,
+      "network": "none",
+      "uv_lock_sha256": "8f23b7f77ac6ff069cfbe503b1007b302e5ef8f0445fc156200d11390f8e4bba",
+      "command": [
+        "/opt/build/uv",
+        "sync",
+        "--offline",
+        "--frozen",
+        "--python",
+        "/opt/science/python311/bin/python",
+        "--project",
+        "/opt/science/c09/project",
+        "--extra",
+        "anvil"
+      ]
+    },
+    "C10": {
+      "seconds": 4.48611446400173,
+      "offline": true,
+      "network": "none",
+      "uv_lock_sha256": "8e5a6d39334d013017ea6433b0185bea5e245cc14926e3abc5bd6a98bf33adde",
+      "command": [
+        "/",
+        "/scratch/user/compmat-env-repair-20260917/matclaw-b550622f27f5.sif",
+        "/opt/build/uv",
+        "sync",
+        "--offline",
+        "--frozen",
+        "--python",
+        "/opt/science/python311/bin/python",
+        "--project",
+        "/opt/science/c10/project"
+      ]
+    }
+  },
+  "model_calls": 0
+}

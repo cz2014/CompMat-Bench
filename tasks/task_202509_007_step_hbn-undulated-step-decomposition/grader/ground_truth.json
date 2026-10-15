@@ -1,0 +1,216 @@
+{
+  "subtask": "L4 analyze",
+  "kind": "analyze (decomposition profiles + residual extremes from staged LOCPOTs + upstream context)",
+  "provenance": "profiles and extremes from 3_reproduction/L4/decomposition_vs_y.csv (run 20260604_li_L4_opus_think, corrected-L2 analytic columns)",
+  "conventions": {
+    "potential_sign": "phi = -LOCPOT (the stored LOCPOT value is the potential energy of an electron). Stated in the prompt; every DFT profile below carries this sign. Note the sibling L1_analyze unit reads the stored value itself, so the two units use opposite readings of the word 'potential' and each prompt states its own.",
+    "step_extraction": "Continuum geometry is the declared sine mid-surface and parallel monolayer offsets +/-1.625 angstrom along its upward normal. Each profile is indexed by its own Cartesian y coordinate. Use x averaging and a uniform 4 angstrom straight tangential average at each normal offset; fit each side over 4.5..9 angstrom and -9..-4.5 angstrom, and subtract extrapolated intercepts at s=0, top minus bottom.",
+    "curvature": "Signed curvature of the declared sinusoidal bilayer continuum mid-surface z_c(y)=L_z/2+9 angstrom*sin(2*pi*y/L), positive where z_c second derivative is positive. The agent derives curvature; the standard curvature formula is not supplied."
+  },
+  "grid": {
+    "n_points": 24,
+    "rule": "y_j = j*L/24, j = 0..23 (pinned in the prompt); the submitted y_over_L must match j/24 within 0.01 each"
+  },
+  "profiles": {
+    "note": "PRIMARY: each of the 24 points within max(10% of |truth|, the profile's floor = 10% of its largest |value|). The six arrays score everything the prompt asks for against our reference: the DFT extraction (dVn, dVfl_I, dVfl_II), the residual (dVsl), and the analytic model (dVfl_an = V0*kappa, dVsl_an = the L1 map at the L2 nu_ac). Nothing is self-graded; the rms/max agreement deviations are recomputed by the grader from the submitted arrays and recorded as diagnostics only. The extraction geometry and the fit window are pinned in the prompt (see `conventions`); the reference arrays retain the canonical historical extraction. An independent implementation of the declared continuum observable agrees within the existing tolerances. Historical extraction used fitted surfaces, discrete tangential averaging over 7 angstrom and a median across five vacuum windows.",
+    "dVn_V": {
+      "truth": [
+        0.00384,
+        -0.03522,
+        -0.05835,
+        -0.04741,
+        -0.00151,
+        0.03242,
+        0.00459,
+        -0.07696,
+        -0.14879,
+        -0.17377,
+        -0.16674,
+        -0.15118,
+        -0.13961,
+        -0.13138,
+        -0.11191,
+        -0.05506,
+        0.03753,
+        0.13088,
+        0.16849,
+        0.15525,
+        0.1306,
+        0.11019,
+        0.08268,
+        0.04564
+      ],
+      "floor_V": 0.01738
+    },
+    "dVfl_I_V": {
+      "truth": [
+        -0.00234,
+        -0.01467,
+        -0.02683,
+        -0.03879,
+        -0.04891,
+        -0.05597,
+        -0.05836,
+        -0.05561,
+        -0.04805,
+        -0.03761,
+        -0.02565,
+        -0.0135,
+        -0.00126,
+        0.01141,
+        0.02448,
+        0.03819,
+        0.05097,
+        0.06029,
+        0.06329,
+        0.05944,
+        0.04975,
+        0.03684,
+        0.02309,
+        0.0102
+      ],
+      "floor_V": 0.00633
+    },
+    "dVfl_II_V": {
+      "truth": [
+        0.00129,
+        -0.0115,
+        -0.02483,
+        -0.03868,
+        -0.05116,
+        -0.06002,
+        -0.06306,
+        -0.05941,
+        -0.05002,
+        -0.03715,
+        -0.0235,
+        -0.01038,
+        0.00237,
+        0.01488,
+        0.02703,
+        0.039,
+        0.04904,
+        0.0559,
+        0.05795,
+        0.05527,
+        0.04817,
+        0.03798,
+        0.02603,
+        0.01372
+      ],
+      "floor_V": 0.00631
+    },
+    "dVfl_an_V": {
+      "truth": [
+        -0.0,
+        -0.01392,
+        -0.02864,
+        -0.04434,
+        -0.05981,
+        -0.07188,
+        -0.07656,
+        -0.07188,
+        -0.05981,
+        -0.04434,
+        -0.02864,
+        -0.01392,
+        -0.0,
+        0.01392,
+        0.02864,
+        0.04434,
+        0.05981,
+        0.07188,
+        0.07656,
+        0.07188,
+        0.05981,
+        0.04434,
+        0.02864,
+        0.01392
+      ],
+      "floor_V": 0.00766
+    },
+    "dVsl_V": {
+      "truth": [
+        0.0049,
+        -0.00905,
+        -0.00669,
+        0.03006,
+        0.09856,
+        0.14841,
+        0.12602,
+        0.03806,
+        -0.05073,
+        -0.09902,
+        -0.11759,
+        -0.12729,
+        -0.14072,
+        -0.15767,
+        -0.16342,
+        -0.13225,
+        -0.06248,
+        0.01469,
+        0.04726,
+        0.04055,
+        0.03269,
+        0.03537,
+        0.03356,
+        0.02172
+      ],
+      "floor_V": 0.01634
+    },
+    "dVsl_an_V": {
+      "truth": [
+        0.0,
+        0.0001,
+        0.00126,
+        0.01141,
+        0.04944,
+        0.11091,
+        0.12631,
+        0.03974,
+        -0.07374,
+        -0.12689,
+        -0.12958,
+        -0.11841,
+        -0.11314,
+        -0.11841,
+        -0.12958,
+        -0.12689,
+        -0.07375,
+        0.03974,
+        0.12631,
+        0.11091,
+        0.04944,
+        0.01141,
+        0.00126,
+        0.0001
+      ],
+      "floor_V": 0.01296
+    }
+  },
+  "consistency": {
+    "rule": "dVsl_V[j] = dVn_V[j] - dVfl_I_V[j] - dVfl_II_V[j] within max(0.002 V, sum of the four independent decimal rounding radii). Radii use original JSON decimal exponents, preserving trailing zeroes. Physical reference tolerances are unchanged."
+  },
+  "residual_extremes": {
+    "note": "PRIMARY (within max(10% of |truth|, floor 0.01634 V)): extremes of the DFT residual over the 24 samples. NOT derivable from the upstream csvs (which give only the analytic ~0.132 V); our historical DFT residual is ~23% larger; the individual contributions of finite-cell, functional, geometry and extraction effects have not been isolated, so an L1-guessed 0.132 fails dVsl_min.",
+    "dVsl_max_V": {
+      "truth": 0.14841
+    },
+    "dVsl_min_V": {
+      "truth": -0.16342
+    },
+    "floor_V": 0.01634
+  },
+  "sign_changes_per_period": {
+    "truth": 2,
+    "rule": "exact integer: cyclic count ignoring samples with |dVsl| < 0.02 V (the threshold is stated in the prompt; the raw unthresholded count is 4, from a sub-0.01 V wiggle at the y=0 node)"
+  },
+  "diagnostics": {
+    "note": "recorded, NOT scored: the grader recomputes the agreement deviations FROM THE SUBMITTED ARRAYS (flexo = dVfl_I/II vs dVfl_an pooled; total = dVn vs 2*dVfl_an + dVsl_an; sliding = dVsl vs dVsl_an). Ours, for calibration:",
+    "flexo_rms_V": 0.0091,
+    "flexo_max_V": 0.0186,
+    "total_rms_V": 0.0445,
+    "sliding_rms_V": 0.0314
+  },
+  "score": "1 only if all six 24-point profiles, the y_over_L grid, the dVsl arithmetic consistency, both residual extremes, and the sign-change count pass (all checks must pass; any single failure scores 0)"
+}

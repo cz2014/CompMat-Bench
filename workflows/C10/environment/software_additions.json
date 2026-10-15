@@ -1,0 +1,13 @@
+{
+  "python-c10": {
+    "version": "UV-locked Python 3.11; ASE 3.26.0 / NumPy 2.2.6 / SciPy 1.15.3",
+    "argv": [
+      "/opt/science/c10/project/.venv/bin/python"
+    ],
+    "env": {
+      "PATH": "/opt/science/c10/project/.venv/bin:/usr/bin:/bin",
+      "PYTHONNOUSERSITE": "1",
+      "LD_LIBRARY_PATH": "/opt/science/python311/lib"
+    }
+  }
+}

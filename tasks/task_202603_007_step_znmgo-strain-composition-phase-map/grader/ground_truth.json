@@ -1,0 +1,38 @@
+{
+  "subtask": "L6 analyze",
+  "kind": "analyze (strain-composition phase map of a coherently strained (0001) wurtzite / (111) rocksalt Zn(1-x)Mg(x)O film: CALPHAD bulk free energies plus rotated-tensor epitaxial elastic energies; transformation strain, rotated biaxial modulus, three boundary compositions and the strain that closes the wurtzite field)",
+  "provenance": "3_reproduction/L6/result.json keys metrics.M1_x_boundary, metrics.M2_M_R111, metrics.M3_eigenstrain and variants.pin_film_frame (commit 0088e46; reviewer ruling 2026-09-05: film-frame transformation strain, C13^2/C33 reduction, per-phase molar volume, T = 298.15 K). Re-derived from the leaf module by reviewer/make_reference_submission.py on the pin; identical to the record.",
+  "primary": {
+    "eps0_inplane_x0": {
+      "truth": 0.07422164,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); an engineering-strain reading (0.0717) passes, a swapped or unrotated pairing of the lattice constants fails"
+    },
+    "M_R111_x0_GPa": {
+      "truth": 317.40487,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); the unrotated cubic-axes biaxial modulus (227.9) and the (001)-film value fail"
+    },
+    "x_boundary_eps_0": {
+      "truth": 0.121817,
+      "rule": "+/-10 percent relative (scalar rule 2(1)): the three boundary compositions are graded as three scalars, not as a curve, because the curve rule's absolute floor (10 percent of 0.43) would let the rocksalt-reference-volume reading (0.155) pass; the five-point-interpolation reading (0.1238) passes"
+    },
+    "x_boundary_eps_p0p02": {
+      "truth": 0.222497,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); five-point interpolation gives 0.2248"
+    },
+    "x_boundary_eps_p0p05": {
+      "truth": 0.431815,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); five-point interpolation gives 0.4299"
+    },
+    "eps_s_boundary_x0": {
+      "truth": -0.03068,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value (compressive); five-point interpolation gives -0.03024"
+    }
+  },
+  "not_graded": {
+    "x_boundary_eps_m0p02": "0.03898; a 10 percent band on it is 0.004 in x, tighter than the honest interpolation spread near x = 0 warrants; not requested",
+    "M_W_x0_GPa": "212.937, the wurtzite biaxial modulus C11 + C12 - 2 C13^2/C33; implied by the graded boundary, not requested",
+    "eps0_outofplane_x0": "0.05979; does not enter any graded value under the boundary condition; not requested",
+    "bulk_T0_298K": "0.339068, the zero-elastic-energy crossing of the staged G table; not requested"
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)"
+}

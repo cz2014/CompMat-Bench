@@ -1,0 +1,128 @@
+{
+  "subtask": "L2 analyze",
+  "kind": "analyze (relaxed lattice parameters, finite-strain elastic constants and proper Berry-phase piezoelectric coefficients of wurtzite and rocksalt Zn(1-x)Mg(x)O at x = 0 and 0.5 from the staged pw.x outputs)",
+  "provenance": "3_reproduction/L2/{lattice_wurtzite,lattice_rocksalt,cij_wurtzite,cij_rocksalt,eij_wurtzite}.csv and result.json (commit a248eb7), reduced by auditor/reduce.py from the outputs staged under agent/runs/; transcribed by reviewer/make_reference_submission.py",
+  "primary": {
+    "wz_x000_a_A": {
+      "truth": 3.2341086013772076,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_c_A": {
+      "truth": 5.217694956,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_C11_GPa": {
+      "truth": 202.413,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_C12_GPa": {
+      "truth": 125.213,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_C13_GPa": {
+      "truth": 110.625,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_C33_GPa": {
+      "truth": 215.575,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_C44_GPa": {
+      "truth": 35.65,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_e33_C_m2": {
+      "truth": 1.2669,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_e31_C_m2": {
+      "truth": -0.6552,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x000_e15_C_m2": {
+      "truth": -0.5104,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x000_a_A": {
+      "truth": 4.26799,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x000_C11_GPa": {
+      "truth": 258.0,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x000_C12_GPa": {
+      "truth": 154.175,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x000_C44_GPa": {
+      "truth": 84.25,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_a_A": {
+      "truth": 3.2598512994972975,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_c_A": {
+      "truth": 5.1600549175,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_C11_GPa": {
+      "truth": 193.6,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_C12_GPa": {
+      "truth": 109.9,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_C13_GPa": {
+      "truth": 99.7,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_C33_GPa": {
+      "truth": 177.275,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_C44_GPa": {
+      "truth": 42.65,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_e33_C_m2": {
+      "truth": 1.4413,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_e31_C_m2": {
+      "truth": -0.6351,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "wz_x050_e15_C_m2": {
+      "truth": -0.4587,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x050_a_A": {
+      "truth": 4.2429,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x050_C11_GPa": {
+      "truth": 260.05,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x050_C12_GPa": {
+      "truth": 127.95,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    },
+    "rs_x050_C44_GPa": {
+      "truth": 111.0,
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value"
+    }
+  },
+  "not_graded": {
+    "u": "the internal parameter (0.3791 / 0.3845); a 10 percent band on it is uninformative",
+    "C66": "(C11 - C12)/2 by hexagonal symmetry; implied",
+    "B": "Voigt bulk modulus; implied by the C_ij",
+    "d_ij": "derived from e_ij and C_ij; not requested",
+    "x = 0.25, 0.75, 1": "not staged (reviewer ruling 2026-09-10: two compositions)",
+    "Table-2 composition polynomials": "not graded (reviewer ruling 2026-09-10)"
+  },
+  "score": "1 only if every one of the 28 primary checks passes (binary all-primary-pass)"
+}

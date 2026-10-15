@@ -1,0 +1,39 @@
+SYSTEM = x050_o95_4Zr vacancy, q = +2
+
+# --- electronic (L1's block, unchanged: E_f is a difference against L1's E_bulk) ---
+PREC   = Accurate      # as L1; a 1E-04 eV/A force criterion is below the Normal grid noise
+LREAL  = .FALSE.       # as L1; real-space projector force error is not compatible with 1E-04 eV/A
+ENCUT  = 600           # eV; source. Also >= 1.3 x max ENMAX (O, 400.0 eV -> 520 eV);
+                       #   the Pulay caveat does not apply because ISIF = 2
+ISPIN  = 1             # source: non-spin-polarised. Odd-electron q = +1 and q = -1 carry
+                       #   an ISPIN = 2 check on one site; see the plan's open point 1
+ISMEAR = 0             # 5.2b: Gaussian smearing; source
+SIGMA  = 0.2           # eV; source
+EDIFF  = 1E-07         # driver: tightened so the source's own 1E-04 eV/A
+                       #   force criterion is meaningful on a 95-atom cell
+NELM   = 250           # source
+NELMIN = 6             # source
+ALGO   = Normal        # driver: blocked Davidson, robust for a 95-atom wide-gap cell
+LASPH  = .FALSE.       # 5.2b decided explicitly: Hf(4+)/Zr(4+) are formally d0 closed
+                       #   shells, plain PBE, no +U, so no aspherical term is required
+LMAXMIX = 2            # 5.2b: the default, stated explicitly (no +U, no ICHARG = 11)
+ISYM   = 0             # source; also stops symmetry from constraining the defect relaxation
+NELECT = 728           # 730 (neutral vacancy cell) - (+2); charge state q = +2
+# LDIPOL / IDIPOL unset: Pca21 is a polar BULK crystal under 3D periodic boundary
+#   conditions. The charged cell's monopole is handled after the fact by the FNV
+#   correction, not by a dipole correction, which is defined only for a slab
+# NBANDS unset: VASP default; the COHP leaf sets its own
+# LSORBIT, MAGMOM, GGA_COMPAT, ADDGRID, METAGGA unset (VASP defaults)
+
+# --- fixed-cell ionic relaxation, pass B (production, restarted from relaxA/CONTCAR) ---
+IBRION = 1             # RMM-DIIS quasi-Newton, as L1 and as the source's own relax deck
+POTIM  = 0.5           # source
+NSW    = 400           # driver; the walltime continuation policy is in submit_l2.sh
+ISIF   = 2             # source: the lattice is held fixed at the pristine cell's values
+EDIFFG = -1E-04       # eV/A; 5.2b: the NEGATIVE sign makes this a force criterion
+LWAVE  = .FALSE.
+LCHARG = .FALSE.
+
+# --- parallelisation (64 ranks) ---
+KPAR   = 4             # 8 k-points at ISYM = 0 -> 4 pools of 16 ranks
+NCORE  = 8

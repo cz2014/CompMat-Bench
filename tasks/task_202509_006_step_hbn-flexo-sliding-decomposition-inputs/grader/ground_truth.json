@@ -1,0 +1,284 @@
+{
+  "subtask": "L4 gen_input",
+  "kind": "gen_input (5-run decomposition campaign input sets)",
+  "provenance": "rubric and references from 3_reproduction/L4/ (run 20260604_li_L4_opus_think). NOTE: L4 used GGA=Ps (PBEsol), accepted as documented provenance; the rubric accepts GGA absent/Pe/Ps. The 2 monolayer relaxes were purged from the HPC cluster, so the relax INCAR is reconstructed from task.txt (ISIF=2, IBRION=2, EDIFFG=-0.02) + the static electronic settings for the self-check.",
+  "run_labels": [
+    "mono_I_relax",
+    "mono_II_relax",
+    "mono_I_static",
+    "mono_II_static",
+    "bilayer_static"
+  ],
+  "structure_reference": {
+    "mono_I_relax": "reference/mono_I_relax/POSCAR",
+    "mono_II_relax": "reference/mono_II_relax/POSCAR",
+    "mono_I_static": "reference/mono_I_static/POSCAR",
+    "mono_II_static": "reference/mono_II_static/POSCAR",
+    "bilayer_static": "reference/bilayer_static/POSCAR"
+  },
+  "structure_match": {
+    "max_disp_A": 0.2,
+    "method": "fallback",
+    "note": "Translation-only matching to each designated reference. Initial/relaxed monolayer differences (~0.00368 A) are below the 0.20 A band and not distinguished. I/II interchange leaves ~0.35918 A mismatch after translation and fails; absolute layer separation is not the rejection reason. Bilayer is the rigid union."
+  },
+  "incar_required": {
+    "current_rules": "See current reviewer notes and grader. Self-consistent charge updates and satisfiable startup dependencies, valid finite/integer graded settings, fixed-cell relaxation, complete electrostatic or accepted total-local potential output, Gaussian/Fermi or supported tetrahedron smearing. Matched monolayer relaxations may provide future CHGCAR; no monolayer producer for bilayer. One consistent PBE/PBEsol model. LDIPOL, IVDW and optional Hubbard parameters are ungraded. Existing cutoffs, mesh density and force/EDIFF tolerances are unchanged."
+  },
+  "kmesh_reference": {
+    "subdivisions": [
+      20,
+      1,
+      1
+    ],
+    "vacuum_axes": [
+      2
+    ],
+    "note": "As-run reproduction mesh provenance. Grading uses the separate frozen kmesh_policy; centering and vacuum requirements remain independent."
+  },
+  "functional_accepted": [
+    "Pe",
+    "Ps"
+  ],
+  "score": "1 only if all 5 runs pass structure match AND their REQUIRED rubric (all checks must pass; any single failure scores 0)",
+  "kmesh_policy": {
+    "id": "automatic-kmesh-v1",
+    "generator": "atomate2.vasp.sets.core.StaticSetGenerator",
+    "versions": {
+      "atomate2": "0.1.0",
+      "pymatgen": "2026.5.4",
+      "pymatgen-core": "2026.8.30"
+    },
+    "reciprocal_density": 64,
+    "force_gamma": true,
+    "previous_calculation": false,
+    "bandgap": null,
+    "standardize": false,
+    "reduce_structure": null,
+    "source": "Trusted reference input cell per run label; geometry-based density shared by VASP, QE and ABACUS. No inference from submitted settings.",
+    "rule": "Each periodic-axis subdivision >= automatic default, without subtraction or relative margin. Vacuum axes are exactly 1. Berry strings retain their independent longitudinal condition.",
+    "minimum_by_label": {
+      "mono_I_relax": [
+        10,
+        1,
+        1
+      ],
+      "mono_II_relax": [
+        10,
+        1,
+        1
+      ],
+      "mono_I_static": [
+        10,
+        1,
+        1
+      ],
+      "mono_II_static": [
+        10,
+        1,
+        1
+      ],
+      "bilayer_static": [
+        10,
+        1,
+        1
+      ]
+    },
+    "references": {
+      "mono_I_relax": {
+        "automatic_subdivisions": [
+          10,
+          1,
+          1
+        ],
+        "minimum": [
+          10,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "898e630ee6b57ebe6ef80ea811311456aee12b477cc71473274e03275750e1b8",
+        "reference_lattice_angstrom": [
+          [
+            2.5123999119,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            105.9609603882,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 104
+      },
+      "mono_II_relax": {
+        "automatic_subdivisions": [
+          10,
+          1,
+          1
+        ],
+        "minimum": [
+          10,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "da0e8ee6c4ab897d7ddca306d91ea7a17c05c1f4a057269541e47ae38ccb5009",
+        "reference_lattice_angstrom": [
+          [
+            2.5123999119,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            105.9609603882,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 104
+      },
+      "mono_I_static": {
+        "automatic_subdivisions": [
+          10,
+          1,
+          1
+        ],
+        "minimum": [
+          10,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "898e630ee6b57ebe6ef80ea811311456aee12b477cc71473274e03275750e1b8",
+        "reference_lattice_angstrom": [
+          [
+            2.5123999119,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            105.9609603882,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 104
+      },
+      "mono_II_static": {
+        "automatic_subdivisions": [
+          10,
+          1,
+          1
+        ],
+        "minimum": [
+          10,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "da0e8ee6c4ab897d7ddca306d91ea7a17c05c1f4a057269541e47ae38ccb5009",
+        "reference_lattice_angstrom": [
+          [
+            2.5123999119,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            105.9609603882,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 104
+      },
+      "bilayer_static": {
+        "automatic_subdivisions": [
+          10,
+          1,
+          1
+        ],
+        "minimum": [
+          10,
+          1,
+          1
+        ],
+        "density_axes": [
+          0,
+          1,
+          2
+        ],
+        "vacuum_axes": [
+          2
+        ],
+        "reference_structure_sha256": "1a855ce330ac9cef978ac70426a186a6967b9e158ba68a2f8bd594718404320c",
+        "reference_lattice_angstrom": [
+          [
+            2.5123999119,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            105.9609603882,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            30.0
+          ]
+        ],
+        "reference_atom_count": 208
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "subtask": "L1 analyze",
+  "kind": "analyze (extract reconstruction fields from a relaxed classical-MD moire; no DFT, no structure build)",
+  "provenance": "values from 3_reproduction/L1/result.json and auditor/analyze.py (the extraction our ground truth came from: local strain from 6-nearest W-W neighbors, registry from the nearest opposite-layer W in the WS2 monolayer basis, radius binning of the fields). Ground truth is OUR reproduction on the staged relaxed structure; the paper's Fig. 1 colorbar is the fidelity check, not the graded number.",
+  "staged_input": "agent/lammps.dat_min (relaxed), agent/lammps.dat (rigid), agent/kc.dump (per-atom interlayer energy on the relaxed structure)",
+  "eps_WS2_curve": {
+    "rule": "The three-locale WS2 strain is graded as one curve, per-point tol_i = max(0.10*|truth_i|, floor), floor = 0.10*max|truth| = 0.0789 %. Signs are PHYSICAL and graded (not convention-soft): WS2 is compressive at R^h_h, tensile at R^X_h/R^M_h.",
+    "order": [
+      "R^h_h",
+      "R^X_h",
+      "R^M_h"
+    ],
+    "truth_pct": [
+      -0.7453716078400653,
+      0.788703265597762,
+      0.6291628623562519
+    ],
+    "floor_pct": 0.0788703265597762
+  },
+  "eps_WSe2_curve": {
+    "rule": "The three-locale paired-WSe2 strain is graded as one curve, floor = 0.10*max|truth| = 0.1372 %. Signs PHYSICAL and graded: WSe2 tensile at R^h_h, compressive at R^X_h/R^M_h (opposite to WS2).",
+    "order": [
+      "R^h_h",
+      "R^X_h",
+      "R^M_h"
+    ],
+    "truth_pct": [
+      1.3723340732514333,
+      -0.48919796443769525,
+      -0.3841205976708684
+    ],
+    "floor_pct": 0.13723340732514333
+  },
+  "d": {
+    "rule": "Each interlayer distance within 10% of the true value (all three clearly nonzero, similar scale). PLUS a relation: d(R^h_h) is the maximum of the three (an exact ordering guard; the reproduction guard G3). The +/-10% value band is loose here because the three d differ by <10%, so the max-location relation is the discriminator.",
+    "truth_A": {
+      "Rhh": 6.858888888888889,
+      "RXh": 6.293915789473684,
+      "RMh": 6.305812244897958
+    },
+    "relation": "d_Rhh_A > d_RXh_A and d_Rhh_A > d_RMh_A"
+  },
+  "corrugation": {
+    "rule": "Each layer corrugation (W z peak-to-peak) within 10% of the true value.",
+    "truth_A": {
+      "WS2": 2.9299,
+      "WSe2": 2.282899999999998
+    }
+  },
+  "adhesion": {
+    "rule": "Each per-locale adhesion within 10% of the true value (all clearly nonzero; sign PHYSICAL, all negative = attractive/bound). PLUS a relation: R^X_h is the minimum (most negative) and R^h_h the maximum (least negative) -- the adhesion-landscape ordering (reproduction guard G1). For three points, argmin==R^X_h and argmax==R^h_h fixes the full order R^X_h < R^M_h < R^h_h.",
+    "truth_eV": {
+      "Rhh": -0.02436835555555556,
+      "RXh": -0.04233334561403508,
+      "RMh": -0.04047724489795919
+    },
+    "relation": "adhesion_RXh_eV < adhesion_RMh_eV < adhesion_Rhh_eV (R^X_h lowest, R^h_h highest)"
+  },
+  "domain_area": {
+    "rule": "Each of the four area fractions within 10% of the true value (all clearly nonzero). PLUS the reconstruction-signature relations (reproduction guard G5): R^X_h grows on relaxation (relaxed > rigid) and R^h_h shrinks (relaxed < rigid).",
+    "truth": {
+      "RXh_rigid": 0.08875739644970414,
+      "RXh_relaxed": 0.15384615384615385,
+      "Rhh_rigid": 0.06656804733727811,
+      "Rhh_relaxed": 0.03106508875739645
+    },
+    "relation": "area_frac_RXh_relaxed > area_frac_RXh_rigid and area_frac_Rhh_relaxed < area_frac_Rhh_rigid"
+  },
+  "score": "1 only if ALL primary checks pass (all checks must pass; any single failure scores 0): (a) the two 3-point strain curves (signs included), (b) the three d values + d(R^h_h) is max, (c) the two corrugations, (d) the three adhesion values + the R^X_h-lowest/R^h_h-highest ordering, (e) the four domain fractions + the R^X_h-grows/R^h_h-shrinks relations.",
+  "self_check_2026-07-03": {
+    "direction1_our_reproduction_as_submission": "Reference and independent solutions pass. RXh relaxed area differs by roughly one site in near-degenerate nearest-opposite-W pairing; 103/676 versus stored 104/676 remains inside the existing band. This is not established as a radius-boundary rounding effect.",
+    "designed_wrong_must_fail": [
+      "WS2 strain signs flipped -> eps_WS2_curve fails",
+      "WS2/WSe2 strain locale fields swapped between layers -> both strain curves fail",
+      "d(R^h_h) not the max (R^X_h reported largest) -> d relation fails",
+      "corrugations halved -> corrugation checks fail",
+      "adhesion order permuted (R^X_h reported least negative) -> adhesion relation fails",
+      "domain growth reversed (R^X_h shrinks) -> domain relation + area values fail",
+      "missing required field -> GradeError -> 0"
+    ]
+  }
+}

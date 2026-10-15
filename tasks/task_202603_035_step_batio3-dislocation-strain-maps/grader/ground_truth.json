@@ -1,0 +1,81 @@
+{
+  "subtask": "L4 analyze",
+  "kind": "analyze (Ba-Ba strain maps of a dislocation-dipole cell; region and core identification; region contrast, extremes, threshold counts)",
+  "provenance": "Existing L4 strain analysis (3_reproduction/L4/result.json, graded M1-M7 and region_means_pct), recomputed by repository-only reviewer/make_reference_submission.py using actual Ba-gap endpoint midpoints. Near-core masks are compared in 5_review/self_review_all_20260912/implementation/analysis/geometry_audit.json; the selected extrema and all strain statistics are unchanged. Tolerances remain result.json key tolerances. No new simulation.",
+  "primary": {
+    "core_BaO_xy_A": {
+      "truth": [
+        79.73,
+        81.079
+      ],
+      "tol_A": 4.0,
+      "rule": "each coordinate within 4.0 A absolute (one lattice spacing; identification band, handbook 2(5) exception: the position is defined by the prompt's rule)"
+    },
+    "core_TiO2_xy_A": {
+      "truth": [
+        79.893,
+        235.659
+      ],
+      "tol_A": 4.0,
+      "rule": "as core_BaO_xy_A"
+    },
+    "contrast_xx_pct": {
+      "truth": 2.4498,
+      "from": "eps_xx_mean_A_pct - eps_xx_mean_B_pct",
+      "rule": "+/-10 percent relative (scalar rule 2(1)); sign is part of the value. The region means themselves are not graded: their absolute values depend on the reference spacings and region B's sign is a recorded fidelity miss (L4 guard G2a) The additive reference baseline cancels in the difference, but the contrast still scales as 1/d0: 100*(mean(d_A)-mean(d_B))/d0."
+    },
+    "contrast_yy_pct": {
+      "truth": -0.9642,
+      "from": "eps_yy_mean_A_pct - eps_yy_mean_B_pct",
+      "rule": "+/-10 percent relative; sign is part of the value"
+    },
+    "eps_xx_max_pct": {
+      "truth": 14.654,
+      "rule": "+/-10 percent relative"
+    },
+    "eps_yy_min_pct": {
+      "truth": -8.1026,
+      "rule": "+/-10 percent relative"
+    },
+    "eps_xx_max_near_BaO_pct": {
+      "truth": 14.654,
+      "rule": "+/-10 percent relative"
+    },
+    "eps_xx_max_near_TiO2_pct": {
+      "truth": 11.9469,
+      "rule": "+/-10 percent relative"
+    },
+    "eps_yy_min_near_BaO_pct": {
+      "truth": -5.2194,
+      "rule": "+/-10 percent relative"
+    },
+    "eps_yy_min_near_TiO2_pct": {
+      "truth": -8.1026,
+      "rule": "+/-10 percent relative"
+    },
+    "n_eps_xx_above_10pct": {
+      "truth": 7,
+      "rule": "exact integer (rule 2(4)). Nearest sites to the 10.0 threshold: 9.720 and 10.595 percent"
+    },
+    "n_eps_yy_below_minus3p5pct": {
+      "truth": 23,
+      "rule": "exact integer (rule 2(4)). Nearest sites to the -3.5 threshold: -3.556 and -3.334 percent; the value is deterministic for the stated protocol and reference on the staged file"
+    }
+  },
+  "not_graded": {
+    "region_means": "eps_xx_mean_A/B_pct, eps_yy_mean_A/B_pct enter only through the two contrasts",
+    "eps_zz": "Not requested or evaluated. A single periodic Ba plane fixes spatially uniform z spacing; strain against an independent reference need not be zero."
+  },
+  "score": "1 only if every primary check passes (binary all-primary-pass)",
+  "reference_builder": {
+    "scope": "Repository-only provenance tool; not executable from a standalone review kit. grader.py and selfcheck.py do not import it.",
+    "dependencies": [
+      "3_reproduction/L4/auditor/compute_strain.py",
+      "numpy",
+      "scipy",
+      "matplotlib (imported by compute_strain.py)",
+      "staged inputs and reproduction result records"
+    ],
+    "core_definition": "Periodic Cartesian midpoint of actual Ba gap endpoints in the outermost region-A row; output in original data-file coordinates. Dependent geometry recomputed."
+  }
+}

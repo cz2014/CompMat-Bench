@@ -1,0 +1,67 @@
+{
+  "release": "long-chain-v9",
+  "workflows": [
+    {
+      "id": "C01",
+      "title": "WS2/WSe2 moire: relaxation, piezoelectric charge and electron potential",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C02",
+      "title": "Se-pair substitutions: space groups, tight-binding models and spin splittings",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C03",
+      "title": "BAs: force constants, isotope-disordered dielectric function and near-field transmission",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C04",
+      "title": "Si/Ge interface: force constants, phonon reflection and specularity",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C05",
+      "title": "Zn(1-x)Mg(x)O: ordered cells, polarization paths and Landau free energy",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C06",
+      "title": "CrN: magnetic ground state, Wannier exchange constants and spin waves",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C07",
+      "title": "V2CoAl orderings: relaxation, magnetic states and exchange couplings",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C08",
+      "title": "Ni island: EAM saddle, machine-learned refinement and curvature certification",
+      "supplementary": false,
+      "evaluated": true
+    },
+    {
+      "id": "C09",
+      "title": "Curie temperature and compression response in CuInP2S6",
+      "supplementary": true,
+      "evaluated": false,
+      "note": "Built from the authors' own CuInP2S6 project; released without any agent evaluation."
+    },
+    {
+      "id": "C10",
+      "title": "Molecular reaction energies and chain propagation",
+      "supplementary": true,
+      "evaluated": false,
+      "note": "Built from the authors' own HNC/HCN energy-transfer project; released without any agent evaluation."
+    }
+  ]
+}

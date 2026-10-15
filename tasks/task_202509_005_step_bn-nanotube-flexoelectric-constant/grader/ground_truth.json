@@ -1,0 +1,11 @@
+{
+  "subtask": "L3 analyze",
+  "kind": "analyze (single scalar V0 from staged LOCPOTs)",
+  "provenance": "V0 from 3_reproduction/L3/result.json (run 20260601_li_L3_opus_think); canonical V0 = 2.420 V.A, fit dVfl = V0*(1/R) through the origin",
+  "sign_convention": "the electrostatic potential is phi = -LOCPOT (the stored VASP value is the potential energy of an electron); dVfl is inner minus outer. Both stated in the prompt. The sibling unit L1_analyze grades the opposite reading (the stored value); a stored-sign submission gives -V0 and scores 0 here.",
+  "V0_VA": {
+    "truth": 2.42,
+    "rule": "within 10% of our reproduced +2.420 V.A (inclusive band 2.178-2.662). The free-intercept estimate 2.645 also lies inside the band. The prompt requests a through-origin fit; this scalar grader does not verify the fitting procedure. The paper value is not the scoring target."
+  },
+  "score": "1 if V0_VA within 10% of 2.420 and positive (all checks must pass; any single failure scores 0)"
+}

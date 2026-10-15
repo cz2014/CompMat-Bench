@@ -1,0 +1,61 @@
+cff-version: 1.2.0
+message: "If you use CompMat-Bench, please cite the paper given under preferred-citation."
+title: "CompMat-Bench"
+type: dataset
+license: CC-BY-4.0
+authors:
+  - given-names: Chenmu
+    family-names: Zhang
+    affiliation: "Rice University"
+  - given-names: Levi
+    family-names: Felix
+    affiliation: "Rice University"
+  - given-names: Jun-Jie
+    family-names: Zhang
+    affiliation: "Rice University"
+  - given-names: Xingfu
+    family-names: Li
+    affiliation: "Rice University"
+  - given-names: Xuelian
+    family-names: Jiang
+    affiliation: "Rice University"
+  - given-names: Tao
+    family-names: Jiang
+    affiliation: "Rice University"
+  - given-names: Subhendu
+    family-names: Mishra
+    affiliation: "Rice University"
+  - given-names: Xixi
+    family-names: Qin
+    affiliation: "Rice University"
+  - given-names: Boris
+    family-names: Yakobson
+    affiliation: "Rice University"
+preferred-citation:
+  type: article
+  title: "CompMat-Bench: Benchmarking AI Agents for Computational Materials Science"
+  authors:
+    - given-names: Chenmu
+      family-names: Zhang
+    - given-names: Levi
+      family-names: Felix
+    - given-names: Jun-Jie
+      family-names: Zhang
+    - given-names: Xingfu
+      family-names: Li
+    - given-names: Xuelian
+      family-names: Jiang
+    - given-names: Tao
+      family-names: Jiang
+    - given-names: Subhendu
+      family-names: Mishra
+    - given-names: Xixi
+      family-names: Qin
+    - given-names: Boris
+      family-names: Yakobson
+  year: 2026
+  journal: "arXiv preprint"
+  identifiers:
+    - type: other
+      value: "arXiv:2610.00636"
+  url: "https://arxiv.org/abs/2610.00636"
