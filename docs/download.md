@@ -16,7 +16,7 @@ All files are available on the [v1.0.0 release page](https://github.com/cz2014/C
 | `compmat_bench_heavy_inputs_2.zip` | Additional inputs for four tasks | 0.8 GB |
 | `<campaign>_<agent>.tar.gz` (13 files) | Agent trajectories, one archive per campaign and agent | 0.34 GB total |
 
-Start with the core package for the [quick-start example](../README.md#quick-start-run-one-task).
+Start with the core package for the [quick-start example](../README.md#-quick-start-run-one-task).
 Download both heavy-input packages to use all 94 tasks. Download trajectory
 archives only if you want to inspect existing agent runs; their contents and
 manifest schema are described in the [trajectory guide](../trajectories/README.md).

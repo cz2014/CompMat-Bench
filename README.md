@@ -1,16 +1,20 @@
 # CompMat-Bench
 
+[![arXiv](https://img.shields.io/badge/arXiv-2610.00636-b31b1b.svg)](https://arxiv.org/abs/2610.00636)
+[![Licence: CC BY 4.0](https://img.shields.io/badge/Licence-CC_BY_4.0-lightgrey.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/cz2014/CompMat-Bench)](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.0.0)
+
 A benchmark of **94 research tasks from 15 peer-reviewed studies** in
 computational materials science. Agents prepare simulation inputs, analyze
 simulation outputs, and perform calculations toward a study's scientific goal.
 Ground truth comes from our own reproductions; submissions are graded by fixed
 rules and numerical tolerances, with no LLM judge.
 
-[Paper](https://arxiv.org/abs/2610.00636) ·
-[Download](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.0.0) ·
-[Browse tasks](tasks/) · [Agent trajectories](trajectories/README.md)
+📄 [Paper](https://arxiv.org/abs/2610.00636) ·
+⬇️ [Download](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.0.0) ·
+🗂️ [Browse tasks](tasks/) · 🤖 [Agent trajectories](trajectories/README.md)
 
-## What's included
+## 📦 What's included
 
 | Resource | Scope |
 |---|---|
@@ -20,7 +24,7 @@ rules and numerical tolerances, with no LLM judge.
 
 Tasks cover VASP, Quantum ESPRESSO, ABACUS, Wannier90, LAMMPS, VAMPIRE and LOBSTER.
 
-## Quick start: run one task
+## 🚀 Quick start: run one task
 
 Use your own agent; this release provides tasks and graders, without an agent
 harness. The example below asks an agent to extract the **valley band gaps and
@@ -78,7 +82,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 "$task/grader/grader.py" "$workspace"
 The grader reports each check and a final `SCORE: 1` (pass) or `SCORE: 0` (fail).
 For other tasks, follow their prompts and the submission filename in `task.yaml`.
 
-## Evaluation setup
+## ⚙️ Evaluation setup
 
 The paper evaluates single steps and complete workflows, each with full or
 reduced methodological guidance. Agents have no internet access and use an
@@ -95,7 +99,7 @@ versions and grader dependencies, or **[workflow guide](workflows/README.md)**
 for the workflow catalogue and execution instructions. Some licensed manuals
 and VASP POTCAR files must be supplied separately, as described in those guides.
 
-## Citation and licence
+## 📖 Citation and licence
 
 Please cite [arXiv:2610.00636](https://arxiv.org/abs/2610.00636);
 [CITATION.cff](CITATION.cff) provides the citation metadata.

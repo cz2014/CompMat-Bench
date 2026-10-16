@@ -6,7 +6,7 @@
 ## Run a single-step task
 
 Start from the extracted release, not a Git clone: the release includes the
-staged inputs. For a complete example, see the [quick start](../README.md#quick-start-run-one-task).
+staged inputs. For a complete example, see the [quick start](../README.md#-quick-start-run-one-task).
 
 (1) Copy `tasks/<task_id>/agent/` into a fresh workspace. Give the agent the
 prompt from `prompt.md` for full guidance, or `prompt_reduced.md` for reduced
