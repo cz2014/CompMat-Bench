@@ -2,7 +2,7 @@
 
 [![arXiv](https://img.shields.io/badge/arXiv-2610.00636-b31b1b.svg)](https://arxiv.org/abs/2610.00636)
 [![Licence: CC BY 4.0](https://img.shields.io/badge/Licence-CC_BY_4.0-lightgrey.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/cz2014/CompMat-Bench)](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.0.0)
+[![Release](https://img.shields.io/github/v/release/cz2014/CompMat-Bench)](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.1.0)
 
 A benchmark of **94 research tasks from 15 peer-reviewed studies** in
 computational materials science. Agents prepare simulation inputs, analyze
@@ -11,7 +11,7 @@ Ground truth comes from our own reproductions; submissions are graded by fixed
 rules and numerical tolerances, with no LLM judge.
 
 📄 [Paper](https://arxiv.org/abs/2610.00636) ·
-⬇️ [Download](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.0.0) ·
+⬇️ [Download](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.1.0) ·
 🗂️ [Browse tasks](tasks/) · 🤖 [Agent trajectories](trajectories/README.md)
 
 ## 📦 What's included
@@ -20,7 +20,7 @@ rules and numerical tolerances, with no LLM judge.
 |---|---|
 | **[94 single-step tasks](tasks/)** | 30 input-preparation, 29 output-analysis and 35 run-and-analyze tasks. Expensive simulations are precomputed; agents prepare their inputs, analyze their outputs, or run light calculations themselves. 52 tasks also have reduced-guidance prompts. |
 | **[10 workflows](workflows/README.md)** | Agents carry out every step themselves, including the simulations in most workflows, from the first calculation to the final quantities. C01–C08 were evaluated in the paper; C09–C10 are supplementary. |
-| **[976 agent trajectories](trajectories/README.md)** | Transcripts, submissions and grades for every attempt reported in the paper, across four agents and three LLMs. |
+| **[1940 agent trajectories](trajectories/README.md)** | Transcripts, submissions and grades for every attempt reported in the paper, across ten agents and nine LLMs. |
 
 Tasks cover VASP, Quantum ESPRESSO, ABACUS, Wannier90, LAMMPS, VAMPIRE and LOBSTER.
 
@@ -36,14 +36,14 @@ inputs for this example. A Git clone contains the prompts and graders, but not
 the staged simulation files.
 
 ```sh
-gh release download v1.0.0 --repo cz2014/CompMat-Bench \
+gh release download v1.1.0 --repo cz2014/CompMat-Bench \
   --pattern compmat_bench_core.zip --dir compmat_bench_release
 cd compmat_bench_release
 unzip compmat_bench_core.zip
 cd compmat_bench
 ```
 
-You can also download the zip from the [release page](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.0.0).
+You can also download the zip from the [release page](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.1.0).
 See the [download guide](docs/download.md) for checksums, the five tasks needing
 additional input packages, and trajectory archives.
 

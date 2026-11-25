@@ -5,7 +5,7 @@
 The Git repository contains prompts, graders, reference answers, manuals and
 source bundles. To run tasks or workflows, download the release packages,
 which also contain the staged inputs. Agent trajectories are separate downloads.
-All files are available on the [v1.0.0 release page](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.0.0).
+All files are available on the [v1.1.0 release page](https://github.com/cz2014/CompMat-Bench/releases/tag/v1.1.0).
 
 ## Choose a package
 
@@ -14,7 +14,7 @@ All files are available on the [v1.0.0 release page](https://github.com/cz2014/C
 | `compmat_bench_core.zip` | Benchmark tree, including staged inputs except those of the five tasks listed below | 0.5 GB |
 | `compmat_bench_heavy_inputs_1.zip` | Additional inputs for one task | 1.4 GB |
 | `compmat_bench_heavy_inputs_2.zip` | Additional inputs for four tasks | 0.8 GB |
-| `<campaign>_<agent>.tar.gz` (13 files) | Agent trajectories, one archive per campaign and agent | 0.34 GB total |
+| `<campaign>_<agent>.tar.gz` (28 files) | Agent trajectories, one archive per campaign and agent | 0.90 GB total |
 
 Start with the core package for the [quick-start example](../README.md#-quick-start-run-one-task).
 Download both heavy-input packages to use all 94 tasks. Download trajectory
@@ -26,7 +26,7 @@ manifest schema are described in the [trajectory guide](../trajectories/README.m
 With the GitHub CLI:
 
 ```sh
-gh release download v1.0.0 --repo cz2014/CompMat-Bench \
+gh release download v1.1.0 --repo cz2014/CompMat-Bench \
   --pattern 'compmat_bench_*.zip' --pattern CHECKSUMS.sha256 \
   --dir compmat_bench_release
 cd compmat_bench_release
@@ -67,10 +67,10 @@ cd compmat_bench
 
 ## Download agent trajectories
 
-To download all 13 archives:
+To download all 28 archives:
 
 ```sh
-gh release download v1.0.0 --repo cz2014/CompMat-Bench \
+gh release download v1.1.0 --repo cz2014/CompMat-Bench \
   --pattern '*.tar.gz' --dir compmat_bench_trajectories
 ```
 
